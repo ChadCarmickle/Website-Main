@@ -1,1 +1,1 @@
-alert("Hello Smart board.");
+alert("Hello Smart board...");
