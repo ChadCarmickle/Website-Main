@@ -1,50 +1,167 @@
-body {
-  background-image: url('background.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: rgb(22, 110, 86);
-  padding: 40px 20px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-  .carousel-wrapper {
-    max-width: 900px;
-    margin: 0 auto;
-  }
 
-  .carousel-item iframe {
-    width: 100%;
-    height: 700px;
-    border: none;
-    background: #fff;
-  }
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0b0d12;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #ffffff;
+}
 
-  /* Make indicator buttons visible against light backgrounds */
-  .carousel-indicators button {
-    background-color: #333 !important;
-  }
+.app {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
 
-  .carousel-control-prev-icon,
-  .carousel-control-next-icon {
-    background-color: rgba(0,0,0,0.5);
-    border-radius: 50%;
-    padding: 15px;
-  }
+/* ---------- TOP: CLOCK ---------- */
+#clock-container {
+  flex: 0 0 15%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 3vw;
+  background: #12151c;
+  border-bottom: 2px solid #23262f;
+  white-space: nowrap;
+}
 
-  .pdf-fallback {
-    padding: 40px;
-    text-align: center;
-    background: #fff;
-  }
+#date {
+  font-size: 2.2vw;
+  color: #ffffff;
+  order: 1;
+  font-family: comic sans ms, cursive;
+}
 
-#h1 {
+#time {
+  font-size: 4.5vw;
+  font-weight: 700;
+  letter-spacing: 2px;
+  order: 2;
+}
+
+/* ---------- CENTER: SLIDESHOW ---------- */
+#slideshow-container {
+  flex: 1 1 65%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+}
+
+#slideshow {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#slideshow img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+
+#slideshow img.active {
+  opacity: 1;
+}
+
+/* ---------- BOTTOM: BUTTONS ---------- */
+#button-container {
+  flex: 0 0 20%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2vh;
+  padding: 3vh 3vw;
+  background: #12151c;
+  border-top: 2px solid #23262f;
+}
+
+.action-btn {
+  font-size: 2.2vw;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(145deg, #2b3040, #1a1d26);
+  border: 2px solid #3a4157;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.action-btn:hover {
+  background: linear-gradient(145deg, #3a4157, #262a35);
+}
+
+.action-btn:active {
+  transform: scale(0.96);
+}
+
+/* ---------- MODAL ---------- */
+#modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  transition: opacity 0.25s ease;
+}
+
+#modal-overlay.hidden {
+  display: none;
+}
+
+#modal-box {
+  background: #1a1d26;
+  border: 2px solid #3a4157;
+  border-radius: 20px;
+  padding: 5vh 5vw;
+  width: 70vw;
+  max-width: 700px;
   text-align: center;
-  margin-bottom: 20px;
-  color: seashell;
 }
 
-.course-image {
-    width: 60%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
+#modal-title {
+  font-size: 3vw;
+  margin-bottom: 2vh;
+  color: #ffffff;
+}
+
+#modal-content {
+  font-size: 2vw;
+  color: #cfd3da;
+  line-height: 1.5;
+  margin-bottom: 3vh;
+}
+
+#modal-close {
+  font-size: 1.8vw;
+  padding: 1.2vh 3vw;
+  border: none;
+  border-radius: 12px;
+  background: #3a7bfd;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#modal-close:hover {
+  background: #2f66d0;
 }
