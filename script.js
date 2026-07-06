@@ -204,3 +204,77 @@ modalClose.addEventListener("click", closeModal);
 modalOverlay.addEventListener("click", (e) => {
   if (e.target === modalOverlay) closeModal();
 });
+
+let canvas = document.querySelector('canvas'),
+	c = canvas.getContext('2d');
+
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+let w = canvas.width;
+let	h = canvas.height;
+
+const mouse = {
+  x: w / 2,
+  y: h / 2 
+}
+
+let shadows = '#000000'
+const gravity = 0.005
+const friction = 0.99
+const particleCount = 100
+const angleIncreament = Math.PI * 2  / particleCount
+const power = 7
+const range = 25
+let color = 30
+
+// =====================================================
+
+// addEventListener('mousemove', (event) => {
+//   mouse.x = event.clientX
+//   mouse.y = event.clientY
+// })
+
+addEventListener('resize', () => {
+	canvas.width = innerWidth
+	canvas.height = innerHeight
+	w = canvas.width
+	h = canvas.height
+
+	init()
+})
+
+addEventListener('click', (event) => {
+	mouse.x = event.clientX
+	mouse.y = event.clientY
+
+	fireWork({x: mouse.x, y: mouse.y})
+	// init(color)
+})
+
+// =====================================================
+
+function randomIntFromRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+function fireWork(mouse, col = color) {
+	for (let i = 0; i < particleCount; i++) {
+		particles.push(new Particle(
+			mouse.x, 
+			mouse.y, 
+			2, 
+			`hsla(
+				${randomIntFromRange(col, col + range)}, 
+				${randomIntFromRange(70, 80)}%, 
+				${randomIntFromRange(55, 65)}%, 
+				50%
+			)`, 
+			{
+				x: Math.cos(particleCount * i) * Math.random() * power, 
+				y: Math.sin(particleCount * i) * Math.random() * power
+			}
+		));
+	}
+}
+
+// =====================================================
