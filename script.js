@@ -159,6 +159,7 @@ document.getElementById("prev-slide").addEventListener("click", () => {
   if (isPlaying) startAutoPlay();
 });
 
+// Toggle play/pause functionality
 const toggleBtn = document.getElementById("toggle-play");
 toggleBtn.addEventListener("click", () => {
   isPlaying = !isPlaying;
