@@ -30,9 +30,7 @@ html, body {
   justify-content: space-between;
   align-items: center;
   padding: 0 3vw;
-  background: #12151c;
-  border-bottom: 2px solid #23262f;
-  white-space: nowrap;
+  background-color: rgb(22, 110, 86);  white-space: nowrap;
 }
 
 #date {
@@ -96,10 +94,9 @@ html, body {
   justify-content: center;
   align-items: center;
   gap: 30px;
-  margin: 25px auto;
-  padding: 20px 40px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 15px;
+  margin: 5px auto;
+  padding: 0px 40px;
+  border-radius: 5px;
   width: fit-content;
 }
 
