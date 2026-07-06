@@ -86,6 +86,59 @@ html, body {
   opacity: 1;
 }
 
+
+/* =============================================
+   SLIDESHOW CONTROLS STYLES
+   ============================================= */
+.slideshow-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin: 25px auto;
+  padding: 20px 40px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  width: fit-content;
+}
+
+/* Base button style */
+.control-btn {
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #006648;        /* Your dark green */
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Previous & Next */
+#prev-slide, #next-slide {
+  font-size: 26px;
+  padding: 16px 26px;
+  min-width: 70px;
+}
+
+/* Pause/Play Button */
+#toggle-play {
+  padding: 16px 40px;
+  min-width: 170px;
+  font-size: 18px;
+}
+
+/* Arrow icons only */
+#prev-slide {
+  content: "❮";
+}
+
+#next-slide {
+  content: "❯";
+}
+
+
 /* ---------- BOTTOM: BUTTONS ---------- */
 #button-container {
   flex: 0 0 5%;

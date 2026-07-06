@@ -1,4 +1,3 @@
-
 /* =========================================================
    1. CLOCK
    ========================================================= */
@@ -31,49 +30,75 @@ updateClock();
    2. SLIDESHOW
    ========================================================= */
 
-const images = [
-  "Courses/IvyTechCourseInfo_1.webp",
-  "Courses/IvyTechCourseInfo_2.webp",
-  "Courses/IvyTechCourseInfo_3.webp",
-  "Courses/IvyTechCourseInfo_4.webp",
-  "Courses/IvyTechCourseInfo_5.webp",
-  "Courses/IvyTechCourseInfo_6.webp",
-  "Courses/IvyTechCourseInfo_7.webp",
-  "Courses/IvyTechCourseInfo_8.webp",
-  "Courses/IvyTechCourseInfo_9.webp",
-  "Courses/IvyTechCourseInfo_10.webp",
-  "Courses/IvyTechCourseInfo_11.webp",
-  "Courses/IvyTechCourseInfo_12.webp",
-  "Courses/IvyTechCourseInfo_13.webp",
-  "Courses/IvyTechCourseInfo_14.webp",
-  "Courses/IvyTechCourseInfo_15.webp",
-  "Courses/IvyTechCourseInfo_16.webp",
-  "Courses/IvyTechCourseInfo_17.webp",
-  "Courses/IvyTechCourseInfo_18.webp",
-  "Courses/IvyTechCourseInfo_19.webp",
-  "Courses/IvyTechCourseInfo_20.webp",
-  "Courses/IvyTechCourseInfo_21.webp",
-  "Courses/IvyTechCourseInfo_22.webp",
-  "Courses/IvyTechCourseInfo_23.webp",
-  "Courses/IvyTechCourseInfo_24.webp",
-  "Courses/IvyTechCourseInfo_25.webp",
-  "Courses/IvyTechCourseInfo_26.webp",
-  "Courses/IvyTechCourseInfo_27.webp",
-  "Courses/IvyTechCourseInfo_28.webp",
-  "Courses/IvyTechCourseInfo_29.webp",
-  "Courses/IvyTechCourseInfo_30.webp",
-  "Courses/IvyTechCourseInfo_31.webp",
-  "Courses/IvyTechCourseInfo_32.webp",
-  "Courses/IvyTechCourseInfo_33.webp"
+const courseImages = [
+  "courses/IvyTechCourseInfo_1.webp",
+  "courses/IvyTechCourseInfo_2.webp",
+  "courses/IvyTechCourseInfo_3.webp",
+  "courses/IvyTechCourseInfo_4.webp",
+  "courses/IvyTechCourseInfo_5.webp",
+  "courses/IvyTechCourseInfo_6.webp",
+  "courses/IvyTechCourseInfo_7.webp",
+  "courses/IvyTechCourseInfo_8.webp",
+  "courses/IvyTechCourseInfo_9.webp",
+  "courses/IvyTechCourseInfo_10.webp",
+  "courses/IvyTechCourseInfo_11.webp",
+  "courses/IvyTechCourseInfo_12.webp",
+  "courses/IvyTechCourseInfo_13.webp",
+  "courses/IvyTechCourseInfo_14.webp",
+  "courses/IvyTechCourseInfo_15.webp",
+  "courses/IvyTechCourseInfo_16.webp",
+  "courses/IvyTechCourseInfo_17.webp",
+  "courses/IvyTechCourseInfo_18.webp",
+  "courses/IvyTechCourseInfo_19.webp",
+  "courses/IvyTechCourseInfo_20.webp",
+  "courses/IvyTechCourseInfo_21.webp",
+  "courses/IvyTechCourseInfo_22.webp",
+  "courses/IvyTechCourseInfo_23.webp",
+  "courses/IvyTechCourseInfo_24.webp",
+  "courses/IvyTechCourseInfo_25.webp",
+  "courses/IvyTechCourseInfo_26.webp",
+  "courses/IvyTechCourseInfo_27.webp",
+  "courses/IvyTechCourseInfo_28.webp",
+  "courses/IvyTechCourseInfo_29.webp",
+  "courses/IvyTechCourseInfo_30.webp",
+  "courses/IvyTechCourseInfo_31.webp",
+  "courses/IvyTechCourseInfo_32.webp",
+  "courses/IvyTechCourseInfo_33.webp"
 ];
 
-const SLIDE_INTERVAL_MS = 5000; // time each image is shown
+const eventImages = [
+  "events/event_1.png",
+  "events/event_2.png",
+]
+
+const SLIDE_INTERVAL_MS = 5000; // 5 seconds per slide. 
+const COURSES_PER_BATCH = 3; // Number of course images to show between event images
+const AUTO_RESUME_DELAY = 120000; // 2 minutes in milliseconds
 
 const slideshowEl = document.getElementById("slideshow");
 let currentSlide = 0;
+let allSlides = [];
+let slideshowInterval = null;
+let resumeTimeout = null;
+let isPlaying = true;
 
-function buildSlideshow() {
-  images.forEach((src, index) => {
+// Build the interleaved slideshow array
+function buildInterleavedSlideshow() {
+  allSlides = [];
+  const totalBatches = Math.ceil(courseImages.length / COURSES_PER_BATCH);
+  
+  for (let i = 0; i < totalBatches; i++) {
+    eventImages.forEach(src => allSlides.push(src));
+    const start = i * COURSES_PER_BATCH;
+    const batch = courseImages.slice(start, start + COURSES_PER_BATCH);
+    allSlides.push(...batch);
+  }
+  
+  eventImages.forEach(src => allSlides.push(src));
+
+  slideshowEl.innerHTML = '';
+  
+  allSlides.forEach((src, index) => {
     const img = document.createElement("img");
     img.src = src;
     img.alt = `Slide ${index + 1}`;
@@ -82,17 +107,75 @@ function buildSlideshow() {
   });
 }
 
-function showNextSlide() {
+// Show a specific slide by index
+function showSlide(index) {
   const slides = slideshowEl.querySelectorAll("img");
   if (slides.length === 0) return;
 
   slides[currentSlide].classList.remove("active");
-  currentSlide = (currentSlide + 1) % slides.length;
+  currentSlide = (index + slides.length) % slides.length;
   slides[currentSlide].classList.add("active");
 }
 
-buildSlideshow();
-setInterval(showNextSlide, SLIDE_INTERVAL_MS);
+function showNextSlide() {
+  showSlide(currentSlide + 1);
+}
+
+function startAutoPlay() {
+  if (slideshowInterval) clearInterval(slideshowInterval);
+  slideshowInterval = setInterval(showNextSlide, SLIDE_INTERVAL_MS);
+}
+
+function stopAutoPlay() {
+  if (slideshowInterval) {
+    clearInterval(slideshowInterval);
+    slideshowInterval = null;
+  }
+}
+
+// Schedule auto-resume after a period of inactivity
+function scheduleAutoResume() {
+  if (resumeTimeout) clearTimeout(resumeTimeout);
+  resumeTimeout = setTimeout(() => {
+    isPlaying = true;
+    const toggleBtn = document.getElementById("toggle-play");
+    if (toggleBtn) toggleBtn.textContent = "⏸";
+    startAutoPlay();
+  }, AUTO_RESUME_DELAY);
+}
+
+// Initialize the slideshow
+buildInterleavedSlideshow();
+startAutoPlay();
+
+// === Sideshow Button Controls ===
+document.getElementById("next-slide").addEventListener("click", () => {
+  showNextSlide();
+  if (isPlaying) startAutoPlay();
+});
+
+document.getElementById("prev-slide").addEventListener("click", () => {
+  showSlide(currentSlide - 1);
+  if (isPlaying) startAutoPlay();
+});
+
+const toggleBtn = document.getElementById("toggle-play");
+toggleBtn.addEventListener("click", () => {
+  isPlaying = !isPlaying;
+  
+  if (isPlaying) {
+    toggleBtn.textContent = "⏸ Pause";
+    stopAutoPlay();           // Clear any existing interval
+    startAutoPlay();          // Resume immediately
+    if (resumeTimeout) clearTimeout(resumeTimeout);
+  } else {
+    toggleBtn.textContent = "▶";
+    stopAutoPlay();
+    scheduleAutoResume();     // Auto resume after 2 minutes
+  }
+});
+
+
 
 /* =========================================================
    3. BUTTON POPUPS
