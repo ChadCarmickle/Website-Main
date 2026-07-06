@@ -8,7 +8,9 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #0b0d12;
+  background-color: #006648;
+  background-image: url("background.jpg");
+  background-size: cover;
   font-family: "Segoe UI", Arial, sans-serif;
   color: #ffffff;
 }
@@ -22,7 +24,7 @@ html, body {
 
 /* ---------- TOP: CLOCK ---------- */
 #clock-container {
-  flex: 0 0 15%;
+  flex: 0 0 0cm;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -34,10 +36,14 @@ html, body {
 }
 
 #date {
-  font-size: 2.2vw;
+  text-align: left;
+  font-size: 4.5vw;
+  font-weight: 700;
+  letter-spacing: 0px;
   color: #ffffff;
   order: 1;
-  font-family: comic sans ms, cursive;
+  text-decoration: bold;
+  font-family: "Inter", "Montserrat", sans-serif, "Open Sans";   
 }
 
 #time {
@@ -56,6 +62,7 @@ html, body {
   background: #000;
   position: relative;
   overflow: hidden;
+  background-color: rgb(22, 110, 86);
 }
 
 #slideshow {
@@ -164,4 +171,61 @@ html, body {
 
 #modal-close:hover {
   background: #2f66d0;
+}
+
+
+
+/* =============================================
+   VARIABLE FONTS
+   ============================================= */
+
+/* --- Open Sans --- */
+@font-face {
+    font-family: "Open Sans";
+    src: url("fonts/OpenSans-VariableFont_wdth,wght.ttf") format("truetype-variations");
+    font-weight: 400 700;        /* Supports weights from 400 to 700 */
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    src: url("fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf") format("truetype-variations");
+    font-weight: 400 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* --- Montserrat --- */
+@font-face {
+    font-family: "Montserrat";
+    src: url("fonts/Montserrat-VariableFont_wght.ttf") format("truetype-variations");
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("fonts/Montserrat-Italic-VariableFont_wght.ttf") format("truetype-variations");
+    font-weight: 400 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* --- Inter --- */
+@font-face {
+    font-family: "Inter";
+    src: url("fonts/Inter-VariableFont_opsz,wght.ttf") format("truetype-variations");
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("fonts/Inter-Italic-VariableFont_opsz,wght.ttf") format("truetype-variations");
+    font-weight: 400 700;
+    font-style: italic;
+    font-display: swap;
 }

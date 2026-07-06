@@ -47,10 +47,27 @@ const images = [
   "Courses/IvyTechCourseInfo_13.webp",
   "Courses/IvyTechCourseInfo_14.webp",
   "Courses/IvyTechCourseInfo_15.webp",
-  "Courses/IvyTechCourseInfo_16.webp"
+  "Courses/IvyTechCourseInfo_16.webp",
+  "Courses/IvyTechCourseInfo_17.webp",
+  "Courses/IvyTechCourseInfo_18.webp",
+  "Courses/IvyTechCourseInfo_19.webp",
+  "Courses/IvyTechCourseInfo_20.webp",
+  "Courses/IvyTechCourseInfo_21.webp",
+  "Courses/IvyTechCourseInfo_22.webp",
+  "Courses/IvyTechCourseInfo_23.webp",
+  "Courses/IvyTechCourseInfo_24.webp",
+  "Courses/IvyTechCourseInfo_25.webp",
+  "Courses/IvyTechCourseInfo_26.webp",
+  "Courses/IvyTechCourseInfo_27.webp",
+  "Courses/IvyTechCourseInfo_28.webp",
+  "Courses/IvyTechCourseInfo_29.webp",
+  "Courses/IvyTechCourseInfo_30.webp",
+  "Courses/IvyTechCourseInfo_31.webp",
+  "Courses/IvyTechCourseInfo_32.webp",
+  "Courses/IvyTechCourseInfo_33.webp"
 ];
 
-const SLIDE_INTERVAL_MS = 6000; // time each image is shown
+const SLIDE_INTERVAL_MS = 5000; // time each image is shown
 
 const slideshowEl = document.getElementById("slideshow");
 let currentSlide = 0;
