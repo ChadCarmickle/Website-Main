@@ -71,11 +71,13 @@ const eventImages = [
   "events/event_2.png",
   "events/event_3.png",
   "events/event_4.png",
+  "events/event_5.jpg",
 ]
 
-const SLIDE_INTERVAL_MS = 5000; // 5 seconds per slide. 
-const COURSES_PER_BATCH = 3; // Number of course images to show between event images
+const SLIDE_INTERVAL_MS = 7000; // 5 seconds per slide. 
+const COURSES_PER_BATCH = 10; // Number of course images to show between event images
 const AUTO_RESUME_DELAY = 120000; // 2 minutes in milliseconds
+const NEWS_BANNER = false; // Set to true to enable news alerts. 
 
 const slideshowEl = document.getElementById("slideshow");
 let currentSlide = 0;
@@ -109,15 +111,38 @@ function buildInterleavedSlideshow() {
   });
 }
 
-// Show a specific slide by index
+let fadeTimeout = null;
+const FADE_DURATION = 500;   // how long each fade takes
+const GAP_DURATION = 800;    // how long the blank gap lasts — bump this up
+
 function showSlide(index) {
   const slides = slideshowEl.querySelectorAll("img");
   if (slides.length === 0) return;
 
-  slides[currentSlide].classList.remove("active");
+  if (fadeTimeout) clearTimeout(fadeTimeout);
+
+  const previousSlide = currentSlide;
   currentSlide = (index + slides.length) % slides.length;
-  slides[currentSlide].classList.add("active");
+
+  // Fade out current slide
+  slides[previousSlide].classList.remove("active");
+
+  fadeTimeout = setTimeout(() => {
+    const nextImg = slides[currentSlide];
+
+    // Force the browser to register opacity:0 before we animate to 1
+    nextImg.classList.remove("active"); // just in case
+    void nextImg.offsetWidth;           // force reflow
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        nextImg.classList.add("active");
+      });
+    });
+  }, GAP_DURATION);
 }
+
+
 
 function showNextSlide() {
   showSlide(currentSlide + 1);
@@ -179,7 +204,6 @@ toggleBtn.addEventListener("click", () => {
 });
 
 
-
 /* =========================================================
    3. BUTTON POPUPS
    ========================================================= */
@@ -188,14 +212,36 @@ const modalTitle = document.getElementById("modal-title");
 const modalContent = document.getElementById("modal-content");
 const modalClose = document.getElementById("modal-close");
 
+const modalImage = document.getElementById("modal-image");
+
 document.querySelectorAll(".action-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
-    modalTitle.textContent = btn.dataset.title || "Info";
+    modalTitle.textContent = btn.dataset.title || "Need Help with Tutoring?";
     modalContent.textContent = btn.dataset.content || "";
+
+    if (btn.dataset.image) {
+      modalImage.src = btn.dataset.image;
+      modalImage.alt = btn.dataset.title || "";
+      modalImage.classList.remove("hidden");
+    } else {
+      modalImage.removeAttribute("src");
+      modalImage.classList.add("hidden");
+    }
+
     modalOverlay.classList.remove("hidden");
   });
 });
 
+
+/*
+document.querySelectorAll(".action-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    modalTitle.textContent = btn.dataset.title || "Need Help with Tutoring?";
+    modalContent.textContent = btn.dataset.content || "";
+    modalOverlay.classList.remove("hidden");
+  });
+});
+*/ 
 function closeModal() {
   modalOverlay.classList.add("hidden");
 }
@@ -230,11 +276,6 @@ const range = 25
 let color = 30
 
 // =====================================================
-
-// addEventListener('mousemove', (event) => {
-//   mouse.x = event.clientX
-//   mouse.y = event.clientY
-// })
 
 addEventListener('resize', () => {
 	canvas.width = innerWidth

@@ -77,7 +77,7 @@ html, body {
   height: 100%;
   object-fit: contain;
   opacity: 0;
-  transition: opacity 1.2s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
 }
 
 #slideshow img.active {
@@ -276,4 +276,10 @@ html, body {
     font-weight: 400 700;
     font-style: italic;
     font-display: swap;
+}
+
+#modal-image {
+  max-width: 50%;
+  border-radius: 8px;
+  margin-bottom: 12px;
 }
