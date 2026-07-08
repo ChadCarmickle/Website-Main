@@ -69,6 +69,8 @@ const courseImages = [
 const eventImages = [
   "events/event_1.png",
   "events/event_2.png",
+  "events/event_3.png",
+  "events/event_4.png",
 ]
 
 const SLIDE_INTERVAL_MS = 5000; // 5 seconds per slide. 
