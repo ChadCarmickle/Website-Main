@@ -69,6 +69,7 @@ let slideshowInterval = null;
 let resumeTimeout = null;
 let isPlaying = true;
 
+/*
 // Build the interleaved slideshow array
 function buildInterleavedSlideshow() {
   allSlides = [];
@@ -93,6 +94,42 @@ function buildInterleavedSlideshow() {
     slideshowEl.appendChild(img);
   });
 }
+*/ 
+
+// Build the interleaved slideshow array
+function buildInterleavedSlideshow() {
+  allSlides = [];
+  const totalBatches = Math.ceil(courseImages.length / COURSES_PER_BATCH);
+  
+  // Add initial events
+  eventImages.forEach(src => allSlides.push(src));
+  
+  for (let i = 0; i < totalBatches; i++) {
+    const start = i * COURSES_PER_BATCH;
+    const batch = courseImages.slice(start, start + COURSES_PER_BATCH);
+    allSlides.push(...batch);
+    // Add event after each batch of courses
+    if (i < totalBatches - 1) {
+      eventImages.forEach(src => allSlides.push(src));
+    }
+  }
+  
+  // Add final events
+  eventImages.forEach(src => allSlides.push(src));
+
+  slideshowEl.innerHTML = '';
+  
+  allSlides.forEach((src, index) => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = `Slide ${index + 1}`;
+    if (index === 0) img.classList.add("active");
+    slideshowEl.appendChild(img);
+  });
+  
+  console.log("Built", allSlides.length, "slides");
+}
+
 
 let fadeTimeout = null;
 const FADE_DURATION = 500;   // how long each fade takes

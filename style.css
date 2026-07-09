@@ -70,7 +70,7 @@ html, body {
 }
 
 #slideshow img {
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -227,6 +227,11 @@ html, body {
   text-align: center;
 }
 
+#modal-image.hidden {
+  display: none;
+}
+
+
 #modal-title {
   font-size: 3vw;
   margin-bottom: 2vh;
@@ -238,6 +243,8 @@ html, body {
   color: #cfd3da;
   line-height: 1.5;
   margin-bottom: 3vh;
+  font-family: sans-serif, "Open Sans", "Inter", "Montserrat"; 
+
 }
 
 #modal-close {
@@ -251,10 +258,10 @@ html, body {
   transition: background 0.2s ease;
 }
 
-#modal-close:hover {
-  background: #2f66d0;
+#modal-box.map-mode {
+  width: 90vw;
+  max-width: 1400px;
 }
-
 
 
 /* =============================================
@@ -313,7 +320,50 @@ html, body {
 }
 
 #modal-image {
-  max-width: 50%;
+  max-width: 100%;
   border-radius: 8px;
   margin-bottom: 12px;
+}
+
+
+#map-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    margin: 30px auto 20px;
+    width: fit-content;
+    pointer-events: none;
+}
+
+#map-controls.hidden {
+    display: none;
+}
+
+.map-arrow-btn {
+    pointer-events: auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.75);
+    color: white;
+    font-size: 60px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+#modal-close_map {
+  font-size: 1.8vw;
+  padding: 1.2vh 3vw;
+  border: none;
+  border-radius: 12px;
+  background: #be1010;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }

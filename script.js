@@ -8,7 +8,7 @@ function updateClock() {
   const dateEl = document.getElementById("date");
 
   const timeString = now.toLocaleTimeString([], {
-    hour: "2-digit",
+    hour: "numeric",
     minute: "2-digit",
   });
 
@@ -45,21 +45,36 @@ const modalOverlay = document.getElementById("modal-overlay");
 const modalTitle = document.getElementById("modal-title");
 const modalContent = document.getElementById("modal-content");
 const modalClose = document.getElementById("modal-close");
+const modalCloseMap = document.getElementById("modal-close_map");
 
 const modalImage = document.getElementById("modal-image");
 
 document.querySelectorAll(".action-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
-    modalTitle.textContent = btn.dataset.title || "test";
-    modalContent.textContent = btn.dataset.content || "";
+
+    modalTitle.textContent = btn.dataset.title || "";
+    modalContent.innerHTML  = btn.dataset.content || "";
+    
+    // Hide image initially for non-map
+    if (!btn.dataset.map) {
+      modalImage.classList.add("hidden");
+    }
 
     if (btn.dataset.image) {
       modalImage.src = btn.dataset.image;
-      modalImage.alt = btn.dataset.title || "";
       modalImage.classList.remove("hidden");
-    } else {
-      modalImage.removeAttribute("src");
-      modalImage.classList.add("hidden");
+    }
+
+    if (btn.dataset.map) {
+      currentMap = 0;
+      showMap();
+      mapControls.classList.remove("hidden");
+      modalImage.classList.remove("hidden");
+      document.getElementById("modal-box").classList.add("map-mode");   // ← added
+    }
+    else {
+      mapControls.classList.add("hidden");
+      document.getElementById("modal-box").classList.remove("map-mode");  // ← added
     }
 
     modalOverlay.classList.remove("hidden");
@@ -67,91 +82,66 @@ document.querySelectorAll(".action-btn").forEach((btn) => {
 });
 
 
-/*
-document.querySelectorAll(".action-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    modalTitle.textContent = btn.dataset.title || "Need Help with Tutoring?";
-    modalContent.textContent = btn.dataset.content || "";
-    modalOverlay.classList.remove("hidden");
-  });
-});
-*/ 
+const mapControls = document.getElementById("map-controls");
+const prevMap = document.getElementById("prev-map");
+const nextMap = document.getElementById("next-map");
+
+let currentMap = 0;
+
+const maps = [
+    {
+        image: "buttonResources/map_1.png",
+        title: "Main Campus Map"
+    },
+    {
+        image: "buttonResources/map_2.png",
+        title: "Ogle Hall"
+    }
+];
+
+
 function closeModal() {
   modalOverlay.classList.add("hidden");
+  mapControls.classList.add("hidden");     // Hide map controls too
 }
 
+// Main Close button (bottom of modal)
 modalClose.addEventListener("click", closeModal);
+
+// Map Close button (in the arrow row)
+if (modalCloseMap) {
+  modalCloseMap.addEventListener("click", closeModal);
+} else {
+  console.warn("modal-close_map button not found in HTML");
+}
+
 
 // Close modal if clicking outside the box
 modalOverlay.addEventListener("click", (e) => {
   if (e.target === modalOverlay) closeModal();
 });
 
-let canvas = document.querySelector('canvas'),
-	c = canvas.getContext('2d');
 
-canvas.width = innerWidth;
-canvas.height = innerHeight;
-let w = canvas.width;
-let	h = canvas.height;
-
-const mouse = {
-  x: w / 2,
-  y: h / 2 
+function showMap() {
+    modalImage.src = maps[currentMap].image;
+    modalTitle.textContent = maps[currentMap].title;
+    modalImage.classList.remove("hidden");
 }
 
-let shadows = '#000000'
-const gravity = 0.005
-const friction = 0.99
-const particleCount = 100
-const angleIncreament = Math.PI * 2  / particleCount
-const power = 7
-const range = 25
-let color = 30
+nextMap.addEventListener("click", () => {
+  currentMap++;
+  if (currentMap >= maps.length) {
+    currentMap = 0;
+  }
+  showMap();
+});
 
-// =====================================================
-
-addEventListener('resize', () => {
-	canvas.width = innerWidth
-	canvas.height = innerHeight
-	w = canvas.width
-	h = canvas.height
-
-	init()
-})
-
-addEventListener('click', (event) => {
-	mouse.x = event.clientX
-	mouse.y = event.clientY
-
-	fireWork({x: mouse.x, y: mouse.y})
-	// init(color)
-})
-
-// =====================================================
-
-function randomIntFromRange(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
-function fireWork(mouse, col = color) {
-	for (let i = 0; i < particleCount; i++) {
-		particles.push(new Particle(
-			mouse.x, 
-			mouse.y, 
-			2, 
-			`hsla(
-				${randomIntFromRange(col, col + range)}, 
-				${randomIntFromRange(70, 80)}%, 
-				${randomIntFromRange(55, 65)}%, 
-				50%
-			)`, 
-			{
-				x: Math.cos(particleCount * i) * Math.random() * power, 
-				y: Math.sin(particleCount * i) * Math.random() * power
-			}
-		));
-	}
-}
+prevMap.addEventListener("click", () => {
+  currentMap--;
+  if (currentMap < 0) {
+    currentMap = maps.length - 1;
+  }
+  showMap();
+});
 
 // =====================================================

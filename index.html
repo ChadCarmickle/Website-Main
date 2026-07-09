@@ -28,37 +28,48 @@
     </div>
     <!-- Slideshow Controls -->
     <div class="slideshow-controls">
-      <button id="prev-slide" class="slideshow_control-btn">❮</button>
-      <button id="toggle-play" class="slideshow_control-btn">⏸ </button>
-      <button id="next-slide" class="slideshow_control-btn">❯</button>      
+      <button id="prev-slide" class="control-btn">❮</button>
+      <button id="toggle-play" class="control-btn">⏸ </button>
+      <button id="next-slide" class="control-btn">❯</button>      
     </div>
 
     <!-- BOTTOM: Buttons -->
-    <div id="button-container">
-      <button class="action-btn" data-title="Find the Latest Announcements">Announcements</button>
-      <button class="action-btn" data-title="Campus Resources">Campus<br>Resources</button>
-      <button class="action-btn" data-title="Campus Map">Map</button>
-      
-      <button 
-        class="action-btn" 
-        data-title="Tutoring Available."
-        data-content="FREE in-person and online tutoring is available in Math, English, Anatomy, and more!"
-        data-image="QR_tutor.png">
-        Tutoring
-      </button>
-    </div>
+  <div id="button-container">
+    <button class="action-btn" data-title="Find the Latest Announcements ***Work in progress***">Announcements</button>
+    <button class="action-btn" data-title="Campus Resources ***Work in progress***">Campus<br>Resources</button>
+  
+    <button 
+      class="action-btn"
+      data-title="Main building"
+      data-image="buttonResources/map_1.png"
+      data-map="true">
+      Map
+    </button>
+    <button 
+      class="action-btn" 
+      data-title="Ivy Tech Offers free Tutoring!"
+      data-content="FREE in-person and online tutoring is available in <br><strong> Math, English, Anatomy, and more! </strong>"
+      data-image="buttonResources/QR_tutor.png">
+      Tutoring
+    </button>
+  </div>
 
   </div>
 
-  <!-- Popup Modal -->
-  <div id="modal-overlay" class="hidden">
-    <div id="modal-box">
-      <h2 id="modal-title">Title</h2>
-      <img id="modal-image" class="hidden" alt="">
-      <p id="modal-content">Content</p>
-      <button id="modal-close">Close</button>
+<!-- Popup Modal -->
+<div id="modal-overlay" class="hidden">
+  <div id="modal-box">
+    <h2 id="modal-title">Title</h2>
+    <img id="modal-image" class="hidden" alt="">
+    <div id="map-controls" class="hidden">
+      <button class="map-arrow-btn" id="prev-map">❮</button>
+      <button class="map-arrow-btn" id="next-map">❯</button>
     </div>
+    <p id="map-text"></p>
+    <p id="modal-content"></p>
+    <button id="modal-close">Close</button>
   </div>
+</div>
 
   <script src="script.js" defer></script>
   <script src="slideshow.js" defer></script>
