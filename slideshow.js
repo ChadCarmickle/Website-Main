@@ -60,7 +60,7 @@ const videos = [
 const SLIDE_INTERVAL_MS = 7000; // 5 seconds per slide. 
 const COURSES_PER_BATCH = 3; // Number of course images to show between event images
 const AUTO_RESUME_DELAY = 120000; // 2 minutes in milliseconds
-const NEWS_BANNER = true; // Set to true to enable news alerts. 
+const NEWS_BANNER = false; // Set to true to enable news alerts. 
 
 
 // Checks the NEWS_BANNER flag and shows/hides every .alert-bar element
