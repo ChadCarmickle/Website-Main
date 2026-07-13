@@ -190,7 +190,7 @@ toggleBtn.addEventListener("click", () => {
   isPlaying = !isPlaying;
   
   if (isPlaying) {
-    toggleBtn.textContent = "⏸ Pause";
+    toggleBtn.textContent = "⏸";
     stopAutoPlay();           // Clear any existing interval
     startAutoPlay();          // Resume immediately
     if (resumeTimeout) clearTimeout(resumeTimeout);
@@ -200,3 +200,39 @@ toggleBtn.addEventListener("click", () => {
     scheduleAutoResume();     // Auto resume after 2 minutes
   }
 });
+
+
+// =========================================================
+// SWIPE GESTURE CONTROLS
+// Lets a finger-swipe on the slideshow move to the next/previous
+// slide, the same way the ❮ / ❯ buttons do.
+// =========================================================
+const slideshowContainer = document.getElementById("slideshow-container");
+const SWIPE_THRESHOLD = 50; // minimum horizontal distance (px) to count as a swipe
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+slideshowContainer.addEventListener("touchstart", (e) => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+slideshowContainer.addEventListener("touchend", (e) => {
+  const touchEndX = e.changedTouches[0].clientX;
+  const touchEndY = e.changedTouches[0].clientY;
+  const deltaX = touchEndX - touchStartX;
+  const deltaY = touchEndY - touchStartY;
+
+  // Ignore swipes that are more vertical than horizontal (likely scrolling, not paging)
+  if (Math.abs(deltaX) < Math.abs(deltaY)) return;
+  if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
+
+  if (deltaX < 0) {
+    showNextSlide();   // swiped left -> advance
+  } else {
+    showSlide(currentSlide - 1); // swiped right -> go back
+  }
+
+  if (isPlaying) startAutoPlay(); // reset the autoplay timer, same as the button controls
+}, { passive: true });
