@@ -20,12 +20,27 @@
       <div id="date">Loading date...</div>
     </div>
 
+    <!-- Alert Bar (top) -->
+    <div id="alert-bar-top" class="alert-bar">
+      <div class="scroll-left">
+        <h1><strong>⚠️ Weather Alert: Severe weather is in the area. Stay informed and follow campus safety guidelines. ⚠️</strong></h1>      </div>
+    </div>
+
     <!-- CENTER: Image Slideshow -->
     <div id="slideshow-container">
       <div id="slideshow">
       </div>
       
+
     </div>
+     
+    <!-- Alert Bar (bottom) -->
+    <div id="alert-bar-bottom" class="alert-bar">
+      <div class="scroll-left">
+        <h1><strong>⚠️ Weather Alert: Severe weather is in the area. Stay informed and follow campus safety guidelines. ⚠️</strong></h1>
+      </div>
+    </div>
+
     <!-- Slideshow Controls -->
     <div class="slideshow-controls">
       <button id="prev-slide" class="control-btn">❮</button>
@@ -33,45 +48,86 @@
       <button id="next-slide" class="control-btn">❯</button>      
     </div>
 
-    <!-- BOTTOM: Buttons -->
-  <div id="button-container">
-    <button class="action-btn" data-title="Find the Latest Announcements ***Work in progress***">Announcements</button>
-    <button class="action-btn" data-title="Campus Resources ***Work in progress***">Campus<br>Resources</button>
-  
-    <button 
-      class="action-btn"
-      data-title="Main building"
-      data-image="buttonResources/map_1.png"
-      data-map="true">
-      Map
-    </button>
-    <button 
-      class="action-btn" 
-      data-title="Ivy Tech Offers free Tutoring!"
-      data-content="FREE in-person and online tutoring is available in <br><strong> Math, English, Anatomy, and more! </strong>"
-      data-image="buttonResources/QR_tutor.png">
-      Tutoring
-    </button>
-  </div>
 
-  </div>
+<!-- BOTTOM: Buttons -->
+<div id="button-container">
 
-<!-- Popup Modal -->
+  <!-- *********************************
+       Announcements
+  ********************************** -->
+  <button 
+    class="action-btn"
+    data-title="<span class='content-title'>Announcements"
+   data-content="<span class='content-highlight'>Dr. Pollio</span> <i>President of Ivy Tech</i> </strong> <br> Wednesday July 15th 2026 <br> Will be visiting the Campus <br>----------------------------------------<br> Fall classes start on August 24th">
+    Announcements
+  </button>
+
+  <!-- *********************************
+      Campus Resources
+  ********************************** -->
+  <button 
+    class="action-btn"
+    data-resources="true">
+    Campus <br> resources
+  </button>
+
+  <!-- *********************************
+       Map
+  ********************************** -->
+  <button 
+    class="action-btn"
+    data-title="Main building"
+    data-image="buttonResources/map_1.png"
+    data-map="true">
+    Map
+  </button>
+
+  <!-- *********************************
+       Tutoring
+  ********************************** -->
+  <button 
+    class="action-btn"
+    data-title="Ivy Tech Offers free Tutoring!"
+    data-content="FREE in-person and online tutoring is available in <br><strong>Math, English, Anatomy, and more!</strong>"
+    data-image="buttonResources/QR_tutor.png">
+    Tutoring
+  </button>
+
+</div> <!-- End of button Container -->
+
+  </div> <!-- End of App div -->
+
+
+
+<!-- Model overlay for the buttons.   --> 
 <div id="modal-overlay" class="hidden">
-  <div id="modal-box">
-    <h2 id="modal-title">Title</h2>
-    <img id="modal-image" class="hidden" alt="">
-    <div id="map-controls" class="hidden">
-      <button class="map-arrow-btn" id="prev-map">❮</button>
-      <button class="map-arrow-btn" id="next-map">❯</button>
-    </div>
-    <p id="map-text"></p>
-    <p id="modal-content"></p>
-    <button id="modal-close">Close</button>
+    <div id="modal-box">
+  <h2 id="modal-title">Title2</h2>
+  <img id="modal-image" class="hidden" alt="">
+
+  <p id="map-text"></p>
+  <p id="modal-content"></p>
+
+  <!-- Resource Controls -->
+  <div id="resource-controls" class="hidden">
+    <button class="map-arrow-btn" id="prev-resource">❮</button>
+    <button class="map-arrow-btn" id="next-resource">❯</button>
+  </div>
+
+  <!-- Map Controls -->
+  <div id="map-controls" class="hidden">
+    <button class="map-arrow-btn" id="prev-map">❮</button>
+    <button class="map-arrow-btn" id="next-map">❯</button>
+  </div>
+
+  <button id="modal-close">Close</button>
   </div>
 </div>
 
+  <!-- Scripts that perform basic functionality -->
   <script src="script.js" defer></script>
+
+  <!-- Scripts for slideshow functionality -->
   <script src="slideshow.js" defer></script>
 </body>
 </html>

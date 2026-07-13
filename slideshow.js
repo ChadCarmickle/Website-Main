@@ -60,7 +60,18 @@ const videos = [
 const SLIDE_INTERVAL_MS = 7000; // 5 seconds per slide. 
 const COURSES_PER_BATCH = 3; // Number of course images to show between event images
 const AUTO_RESUME_DELAY = 120000; // 2 minutes in milliseconds
-const NEWS_BANNER = false; // Set to true to enable news alerts. 
+const NEWS_BANNER = true; // Set to true to enable news alerts. 
+
+
+// Checks the NEWS_BANNER flag and shows/hides every .alert-bar element
+// to match it. Safe to call any time — always sets the correct state
+// rather than flipping whatever it currently is.
+function updateAlertBars() {
+  const alertBars = document.querySelectorAll(".alert-bar");
+  alertBars.forEach((bar) => {
+    bar.style.display = NEWS_BANNER ? "block" : "none";
+  });
+}
 
 const slideshowEl = document.getElementById("slideshow");
 let currentSlide = 0;
@@ -69,32 +80,7 @@ let slideshowInterval = null;
 let resumeTimeout = null;
 let isPlaying = true;
 
-/*
-// Build the interleaved slideshow array
-function buildInterleavedSlideshow() {
-  allSlides = [];
-  const totalBatches = Math.ceil(courseImages.length / COURSES_PER_BATCH);
-  
-  for (let i = 0; i < totalBatches; i++) {
-    eventImages.forEach(src => allSlides.push(src));
-    const start = i * COURSES_PER_BATCH;
-    const batch = courseImages.slice(start, start + COURSES_PER_BATCH);
-    allSlides.push(...batch);
-  }
-  
-  eventImages.forEach(src => allSlides.push(src));
 
-  slideshowEl.innerHTML = '';
-  
-  allSlides.forEach((src, index) => {
-    const img = document.createElement("img");
-    img.src = src;
-    img.alt = `Slide ${index + 1}`;
-    if (index === 0) img.classList.add("active");
-    slideshowEl.appendChild(img);
-  });
-}
-*/ 
 
 // Build the interleaved slideshow array
 function buildInterleavedSlideshow() {
@@ -183,7 +169,9 @@ function stopAutoPlay() {
 
 // Initialize the slideshow
 buildInterleavedSlideshow();
-startAutoPlay();
+startAutoPlay(); 
+updateAlertBars();
+
 
 // === Sideshow Button Controls ===
 document.getElementById("next-slide").addEventListener("click", () => {

@@ -38,6 +38,8 @@ function scheduleAutoResume() {
 }
 
 
+
+
 /* =========================================================
    3. BUTTON POPUPS
    ========================================================= */
@@ -49,13 +51,13 @@ const modalCloseMap = document.getElementById("modal-close_map");
 
 const modalImage = document.getElementById("modal-image");
 
+// Add event listeners to all buttons with the class "action-btn"
 document.querySelectorAll(".action-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
 
-    modalTitle.textContent = btn.dataset.title || "";
-    modalContent.innerHTML  = btn.dataset.content || "";
-    
-    // Hide image initially for non-map
+    modalTitle.innerHTML = btn.dataset.title || "";
+    modalContent.innerHTML = btn.dataset.content || "";
+
     if (!btn.dataset.map) {
       modalImage.classList.add("hidden");
     }
@@ -70,11 +72,19 @@ document.querySelectorAll(".action-btn").forEach((btn) => {
       showMap();
       mapControls.classList.remove("hidden");
       modalImage.classList.remove("hidden");
-      document.getElementById("modal-box").classList.add("map-mode");   // ← added
-    }
-    else {
+      document.getElementById("modal-box").classList.add("map-mode");
+    } else {
       mapControls.classList.add("hidden");
-      document.getElementById("modal-box").classList.remove("map-mode");  // ← added
+      document.getElementById("modal-box").classList.remove("map-mode");
+    }
+
+    // NEW: handle campus resources navigation
+    if (btn.dataset.resources) {
+      currentResource = 0;
+      showResource();
+      resourceControls.classList.remove("hidden");
+    } else {
+      resourceControls.classList.add("hidden");
     }
 
     modalOverlay.classList.remove("hidden");
@@ -82,11 +92,55 @@ document.querySelectorAll(".action-btn").forEach((btn) => {
 });
 
 
+
+/************************************************************ 
+    4. CAMPUS RESOURCES infomation display. 
+    Contains an array of objects with title and content for each resource when CAMPUS RESOURCES is clicked.
+************************************************************/ 
+const resourceControls = document.getElementById("resource-controls");
+const prevResource = document.getElementById("prev-resource");
+const nextResource = document.getElementById("next-resource");
+
+// Variable to track the current map index
+let currentResource = 0;
+
+const CampusResources = [
+  {
+    title: "Dean of IT & IT Professors",
+    content: "<strong>Lioyda S. Fairweather.</strong><br><i>Dean of IT</i><br>lfairweather@ivytech.edu <br><br><strong>  Kenyatte V. Simuel</strong><br><i> Cybersecurity, Cloud Technologies, Network Infrastrucuture, IT Support </i><br> ksimuel@ivytech.edu <br><br> Christopher S. Francis </strong><br><i>Infomatics, Software Development, Computer Science, Data Analytics </i><br>cfrancis4@ivytech.edu",
+  },
+  {
+    title: "Academic Advising",
+    content: "Your academic advisor will be your guide as you determine which courses to take each semester. <br><br> For more infomation, please email --- or call 000000000 ext 4242  <br>",
+  },
+  {
+    title: "Disability Support Services",
+    content: "The office of Disability support provides assistance to studnets who qualify for reasonable accommodations. <br><br> For more infomation, please email --- or call 000000000 ext 4242  <br>",
+  },
+  {
+    title: "Financial Aid",
+    content: "Financial aid includes scholarships, grants, work-study and loans - all of which help make college more affordable. <br><br> For more infomation please email --- or call 0000000000 ext 4213",
+  },
+  {
+    title: "Ivy Cares",
+    content: "IvyCares assists you with finding additional campus and community support throughout your academic journey <br> for more ",
+  }
+  
+];
+
+
+
+
+
+
+/************************************************************
+ *   4. MAPS
+ *  Contains an array of objects with image and title for each map when MAP is clicked. 
+ * ************************************************************/
+// variables to control map navigation
 const mapControls = document.getElementById("map-controls");
 const prevMap = document.getElementById("prev-map");
 const nextMap = document.getElementById("next-map");
-
-let currentMap = 0;
 
 const maps = [
     {
@@ -100,9 +154,19 @@ const maps = [
 ];
 
 
+// Variable to track the current map index
+let currentMap = 0;
+
+
+/************************************************************
+ *   4. Display campus resources and maps in the modal when the corresponding buttons are clicked.
+ * ************************************************************/
+
+// Function to close the modal 
 function closeModal() {
   modalOverlay.classList.add("hidden");
-  mapControls.classList.add("hidden");     // Hide map controls too
+  mapControls.classList.add("hidden");
+  resourceControls.classList.add("hidden");
 }
 
 // Main Close button (bottom of modal)
@@ -122,12 +186,38 @@ modalOverlay.addEventListener("click", (e) => {
 });
 
 
+// Function to show the current resource based on currentResource index
+function showResource() {
+  modalTitle.innerHTML = CampusResources[currentResource].title;
+  modalContent.innerHTML = CampusResources[currentResource].content;
+}
+// Event listeners for navigating through campus resources
+nextResource.addEventListener("click", () => {
+  currentResource++;
+  if (currentResource >= CampusResources.length) {
+    currentResource = 0;
+  }
+  showResource();
+});
+
+// Event listener for navigating to the previous campus resource
+prevResource.addEventListener("click", () => {
+  currentResource--;
+  if (currentResource < 0) {
+    currentResource = CampusResources.length - 1;
+  }
+  showResource();
+});
+
+
+// Function to show the current map based on currentMap index
 function showMap() {
     modalImage.src = maps[currentMap].image;
     modalTitle.textContent = maps[currentMap].title;
     modalImage.classList.remove("hidden");
 }
 
+// Event listeners for navigating through maps
 nextMap.addEventListener("click", () => {
   currentMap++;
   if (currentMap >= maps.length) {
@@ -143,5 +233,7 @@ prevMap.addEventListener("click", () => {
   }
   showMap();
 });
+
+
 
 // =====================================================
