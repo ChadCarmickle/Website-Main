@@ -12,7 +12,6 @@ html, body {
   height: 100%;
   overflow: hidden;
   background-color: #006648;
-  background-image: url("background.jpg");
   background-size: cover;
   font-family: "Segoe UI", Arial, sans-serif;
   color: #ffffff;
@@ -31,7 +30,7 @@ html, body {
    TOP: CLOCK
    ============================================================= */
 #clock-container {
-  flex: 0 0 0cm;
+  flex: 0 0 0 auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -48,7 +47,6 @@ html, body {
   letter-spacing: 0px;
   color: #ffffff;
   order: 1;
-  text-decoration: bold;
   font-family: "Inter", "Montserrat", sans-serif, "Open Sans";
 }
 
@@ -158,13 +156,14 @@ html, body {
 /* =============================================================
    BOTTOM: ACTION BUTTONS (Announcements / Resources / Map / Tutoring)
    ============================================================= */
-#button-container {
+/* Old 
+   #button-container {
   flex: 0 0 5%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2vh;
   padding: 3vh 3vw;
-  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjN9sGH0whW8RM8fzqQXZu8BMobjbjD447FvdKFN1RHh0CqYzuPZ66MAIQ&s=10");
+  background-image: url("assets/ButtonBackground.png");
   background-size: repeat;
   border-top: 2px solid #23262f;
 }
@@ -179,12 +178,52 @@ html, body {
   cursor: pointer;
   transition: transform 0.15s ease, background 0.2s ease;
 }
+*/ 
+
+/* New Button display. */ 
+#button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 20px;
+
+    width: 100%;
+    padding: 20px;
+}
+
+.action-btn {
+    flex: 1;
+    max-width: 250px;
+
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+
+    border: 2px solid rgba(255,255,255,0.4);
+
+    color: white;
+    font-size: 28px;
+
+    border-radius: 20px;
+
+    padding: 25px 20px;
+
+    min-height: 120px;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.25);
+
+    transition: 0.25s ease;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 
 .action-btn:active {
   transform: scale(0.96);
 }
-
-
 /* =============================================================
    MODAL (popup shown when an action button is clicked)
    ============================================================= */
@@ -212,7 +251,7 @@ html, body {
   border-radius: 20px;
   padding: 5vh 5vw;
   width: 90vw;
-  max-width: 700px;
+  max-width: 1400px;
   text-align: center;
 }
 
@@ -260,61 +299,76 @@ html, body {
   display: none;
 }
 
-/* Standard "Close" button (bottom of every modal) */
-#modal-close {
-  font-size: 1.8vw;
-  padding: 1.2vh 3vw;
-  border: none;
-  border-radius: 12px;
-  background: #3a7bfd;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.2s ease;
+#resource-image {
+    max-width: 100%;
+    max-height: 60vh;
+    border-radius: 8px;
+    margin-bottom: 12px;
 }
 
-/* Red "Close" button variant used in the map arrow row */
-#modal-close_map {
-  font-size: 1.8vw;
-  padding: 1.2vh 3vw;
-  border: none;
-  border-radius: 12px;
-  background: #be1010;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.2s ease;
+#resource-image.hidden,
+#resource-video.hidden {
+    display: none;
 }
-
 
 /* =============================================================
    MODAL ARROW CONTROLS (Map + Campus Resources navigation)
    ============================================================= */
 
-/* --- Map arrows --- */
+/* --- Map + Campus Resources arrows (mirrors #map-controls) --- */
 #map-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    margin-top: 25px;
+}
+
+
+.resource-video-wrap {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 40px;
-  margin: 30px auto 20px;
-  width: fit-content;
-  pointer-events: none; /* container ignores clicks; buttons re-enable below */
+  justify-content: center;
+  min-height: 300px;
 }
 
-#map-controls.hidden {
-  display: none;
+.resource-video-wrap video {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: 60vh;
+  border-radius: 8px;
+  display: block;
 }
 
-/* --- Campus Resources arrows (mirrors #map-controls) --- */
-#resource-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 40px;
-  margin: 30px auto 20px;
-  width: fit-content;
-  pointer-events: none;
+.resource-arrow-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    margin-top: 25px;
 }
 
+.modal-close,
+.modal-close-map {
+    width: 220px;
+    height: 70px;
+    font-size: 28px;
+
+    background: #fa5903;
+    color: white;
+
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.idle-countdown {
+  font-size: 0.75em;
+  opacity: 0.8;
+}
+
+#map-controls.hidden,
 #resource-controls.hidden {
   display: none;
 }
@@ -326,7 +380,7 @@ html, body {
   height: 100px;
   border-radius: 50%;
   border: none;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(22,110,86);
   color: white;
   font-size: 60px;
   cursor: pointer;
@@ -335,6 +389,32 @@ html, body {
   align-items: center;
   transition: 0.2s;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+
+/* =========================================================
+   Swipe feedback animation
+   ========================================================= */
+
+.control-btn.swipe-feedback {
+  animation: swipeFlash 0.4s ease;
+}
+
+@keyframes swipeFlash {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+
+  50% {
+    transform: scale(1.15);
+    filter: brightness(2);
+  }
+
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
 }
 
 
@@ -419,4 +499,8 @@ html, body {
 @keyframes scroll-left {
   from { transform: translateX(0); }
   to { transform: translateX(-100%); }
+}
+
+.hidden {
+    display: none !important;
 }

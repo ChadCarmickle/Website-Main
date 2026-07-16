@@ -46,30 +46,32 @@ const eventImages = [
   "events/event_3.png",
   "events/event_4.png"
 ]
-// Advertisement paths for ads (tutoring available, reminder to graduate, etc.)
-const ads = [
-  "ad_1.jpg"
-]
 
-// Video paths for videos. 
-const videos = [
-  "videos/video_1.mp4"
-]
-
-
-const SLIDE_INTERVAL_MS = 7000; // 5 seconds per slide. 
+const SLIDE_INTERVAL_MS = 7000; // 7 seconds per slide. 
 const COURSES_PER_BATCH = 3; // Number of course images to show between event images
 const AUTO_RESUME_DELAY = 120000; // 2 minutes in milliseconds
+
+
 const NEWS_BANNER = false; // Set to true to enable news alerts. 
+const NEWS_BANNER_Text = "Display an Alert Message."; 
+const NEWS_BANNER_Color = "red"; 
 
 
-// Checks the NEWS_BANNER flag and shows/hides every .alert-bar element
-// to match it. Safe to call any time — always sets the correct state
-// rather than flipping whatever it currently is.
+// Set bar colors
+document.getElementById("alert-bar-top").style.backgroundColor = NEWS_BANNER_Color;
+document.getElementById("alert-bar-bot").style.backgroundColor = NEWS_BANNER_Color;
+
+// Update every alert text
+document.querySelectorAll(".AlertBar_Text").forEach(element => {
+    element.textContent = NEWS_BANNER_Text;
+});
+
+
 function updateAlertBars() {
   const alertBars = document.querySelectorAll(".alert-bar");
   alertBars.forEach((bar) => {
     bar.style.display = NEWS_BANNER ? "block" : "none";
+
   });
 }
 
@@ -118,7 +120,6 @@ function buildInterleavedSlideshow() {
 
 
 let fadeTimeout = null;
-const FADE_DURATION = 500;   // how long each fade takes
 const GAP_DURATION = 800;    // how long the blank gap lasts — bump this up
 
 function showSlide(index) {
@@ -166,6 +167,18 @@ function stopAutoPlay() {
   }
 }
 
+// Schedule auto-resume after a period of inactivity
+function scheduleAutoResume() {
+  if (resumeTimeout) clearTimeout(resumeTimeout);
+  resumeTimeout = setTimeout(() => {
+    isPlaying = true;
+    const toggleBtn = document.getElementById("toggle-play");
+    if (toggleBtn) toggleBtn.textContent = "⏸";
+    startAutoPlay();
+  }, AUTO_RESUME_DELAY);
+}
+
+
 
 // Initialize the slideshow
 buildInterleavedSlideshow();
@@ -173,8 +186,8 @@ startAutoPlay();
 updateAlertBars();
 
 
-// === Sideshow Button Controls ===
-document.getElementById("next-slide").addEventListener("click", () => {
+// === Slideshow Button Controls ===
+  document.getElementById("next-slide").addEventListener("click", () => {
   showNextSlide();
   if (isPlaying) startAutoPlay();
 });
@@ -228,11 +241,45 @@ slideshowContainer.addEventListener("touchend", (e) => {
   if (Math.abs(deltaX) < Math.abs(deltaY)) return;
   if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
 
-  if (deltaX < 0) {
-    showNextSlide();   // swiped left -> advance
-  } else {
-    showSlide(currentSlide - 1); // swiped right -> go back
-  }
+if (deltaX < 0) {
+
+  // Swipe left = next slide
+  flashSwipeArrow("left");
+  showNextSlide();
+
+} else {
+
+  // Swipe right = previous slide
+  flashSwipeArrow("right");
+  showSlide(currentSlide - 1);
+
+}
 
   if (isPlaying) startAutoPlay(); // reset the autoplay timer, same as the button controls
 }, { passive: true });
+
+
+// =====================================================
+// SWIPE VISUAL FEEDBACK
+// Flashes the matching arrow button when a swipe occurs.
+// =====================================================
+
+function flashSwipeArrow(direction) {
+
+  const button = direction === "left"
+    ? document.getElementById("next-slide")
+    : document.getElementById("prev-slide");
+
+  if (!button) return;
+
+  // Restart animation if triggered quickly multiple times
+  button.classList.remove("swipe-feedback");
+
+  void button.offsetWidth;
+
+  button.classList.add("swipe-feedback");
+
+  setTimeout(() => {
+    button.classList.remove("swipe-feedback");
+  }, 400);
+}

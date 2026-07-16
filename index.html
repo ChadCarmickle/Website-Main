@@ -1,16 +1,16 @@
+<!-- Home page of the system. -->
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Board Display</title>
-  <link rel="stylesheet" href="style.css">
-
-
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Board Display</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
 <body>
 
-
+  <!-- Full display -->
   <div class="app">
 
     <!-- TOP: Time & Date -->
@@ -23,7 +23,8 @@
     <!-- Alert Bar (top) -->
     <div id="alert-bar-top" class="alert-bar">
       <div class="scroll-left">
-        <h1><strong>⚠️ Weather Alert: Severe weather is in the area. Stay informed and follow campus safety guidelines. ⚠️</strong></h1>      </div>
+        <h1 class="AlertBar_Text"></h1>      
+      </div>
     </div>
 
     <!-- CENTER: Image Slideshow -->
@@ -34,10 +35,10 @@
 
     </div>
      
-    <!-- Alert Bar (bottom) -->
-    <div id="alert-bar-bottom" class="alert-bar">
+    <!-- Alert Bar (bottom display) -->
+    <div id="alert-bar-bot" class="alert-bar">
       <div class="scroll-left">
-        <h1><strong>⚠️ Weather Alert: Severe weather is in the area. Stay informed and follow campus safety guidelines. ⚠️</strong></h1>
+        <h1 class="AlertBar_Text"></h1>
       </div>
     </div>
 
@@ -57,8 +58,13 @@
   ********************************** -->
   <button 
     class="action-btn"
-    data-title="<span class='content-title'>Announcements"
-   data-content="<span class='content-highlight'>Dr. Pollio</span> <i>President of Ivy Tech</i> </strong> <br> Wednesday July 15th 2026 <br> Will be visiting the Campus <br>----------------------------------------<br> Fall classes start on August 24th">
+    data-title="Announcements"
+    data-content="
+      📣 Fall classes start on August 24th — enroll now! <br> Don’t miss the first week of lectures and syllabus updates. <br><br>
+
+      Attention students: Starting today, the library is open until 9 PM on weekdays.<br><br> 
+
+      Please review the campus parking map and purchase your permit.<br><br>"> 
     Announcements
   </button>
 
@@ -76,8 +82,6 @@
   ********************************** -->
   <button 
     class="action-btn"
-    data-title="Main building"
-    data-image="buttonResources/map_1.png"
     data-map="true">
     Map
   </button>
@@ -87,9 +91,9 @@
   ********************************** -->
   <button 
     class="action-btn"
-    data-title="Ivy Tech Offers free Tutoring!"
-    data-content="FREE in-person and online tutoring is available in <br><strong>Math, English, Anatomy, and more!</strong>"
-    data-image="buttonResources/QR_tutor.png">
+    data-title="Ivy Tech 2026 Summer"
+    data-content=""
+    data-image="assets/QR_tutor.png">
     Tutoring
   </button>
 
@@ -101,26 +105,58 @@
 
 <!-- Model overlay for the buttons.   --> 
 <div id="modal-overlay" class="hidden">
+  
     <div id="modal-box">
+      
   <h2 id="modal-title">Title2</h2>
   <img id="modal-image" class="hidden" alt="">
 
-  <p id="map-text"></p>
   <p id="modal-content"></p>
 
+  
   <!-- Resource Controls -->
-  <div id="resource-controls" class="hidden">
-    <button class="map-arrow-btn" id="prev-resource">❮</button>
-    <button class="map-arrow-btn" id="next-resource">❯</button>
+    <div id="resource-controls" class="hidden">
+
+      <div id="resource-video-wrap" class="resource-video-wrap">
+
+      <!-- Campus Resource Image -->
+      <img id="resource-image" class="hidden" alt="Campus Resource">
+
+      <!-- Campus Resource Video -->
+      <video id="resource-video" class="hidden" width="320" height="240" controls>
+        <source id="resource-video-source" src="" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+
+    </div>
+      
+
+      
+      <div class="resource-arrow-row">
+        <button class="map-arrow-btn" id="prev-resource">❮</button>
+          <button id="modal-close-resource" class="modal-close">
+          Close <span class="idle-countdown"></span>
+          </button>
+        <button class="map-arrow-btn" id="next-resource">❯</button>
+      </div>
   </div>
 
   <!-- Map Controls -->
-  <div id="map-controls" class="hidden">
+   <div id="map-controls" class="hidden">
     <button class="map-arrow-btn" id="prev-map">❮</button>
+      <button id="modal-close-map" class="modal-close">
+        Close <span class="idle-countdown"></span>
+      </button>
     <button class="map-arrow-btn" id="next-map">❯</button>
   </div>
 
-  <button id="modal-close">Close</button>
+  <!-- General Modal Close -->
+  <div id="general-modal-controls">
+    <button id="modal-close" class="modal-close">
+      Close <span class="idle-countdown"></span>
+    </button>
+  </div>
+
   </div>
 </div>
 
