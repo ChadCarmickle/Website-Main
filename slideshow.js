@@ -47,14 +47,21 @@ const eventImages = [
   "events/event_4.png"
 ]
 
+
 const SLIDE_INTERVAL_MS = 7000; // 7 seconds per slide. 
 const COURSES_PER_BATCH = 3; // Number of course images to show between event images
-const AUTO_RESUME_DELAY = 120000; // 2 minutes in milliseconds
+const AUTO_RESUME_DELAY = 40000; // 2 minutes in milliseconds
 
 
 const NEWS_BANNER = false; // Set to true to enable news alerts. 
 const NEWS_BANNER_Text = "Display an Alert Message."; 
 const NEWS_BANNER_Color = "red"; 
+
+// Countdown display logic for slideshow. 
+let resumeCountdownInterval = null;
+let resumeCountdown = AUTO_RESUME_DELAY / 1000;
+const slideshowCountdownEl = document.getElementById("slideshow-idle-countdown");
+
 
 
 // Set bar colors
@@ -167,15 +174,58 @@ function stopAutoPlay() {
   }
 }
 
-// Schedule auto-resume after a period of inactivity
 function scheduleAutoResume() {
   if (resumeTimeout) clearTimeout(resumeTimeout);
-  resumeTimeout = setTimeout(() => {
+  if (resumeCountdownInterval) clearInterval(resumeCountdownInterval);
+
+  resumeCountdown = AUTO_RESUME_DELAY / 1000;
+  updateSlideshowCountdown();
+
+  resumeCountdownInterval = setInterval(() => {
+    resumeCountdown--;
+    updateSlideshowCountdown();
+
+    if (resumeCountdown <= 0) {
+      clearInterval(resumeCountdownInterval);
+    }
+  }, 1000);
+
+resumeTimeout = setTimeout(() => {
     isPlaying = true;
     const toggleBtn = document.getElementById("toggle-play");
-    if (toggleBtn) toggleBtn.textContent = "⏸";
+    if (toggleBtn) {
+      toggleBtn.childNodes[0].textContent = "⏸ "; // update icon only, keep the countdown span intact
+    }
     startAutoPlay();
+    hideSlideshowCountdown();
   }, AUTO_RESUME_DELAY);
+}
+
+function updateSlideshowCountdown() {
+  if (!slideshowCountdownEl) return;
+
+  if (resumeCountdown <= 30 && resumeCountdown > 0) {
+    slideshowCountdownEl.textContent = `(${resumeCountdown}s)`;
+    slideshowCountdownEl.classList.remove("hidden");
+  } else {
+    slideshowCountdownEl.textContent = "";
+    slideshowCountdownEl.classList.add("hidden");
+  }
+}
+
+function hideSlideshowCountdown() {
+  if (slideshowCountdownEl) {
+    slideshowCountdownEl.textContent = "";
+    slideshowCountdownEl.classList.add("hidden");
+  }
+  if (resumeCountdownInterval) {
+    clearInterval(resumeCountdownInterval);
+    resumeCountdownInterval = null;
+  }
+  if (resumeTimeout) {
+    clearTimeout(resumeTimeout);
+    resumeTimeout = null;
+  }
 }
 
 
@@ -188,11 +238,13 @@ updateAlertBars();
 
 // === Slideshow Button Controls ===
   document.getElementById("next-slide").addEventListener("click", () => {
+  window.analytics.logEvent("slideshow_next");
   showNextSlide();
   if (isPlaying) startAutoPlay();
 });
 
 document.getElementById("prev-slide").addEventListener("click", () => {
+  window.analytics.logEvent("slideshow_prev");
   showSlide(currentSlide - 1);
   if (isPlaying) startAutoPlay();
 });
@@ -201,18 +253,24 @@ document.getElementById("prev-slide").addEventListener("click", () => {
 const toggleBtn = document.getElementById("toggle-play");
 toggleBtn.addEventListener("click", () => {
   isPlaying = !isPlaying;
+
+  window.analytics.logEvent("slideshow_toggle", { 
+    state: isPlaying ? "play" : "pause" 
+  });
   
   if (isPlaying) {
-    toggleBtn.textContent = "⏸";
-    stopAutoPlay();           // Clear any existing interval
-    startAutoPlay();          // Resume immediately
-    if (resumeTimeout) clearTimeout(resumeTimeout);
-  } else {
-    toggleBtn.textContent = "▶";
+    toggleBtn.childNodes[0].textContent = "⏸ ";
     stopAutoPlay();
-    scheduleAutoResume();     // Auto resume after 2 minutes
+    startAutoPlay();
+    hideSlideshowCountdown(); // clears timer + hides countdown on manual resume
+  } else {
+    toggleBtn.childNodes[0].textContent = "▶ ";
+    stopAutoPlay();
+    scheduleAutoResume();
   }
 });
+
+
 
 
 // =========================================================
@@ -243,12 +301,14 @@ slideshowContainer.addEventListener("touchend", (e) => {
 
 if (deltaX < 0) {
 
+  // log data. 
+  window.analytics.logEvent("swipe", { direction: "left" });
   // Swipe left = next slide
   flashSwipeArrow("left");
   showNextSlide();
 
 } else {
-
+  window.analytics.logEvent("swipe", { direction: "right" });
   // Swipe right = previous slide
   flashSwipeArrow("right");
   showSlide(currentSlide - 1);

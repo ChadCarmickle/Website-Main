@@ -14,7 +14,7 @@
   <div class="app">
 
     <!-- TOP: Time & Date -->
-    <div id="clock-container">
+    <div id="clock-container" style="cursor: default; user-select: none;">
 
       <div id="time">00:00:00</div>
       <div id="date">Loading date...</div>
@@ -45,7 +45,7 @@
     <!-- Slideshow Controls -->
     <div class="slideshow-controls">
       <button id="prev-slide" class="control-btn">❮</button>
-      <button id="toggle-play" class="control-btn">⏸ </button>
+      <button id="toggle-play" class="control-btn">⏸ <span id="slideshow-idle-countdown" class="idle-countdown hidden"></span></button>
       <button id="next-slide" class="control-btn">❯</button>      
     </div>
 
@@ -86,16 +86,14 @@
     Map
   </button>
 
-  <!-- *********************************
-       Tutoring
-  ********************************** -->
-  <button 
-    class="action-btn"
-    data-title="Ivy Tech 2026 Summer"
-    data-content=""
-    data-image="assets/QR_tutor.png">
-    Tutoring
-  </button>
+<!-- *********************************
+     Programs
+********************************** -->
+<button 
+  class="action-btn"
+  data-programs="true">
+  Programs
+</button>
 
 </div> <!-- End of button Container -->
 
@@ -113,25 +111,26 @@
 
   <p id="modal-content"></p>
 
-  
+
   <!-- Resource Controls -->
     <div id="resource-controls" class="hidden">
 
       <div id="resource-video-wrap" class="resource-video-wrap">
 
-      <!-- Campus Resource Image -->
-      <img id="resource-image" class="hidden" alt="Campus Resource">
+        <!-- Campus Resource Image -->
+        <img id="resource-image" class="hidden" alt="Campus Resource">
 
-      <!-- Campus Resource Video -->
-      <video id="resource-video" class="hidden" width="320" height="240" controls>
-        <source id="resource-video-source" src="" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+        <!-- Campus Resource Video -->
+            <video id="resource-video" class="hidden" width="320" height="240" controls controlsList="nofullscreen" disablePictureInPicture>
+              <source id="resource-video-source" src="" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <img id="resource-qr" class="hidden" alt="Scan QR code">
+      </div>
 
-    </div>
-      
+      <!-- Quick-jump links -->
+      <div id="resource-jump-links" class="resource-jump-links"></div>
 
-      
       <div class="resource-arrow-row">
         <button class="map-arrow-btn" id="prev-resource">❮</button>
           <button id="modal-close-resource" class="modal-close">
@@ -139,7 +138,37 @@
           </button>
         <button class="map-arrow-btn" id="next-resource">❯</button>
       </div>
+
+    </div>
+
+  <!-- Programs Controls -->
+  <div id="program-controls" class="hidden">
+    <div id="program-video-wrap" class="resource-video-wrap">
+      <!-- Program Image -->
+      <img id="program-image" class="hidden" alt="Program Image">
+      
+      <!-- Program Video -->
+      <video id="program-video" class="hidden" width="320" height="240" controls controlsList="nofullscreen" disablePictureInPicture>
+        <source id="program-video-source" src="" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      
+      <img id="program-qr" class="hidden" alt="Scan QR code">
+    </div>
+
+    <!-- Quick-jump links for Programs -->
+    <div id="program-jump-links" class="resource-jump-links"></div>
+
+    <div class="resource-arrow-row">
+      <button class="map-arrow-btn" id="prev-program">❮</button>
+      <button id="modal-close-program" class="modal-close">
+        Close <span class="idle-countdown"></span>
+      </button>
+      <button class="map-arrow-btn" id="next-program">❯</button>
+    </div>
   </div>
+
+
 
   <!-- Map Controls -->
    <div id="map-controls" class="hidden">
@@ -160,10 +189,15 @@
   </div>
 </div>
 
+  <!-- Analytics: separate file, must load before script.js and slideshow.js -->
+  <script src="analytics.js" defer></script>
+
   <!-- Scripts that perform basic functionality -->
   <script src="script.js" defer></script>
 
   <!-- Scripts for slideshow functionality -->
   <script src="slideshow.js" defer></script>
+
+
 </body>
 </html>
