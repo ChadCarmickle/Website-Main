@@ -161,9 +161,12 @@
 
     <div class="resource-arrow-row">
       <button class="map-arrow-btn" id="prev-program">❮</button>
-      <button id="modal-close-program" class="modal-close">
-        Close <span class="idle-countdown"></span>
-      </button>
+        <button id="program-back" class="modal-close hidden">
+         Back
+        </button>
+        <button id="modal-close-program" class="modal-close">
+         Close <span class="idle-countdown"></span>
+        </button>
       <button class="map-arrow-btn" id="next-program">❯</button>
     </div>
   </div>
@@ -191,6 +194,9 @@
 
   <!-- Analytics: separate file, must load before script.js and slideshow.js -->
   <script src="analytics.js" defer></script>
+
+  <!-- Data: field/program/resource content, must load before script.js -->
+<script src="resources.js" defer></script>
 
   <!-- Scripts that perform basic functionality -->
   <script src="script.js" defer></script>

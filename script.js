@@ -107,72 +107,6 @@ document.querySelectorAll(".action-btn").forEach((btn) => {
    ========================================================= */
 // Tracks the currently displayed campus resource
 
-const CampusResources = [
-  { 
-    label: "Registrar", 
-    title: "Office of the Registrar",
-    content: "The Office of the Registrar performs a variety of functions at Ivy Tech Community College. At some time during your connection with Ivy Tech, you will probably have contact with the office due to the nature of its responsibilities. Some of the functions of the office are listed below. <br><br>• Changing your demographic information <br>• Credit Hours / Load / Enrollment Status <br>• Student Loan Deferment Requests and Insurance Reporting, <br>• Adding / Dropping Courses <br>• Grading / Improving a Grade  <br>• Grade Point Average (GPA) / Dean's List <br>• Transfer of Credit <br>• Graduation <br>• Transscripts  <br>• Family Education Rights & Privacy Act of 1974, as amended  <br>• Voter Registration ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  { 
-    label: "Tutoring", 
-    title: "Ivy tech<br> Offers free tutoring in the following subjects:",
-    content: "",
-    image: "/assets/_QR_tutor.png",
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Academic Advising", 
-    title: "Academic Advising at Ivy Tech",
-    content: "Academic advising serves to help students set and complete their programs and/or academic goals by building relationships within their student success network. Advising is a collaborative partnership where the student is the primary driver for success and their advisor serves as a navigator to support them through their educational journey. <br><br>Your academic advisor will be your guide as you determine which courses to take each semester. If your goal is to transfer to a four-year college or university, your advisor will help you with that too! <br><br> For more infomation, Scan the QR code!",
-    image: "assets/CampusResources/AcademicAdvising.jpg",
-    video: null,
-    qr: "assets/CampusResources/QR_AcademicAdvising.jpg",
-  },
-  {
-    label: "Disability Services", 
-    title: "Disability Support Services",
-    content: "As an Ivy Tech student, you have access to a wide variety of resources to meet your individual needs.  If you have a disability, you’ll want to learn more about Disability Support Services (DSS) and how they can support you?  DSS works with students on a case-by-case basis to determine what accommodations meet their specific needs in accordance with the Americans with Disabilities Act. <br> In addition, to ensuring you receive the best possible learning accommodations, DSS serves as an advocate for students with disabilities.  Get started by contacting the DSS office on your home campus or completing an Accommodation Request Form. <br><br> For additional Questions Scan the QR code below.",
-    image: "assets/CampusResources/disabilitySupport.jpg",
-    video: null,
-    qr: "assets/CampusResources/QR_AcademicAdvising.jpg",
-  },
-  {
-    label: "Finnancial Aid", 
-    title: "Financial Aid",
-    content: "Financial aid is money to help pay for college or career school. Whether your goal is finding a career after graduation or continuing on to a four-year university, getting financial aid can help you pay for college now and finish with little to no debt or a more manageable payment plan. Financial aid includes scholarships, grants, work-study, and loans—all of which help make college more affordable. <br> • Scholarships <br> • Grants <br> • Federal Work-Study <br> • Loans <br><br> For more infomation, Scan the QR code!  ",
-    image: "assets/CampusResources/FinnancialAid.jpg",
-    video: null,
-    qr: "assets/CampusResources/QR_AcademicAdvising.jpg",
-  },
-  {
-    label: "Career Link", 
-    title: "Career Link",
-    content: "Career Link is a team that provides transformative career development services for Ivy Tech students and alumni as well as a variety of talent connection opportunities and employee training for employers. The pool of resources we offer connects students, employers, alumni, and communities. <br> By focusing on honing the employability skills of our students and the state's workers, we are working to meet the specific skills and training needs of employers in Indiana and neighboring states. ",
-    image: "assets/CampusResources/Career.jpg",
-    video: null,
-    qr: "assets/CampusResources/QR_AcademicAdvising.jpg",
-  },  
-  {
-    label: "IT professors", 
-    title: "IT Professors",
-    image: "assets/campusResource_ITProf.png",
-    video: null,
-    qr: null,
-  },
-
-  {
-    label: "Video Example", 
-    title: "Video Example",
-    image: null,
-    video: "videos/video_1.mp4",
-    qr: null,
-  }
-];
-
 function buildResourceJumpLinks() {
   resourceJumpLinks.innerHTML = "";
   CampusResources.forEach((resource, index) => {
@@ -191,169 +125,105 @@ function buildResourceJumpLinks() {
 buildResourceJumpLinks();
 
 /* =========================================================
-   4. PROGRAMS
+   4. PROGRAMS (field -> program drill-down)
    ========================================================= */
-const ProgramResources = [
-  { 
-    label: "Advanced Manufacturing", 
-    title: "Advanced Manufacturing",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Agriculture", 
-    title: "Agriculture",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Automotive", 
-    title: "Automotive",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Aviation", 
-    title: "Aviation",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Computers & Infomation Technology", 
-    title: "Computers & Infomation Technology",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Construction", 
-    title: "Construction",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Education", 
-    title: "Education",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  
-  {
-    label: "Engineering", 
-    title: "Engineering",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Entrepreneurship", 
-    title: "Entrepreneurship",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Fine Arts & Design", 
-    title: "Fine Arts & Design",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "General Studies", 
-    title: "General Studies",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Healthcare", 
-    title: "Healthcare",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Hospitality & Culinary", 
-    title: "Hospitality & Culinary",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Law", 
-    title: "Law",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
-  {
-    label: "Public Safety", 
-    title: "Public Safety",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
+const programBack = document.getElementById("program-back");
 
-  {
-    label: "Science & Applied Science", 
-    title: "Science & Applied Science",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  },
+// null = showing the field grid. A number = index into ProgramFields.
+let currentFieldIndex = null;
 
-  {
-    label: "Science & Applied Science", 
-    title: "Science & Applied Science",
-    content: " ",
-    image: null,
-    video: null,
-    qr: null,
-  }
-  
-]; 
+function getCurrentPrograms() {
+  if (currentFieldIndex === null) return [];
+  return ProgramFields[currentFieldIndex].programs || [];
+}
 
-function buildProgramJumpLinks() {
+// Called when Programs button is first clicked (from script.js's main handler)
+function showProgram() {
+  currentFieldIndex = null;
+  currentProgram = 0;
+  renderFieldGrid();
+}
+
+function renderFieldGrid() {
+  modalTitle.innerHTML = "Programs";
+  modalContent.innerHTML = "Tap a field to see its programs.";
+
+  document.getElementById("program-image").classList.add("hidden");
+  document.getElementById("program-video").classList.add("hidden");
+  document.getElementById("program-qr").classList.add("hidden");
+  document.getElementById("program-video-wrap").classList.add("empty");
+
+  document.getElementById("prev-program").classList.add("hidden");
+  document.getElementById("next-program").classList.add("hidden");
+  programBack.classList.add("hidden");
+
   programJumpLinks.innerHTML = "";
-  ProgramResources.forEach((prog, index) => {
+  ProgramFields.forEach((field, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = field.label;
+    btn.dataset.index = index;
+    btn.addEventListener("click", () => {
+      resetModalTimer();
+      window.analytics.logEvent("program_field_select", { field: field.label });
+      openField(index);
+    });
+    programJumpLinks.appendChild(btn);
+  });
+}
+
+function openField(fieldIndex) {
+  currentFieldIndex = fieldIndex;
+  currentProgram = 0;
+
+  const programs = getCurrentPrograms();
+
+  if (programs.length === 0) {
+    modalTitle.innerHTML = ProgramFields[fieldIndex].label;
+    modalContent.innerHTML = "Programs for this field are coming soon.";
+    document.getElementById("program-image").classList.add("hidden");
+    document.getElementById("program-video").classList.add("hidden");
+    document.getElementById("program-qr").classList.add("hidden");
+    document.getElementById("program-video-wrap").classList.add("empty");
+    document.getElementById("prev-program").classList.add("hidden");
+    document.getElementById("next-program").classList.add("hidden");
+    programJumpLinks.innerHTML = "";
+    programBack.classList.remove("hidden");
+    return;
+  }
+
+  // Skip straight to the detail view if there's only one program
+  renderProgramJumpLinks();
+  renderProgramDetail();
+  programBack.classList.remove("hidden");
+
+  const showArrows = programs.length > 1;
+  document.getElementById("prev-program").classList.toggle("hidden", !showArrows);
+  document.getElementById("next-program").classList.toggle("hidden", !showArrows);
+}
+
+function renderProgramJumpLinks() {
+  const programs = getCurrentPrograms();
+  programJumpLinks.innerHTML = "";
+  programs.forEach((prog, index) => {
     const btn = document.createElement("button");
     btn.textContent = prog.label || prog.title;
     btn.dataset.index = index;
     btn.addEventListener("click", () => {
       resetModalTimer();
       currentProgram = index;
-      showProgram();
+      renderProgramDetail();
     });
     programJumpLinks.appendChild(btn);
   });
 }
 
-function showProgram() {
-  const program = ProgramResources[currentProgram];
-  modalTitle.innerHTML = program.title || "";
+function renderProgramDetail() {
+  const programs = getCurrentPrograms();
+  const program = programs[currentProgram];
+  if (!program) return;
+
+  const fieldLabel = ProgramFields[currentFieldIndex].label;
+  modalTitle.innerHTML = `${fieldLabel} <br><span style="font-size:0.6em;opacity:0.8;">${program.title || ""}</span>`;
   modalContent.innerHTML = program.content || "";
 
   const progImage = document.getElementById("program-image");
@@ -387,9 +257,38 @@ function showProgram() {
   programJumpLinks.querySelectorAll("button").forEach(btn => {
     btn.classList.toggle("active-resource", Number(btn.dataset.index) === currentProgram);
   });
+
+  window.analytics.logEvent("program_view", {
+    field: fieldLabel,
+    program: program.label || program.title || "Unknown"
+  });
 }
 
-buildProgramJumpLinks();
+// Back button: from program detail/list -> back to field grid
+programBack.addEventListener("click", () => {
+  resetModalTimer();
+  window.analytics.logEvent("program_back", {});
+  currentFieldIndex = null;
+  currentProgram = 0;
+  renderFieldGrid();
+});
+
+// Prev/Next now cycle within the CURRENT field's programs only
+nextProgram.addEventListener("click", () => {
+  resetModalTimer();
+  const programs = getCurrentPrograms();
+  if (programs.length === 0) return;
+  currentProgram = (currentProgram + 1) % programs.length;
+  renderProgramDetail();
+});
+
+prevProgram.addEventListener("click", () => {
+  resetModalTimer();
+  const programs = getCurrentPrograms();
+  if (programs.length === 0) return;
+  currentProgram = (currentProgram - 1 + programs.length) % programs.length;
+  renderProgramDetail();
+});
 
 /* =========================================================
    5. MAPS
@@ -398,6 +297,7 @@ const maps = [
   { image: "assets/map_1.png", title: "Main Campus Map" },
   { image: "assets/map_2.png", title: "Ogle Hall" }
 ];
+
 
 /* =========================================================
    6. IDLE TIMER + DISPLAY FUNCTIONS
@@ -451,10 +351,16 @@ function stopModalTimer() {
   }
 }
 
+
+
+
+
 /* =========================================================
    6. MODAL DISPLAY FUNCTIONS
    ========================================================= */
    function closeModal() {
+  currentFieldIndex = null;
+  currentProgram = 0;
   stopModalTimer();
   modalOverlay.classList.add("hidden");
   
@@ -568,16 +474,4 @@ prevMap.addEventListener("click", () => {
   resetModalTimer();
   currentMap = (currentMap - 1 + maps.length) % maps.length;
   showMap();
-});
-
-nextProgram.addEventListener("click", () => {
-  resetModalTimer();
-  currentProgram = (currentProgram + 1) % ProgramResources.length;
-  showProgram();
-});
-
-prevProgram.addEventListener("click", () => {
-  resetModalTimer();
-  currentProgram = (currentProgram - 1 + ProgramResources.length) % ProgramResources.length;
-  showProgram();
 });
