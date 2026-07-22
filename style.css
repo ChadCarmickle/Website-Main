@@ -66,7 +66,8 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #3e3939;
+  background: linear-gradient(135deg, #006648 0%, #8DC63F 45%, #41AD49 100%);
+
   position: relative;
   overflow: hidden;
   background-color: rgb(22, 110, 86);
@@ -519,18 +520,14 @@ html, body {
 }
 
 .resource-jump-links button {
-  background: rgba(255,255,255,0.1);
-  color: #cfd3da;
+  background: linear-gradient(135deg, #006648 0%, #41AD49 55%, #8DC63F 100%);
+  color: #000;
   border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 20px;
+  border-radius: 0px;
   padding: 10px 18px;
-  font-size: 1.2vw;
+  font-size: 2vw;
   cursor: pointer;
   transition: 0.2s ease;
-}
-
-.resource-jump-links button:hover {
-  background: rgba(255,255,255,0.2);
 }
 
 .resource-jump-links button.active-resource {

@@ -145,9 +145,8 @@ function showProgram() {
 }
 
 function renderFieldGrid() {
-  modalTitle.innerHTML = "Programs";
-  modalContent.innerHTML = "Tap a field to see its programs.";
-
+  modalTitle.innerHTML = ' <strong style="font-size: 24px;">Ivy tech Offers over 70+ Programs <br> Desngined for Indiana Jobs!</strong>'; 
+  modalContent.innerHTML = "<i> Tap the subjects below to view each category. </i>"; 
   document.getElementById("program-image").classList.add("hidden");
   document.getElementById("program-video").classList.add("hidden");
   document.getElementById("program-qr").classList.add("hidden");
