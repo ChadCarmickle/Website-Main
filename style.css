@@ -19,10 +19,15 @@ html, body {
 
 /* Main app wrapper: stacks clock / slideshow / buttons vertically */
 .app {
+  /* Deep ivy -> woodland -> banks of the wabash */
+/* Ivy green with a cooler contrast (grey) */
+/* Bright green glow look */
+background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
   display: flex;
   flex-direction: column;
   width: 100vw;
   height: 100vh;
+  
 }
 
 
@@ -36,8 +41,6 @@ html, body {
   justify-content: space-between;
   align-items: center;
   padding: 0 3vw;
-  background-color: rgb(22, 110, 86);
-  white-space: nowrap;
 }
 
 #date {
@@ -66,8 +69,6 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #006648 0%, #8DC63F 45%, #41AD49 100%);
-
   position: relative;
   overflow: hidden;
   background-color: rgb(22, 110, 86);
@@ -557,3 +558,19 @@ html, body {
 #resource-video::-webkit-media-controls-fullscreen-button {
   display: none !important;
 }
+
+
+#slideshow-container {
+  background: linear-gradient(180deg, #006648 0%, #41AD49 55%, #8DC63F 100%);
+}
+
+/* Top (clock bar): light at top, darker as it goes down */
+#clock-container {
+  background: linear-gradient(180deg, #8DC63F 0%, #41AD49 45%, #006648 100%);
+}
+
+/* App base (so the “bleed” between sections matches):
+   light near the top, dark near the bottom */
+.app {
+  background: linear-gradient(180deg, #8DC63F 0%, #41AD49 45%, #006648 100%);
+} 
