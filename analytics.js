@@ -2,6 +2,16 @@
    analytics.js - Smart Board Analytics Logger
    ========================================================= */
 
+// ====================== MODE TOGGLE ======================
+// Set to true while developing/testing so you get a confirmation
+// before the page closes (handy so you don't lose test data).
+
+// Set to false before deploying to the live smart board — the
+// export still fires, but nothing blocks the window from closing.
+const DEV_MODE = true;
+
+
+
 const ANALYTICS_VERSION = "1.3";
 
 let eventLog = [];
@@ -26,9 +36,10 @@ function saveLogs() {
 
 // Main logging function
 function logEvent(action, details = {}) {
+  const now = new Date();
   const event = {
-    timestamp: new Date().toISOString(),
-    session: sessionStart,
+    date: now.toLocaleDateString(),
+    time: now.toLocaleTimeString(),
     action: action,
     ...details
   };
@@ -37,6 +48,7 @@ function logEvent(action, details = {}) {
   saveLogs();
   console.log(`[Analytics] ${action}`, details);
 }
+
 
 // Export logs
 function exportAnalytics(auto = false) {
@@ -52,16 +64,23 @@ function exportAnalytics(auto = false) {
   linkElement.click();
 
   console.log(`[Analytics] Exported ${eventLog.length} events ${auto ? '(auto on close)' : ''}`);
+
+  // Clear the log now that it's safely exported, so it doesn't keep growing forever
+  eventLog = [];
+  saveLogs();
+
 }
 
 // ====================== AUTO BACKUP ON CLOSE ======================
 
 function setupAutoBackupOnClose() {
   window.addEventListener("beforeunload", (event) => {
-    if (eventLog.length > 0) {
-      exportAnalytics(true);   // Auto backup before closing
+    if (eventLog.length === 0) return;
 
-      // Optional warning (you can remove this line if you don't want any popup)
+    exportAnalytics(true); // fire off the auto backup regardless of mode
+
+    if (DEV_MODE) {
+      // Native "leave site?" confirmation — dev/testing only
       event.preventDefault();
       event.returnValue = "Closing this application. Analytics data will be saved.";
     }

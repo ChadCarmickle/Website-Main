@@ -50,13 +50,15 @@ const nextMap = document.getElementById("next-map");
 let currentResource = 0;
 let currentProgram = 0;
 let currentMap = 0;
+let currentAnnouncement = 0;
+let currentModalMode = null;  // 'announcements', 'resources', 'map', etc.
 
 // Button handler
 document.querySelectorAll(".action-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     const btnType = btn.textContent.trim() || btn.dataset.title || "Unknown";
-    window.analytics.logEvent("button_click", { button: btnType, dataset: { ...btn.dataset } });
-
+    window.analytics.logEvent("button_click", { button: btnType });
+    
     // Reset modal
     modalTitle.innerHTML = btn.dataset.title || "";
     modalContent.innerHTML = btn.dataset.content || "";
@@ -76,23 +78,36 @@ document.querySelectorAll(".action-btn").forEach((btn) => {
     // Show the correct mode
     if (btn.dataset.map) {
       currentMap = 0;
+      currentModalMode = 'map';
       showMap();
       mapControls.classList.remove("hidden");
       generalModalControls.classList.add("hidden");
       document.getElementById("modal-box").classList.add("map-mode");
     } else if (btn.dataset.resources) {
       currentResource = 0;
+      currentModalMode = 'resources';
       showResource();
       resourceControls.classList.remove("hidden");
       generalModalControls.classList.add("hidden");
       document.getElementById("modal-box").classList.remove("map-mode");
+      buildResourceJumpLinks();           // ← Added
     } else if (btn.dataset.programs) {
       currentProgram = 0;
+      currentModalMode = 'programs';
       showProgram();
       programControls.classList.remove("hidden");
       generalModalControls.classList.add("hidden");
       document.getElementById("modal-box").classList.remove("map-mode");
+    } else if (btn.dataset.announcements) {
+      currentAnnouncement = 0;
+      currentModalMode = 'announcements';
+      showAnnouncement();
+      resourceControls.classList.remove("hidden");  
+      generalModalControls.classList.add("hidden");
+      document.getElementById("modal-box").classList.remove("map-mode");
+      buildAnnouncementJumpLinks();       // ← Added (this was the fix)
     } else {
+      currentModalMode = null;
       document.getElementById("modal-box").classList.remove("map-mode");
     }
 
@@ -101,6 +116,73 @@ document.querySelectorAll(".action-btn").forEach((btn) => {
     resetModalTimer();   // Start idle timer
   });
 });
+
+
+/* =========================================================
+   3. Announcements.
+   ========================================================= */
+
+function showAnnouncement() {
+  const ann = Announcements[currentAnnouncement];
+  modalTitle.innerHTML = ann.title || "Announcement";
+  modalContent.innerHTML = ann.content || "";
+
+  const resourceImage = document.getElementById("resource-image");
+  const resourceQr = document.getElementById("resource-qr");
+  const video = document.getElementById("resource-video");
+  const videoSource = document.getElementById("resource-video-source");
+  const videoWrap = document.getElementById("resource-video-wrap");
+
+  resourceImage.classList.add("hidden");
+  resourceQr.classList.add("hidden");
+  video.classList.add("hidden");
+  video.pause();
+  video.currentTime = 0;
+
+  if (ann.image) {
+    resourceImage.src = ann.image;
+    resourceImage.classList.remove("hidden");
+  } else if (ann.video) {
+    videoSource.src = ann.video;
+    video.load();
+    video.classList.remove("hidden");
+  }
+
+  if (ann.qr) {
+    resourceQr.src = ann.qr;
+    resourceQr.classList.remove("hidden");
+  }
+
+  const hasMedia = Boolean(ann.image || ann.video || ann.qr);
+  videoWrap.classList.toggle("empty", !hasMedia);
+
+  resourceJumpLinks.querySelectorAll("button").forEach(btn => {
+    btn.classList.toggle("active-resource", Number(btn.dataset.index) === currentAnnouncement);
+  });
+
+  window.analytics.logEvent("announcement_view", {
+    index: currentAnnouncement,
+    label: ann.label || ann.title || "Unknown"
+  });
+}
+
+
+function buildAnnouncementJumpLinks() {
+  resourceJumpLinks.innerHTML = "";  // Reuse resource jump links
+  Announcements.forEach((ann, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = ann.label || ann.title;
+    btn.dataset.index = index;
+    btn.addEventListener("click", () => {
+      resetModalTimer();
+      currentAnnouncement = index;
+      showAnnouncement();
+    });
+    resourceJumpLinks.appendChild(btn);
+  });
+}
+
+buildAnnouncementJumpLinks();
 
 /* =========================================================
    3. CAMPUS RESOURCES
@@ -314,7 +396,7 @@ function resetModalTimer() {
   if (modalTimer) clearInterval(modalTimer);
   modalCountdown = MODAL_IDLE_TIME;
 
-  document.querySelectorAll(".idle-countdown").forEach(counter => {
+  modalOverlay.querySelectorAll(".idle-countdown").forEach(counter => {
     counter.textContent = "";
     counter.classList.add("hidden");
   });
@@ -332,8 +414,8 @@ function resetModalTimer() {
 }
 
 function updateModalCountdown() {
-  document.querySelectorAll(".idle-countdown").forEach(counter => {
-    if (modalCountdown <= 30) {
+  modalOverlay.querySelectorAll(".idle-countdown").forEach(counter => {
+    if (modalCountdown <= 30 && modalCountdown > 0) {
       counter.textContent = `(${modalCountdown}s)`;
       counter.classList.remove("hidden");
     } else {
@@ -348,6 +430,11 @@ function stopModalTimer() {
     clearInterval(modalTimer);
     modalTimer = null;
   }
+  modalOverlay.querySelectorAll(".idle-countdown").forEach(counter => {
+    counter.textContent = "";
+    counter.classList.add("hidden");
+  });
+
 }
 
 
@@ -360,6 +447,8 @@ function stopModalTimer() {
    function closeModal() {
   currentFieldIndex = null;
   currentProgram = 0;
+  currentAnnouncement = 0;
+  currentModalMode = null;
   stopModalTimer();
   modalOverlay.classList.add("hidden");
   
@@ -453,14 +542,24 @@ function showMap() {
 // Navigation listeners 
 nextResource.addEventListener("click", () => {
   resetModalTimer();
-  currentResource = (currentResource + 1) % CampusResources.length;
-  showResource();
+  if (currentModalMode === 'announcements') {
+    currentAnnouncement = (currentAnnouncement + 1) % Announcements.length;
+    showAnnouncement();
+  } else {
+    currentResource = (currentResource + 1) % CampusResources.length;
+    showResource();
+  }
 });
 
 prevResource.addEventListener("click", () => {
   resetModalTimer();
-  currentResource = (currentResource - 1 + CampusResources.length) % CampusResources.length;
-  showResource();
+  if (currentModalMode === 'announcements') {
+    currentAnnouncement = (currentAnnouncement - 1 + Announcements.length) % Announcements.length;
+    showAnnouncement();
+  } else {
+    currentResource = (currentResource - 1 + CampusResources.length) % CampusResources.length;
+    showResource();
+  }
 });
 
 nextMap.addEventListener("click", () => {

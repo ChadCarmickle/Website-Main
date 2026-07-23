@@ -1,5 +1,57 @@
+/* =========================================================
+   1. Global Variables. 
+   ========================================================= */
+const SLIDE_INTERVAL_MS = 7000; // 7 seconds per slide. 
+const COURSES_PER_BATCH = 3; // Number of course images to show between event images
+const AUTO_RESUME_DELAY = 40000; // 2 minutes in milliseconds
 
 
+const NEWS_BANNER = false; // Set to true to enable news alerts. 
+const NEWS_BANNER_Text = "Display an Alert Message."; 
+const NEWS_BANNER_Color = "red"; 
+
+// Countdown display logic for slideshow. 
+let resumeCountdownInterval = null;
+let resumeCountdown = AUTO_RESUME_DELAY / 1000;
+const slideshowCountdownEl = document.getElementById("slideshow-idle-countdown");
+
+
+
+/* =========================================================
+   2. Announcements. 
+   ========================================================= */
+
+const Announcements = [
+    { 
+      label: "Fall Enrollment",   // Short label for jump buttons
+      title: "Fall Classes Start August 24th",
+      content: "📣 Fall classes start on August 24th — enroll now! ...",  
+      image: null,     
+      video: null,     
+      qr: null,        
+    },
+    { 
+      label: "Library Hours", 
+      title: "Extended Library Hours",
+      content: "Attention students: Starting today, the library is open until 9 PM on weekdays.",
+      image: "assets/ProgramResources/Healthcare/HealthInformationTechnology.jpg",
+      video: null,
+      qr: null,
+    },
+    {
+      label: "Parking", 
+      title: "Campus Parking Reminder",
+      content: "Please review the campus parking map and purchase your permit.",
+      image: null,
+      video: "videos/video_1.mp4",
+      qr: null,
+    },
+];
+
+
+/* =========================================================
+   2. Campus Resources: 
+   ========================================================= */
 const CampusResources = [
   { 
     label: "Registrar", 
@@ -36,7 +88,7 @@ const CampusResources = [
   {
     label: "Financial Aid", 
     title: "Financial Aid",
-    content: "Financial aid is money to help pay for college or career school. Whether your goal is finding a career after graduation or continuing on to a four-year university, getting financial aid can help you pay for college now and finish with little to no debt or a more manageable payment plan. Financial aid includes scholarships, grants, work-study, and loans—all of which help make college more affordable. <br> • Scholarships <br> • Grants <br> • Federal Work-Study <br> • Loans <br><br> For more information, Scan the QR code!  ",
+    content: "Financial aid is money to help pay for college or career school. Whether your goal is finding a career after graduation or continuing on to a four-year university, getting financial aid can help you pay for college now and finish with little to no debt or a more manageable payment plan. <br><br> Financial aid includes: <br> • Scholarships <br> • Grants <br> • Federal Work-Study <br> • Loans <br><br> For more information, Scan the QR code!  ",
     image: "assets/CampusResources/FinancialAid.jpg",
     video: null,
     qr: "assets/CampusResources/QR_AcademicAdvising.jpg",
@@ -44,7 +96,7 @@ const CampusResources = [
   {
     label: "Career Link", 
     title: "Career Link",
-    content: "Career Link is a team that provides transformative career development services for Ivy Tech students and alumni as well as a variety of talent connection opportunities and employee training for employers. The pool of resources we offer connects students, employers, alumni, and communities. <br> By focusing on honing the employability skills of our students and the state's workers, we are working to meet the specific skills and training needs of employers in Indiana and neighboring states. ",
+    content: "Career Link is a team that provides transformative career development services for Ivy Tech students and alumni as well as a variety of talent connection opportunities and employee training for employers. The pool of resources we offer connects students, employers, alumni, and communities. <br><br> By focusing on honing the employability skills of our students and the state's workers, we are working to meet the specific skills and training needs of employers in Indiana and neighboring states. ",
     image: "assets/CampusResources/Career.jpg",
     video: null,
     qr: "assets/CampusResources/QR_AcademicAdvising.jpg",
@@ -70,32 +122,6 @@ const CampusResources = [
 /* =========================================================
    4. PROGRAMS
    ========================================================= */
-
-/* 
-    label: "Advanced Manufacturing",
-    programs: [
-      {
-        label: "Industrial Technology",
-        title: "Industrial Technology",
-        content: "Trains students to install, maintain, and troubleshoot automated manufacturing equipment. <br><br><b>Salary range:</b> $42,000 – $60,000 <br><b>Duration:</b> 2-year Associate Degree",
-        image: "assets/ProgramsResources/automationmanufacturing.jpg",
-        video: null,
-        qr: null,
-      },
-      {
-        label: "Welding Technology",
-        title: "Welding Technology",
-        content: "Hands-on training in MIG, TIG, and stick welding for manufacturing and construction trades. <br><br><b>Salary range:</b> $38,000 – $55,000 <br><b>Duration:</b> 1-year Certificate or 2-year Associate Degree",
-        image: "assets/ProgramsResources/Nursing.jpg",
-        video: null,
-        qr: null,
-      }
-    ]
-  },
-
-
-*/ 
-
 
 const ProgramFields = [
   {

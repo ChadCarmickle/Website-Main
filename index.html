@@ -57,16 +57,10 @@
        Announcements
   ********************************** -->
   <button 
-    class="action-btn"
-    data-title="Announcements"
-    data-content="
-      📣 Fall classes start on August 24th — enroll now! <br> Don’t miss the first week of lectures and syllabus updates. <br><br>
-
-      Attention students: Starting today, the library is open until 9 PM on weekdays.<br><br> 
-
-      Please review the campus parking map and purchase your permit.<br><br>"> 
-    Announcements
-  </button>
+      class="action-btn"
+      data-announcements="true">
+      Announcements
+    </button>
 
   <!-- *********************************
       Campus Resources
@@ -121,7 +115,7 @@
         <img id="resource-image" class="hidden" alt="Campus Resource">
 
         <!-- Campus Resource Video -->
-            <video id="resource-video" class="hidden" width="320" height="240" controls controlsList="nofullscreen" disablePictureInPicture>
+            <video id="resource-video" class="hidden" width="320" height="240" controls controlsList="nofullscreen" disablePictureInPicture autoplay>
               <source id="resource-video-source" src="" type="video/mp4">
               Your browser does not support the video tag.
             </video>

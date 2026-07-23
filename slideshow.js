@@ -47,23 +47,6 @@ const eventImages = [
   "events/event_4.png"
 ]
 
-
-const SLIDE_INTERVAL_MS = 7000; // 7 seconds per slide. 
-const COURSES_PER_BATCH = 3; // Number of course images to show between event images
-const AUTO_RESUME_DELAY = 40000; // 2 minutes in milliseconds
-
-
-const NEWS_BANNER = false; // Set to true to enable news alerts. 
-const NEWS_BANNER_Text = "Display an Alert Message."; 
-const NEWS_BANNER_Color = "red"; 
-
-// Countdown display logic for slideshow. 
-let resumeCountdownInterval = null;
-let resumeCountdown = AUTO_RESUME_DELAY / 1000;
-const slideshowCountdownEl = document.getElementById("slideshow-idle-countdown");
-
-
-
 // Set bar colors
 document.getElementById("alert-bar-top").style.backgroundColor = NEWS_BANNER_Color;
 document.getElementById("alert-bar-bot").style.backgroundColor = NEWS_BANNER_Color;

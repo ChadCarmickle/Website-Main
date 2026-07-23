@@ -352,7 +352,7 @@ background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 80px;
+    gap: 20px;
     margin-top: 25px;
 }
 
