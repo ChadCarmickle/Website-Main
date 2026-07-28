@@ -21,8 +21,8 @@ const slideshowCountdownEl = document.getElementById("slideshow-idle-countdown")
 
 
 // How often a video plays. 
-const VIDEO_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
-//const VIDEO_INTERVAL_MS = 0.5 * 60 * 1000; // 1 minute (testing)
+//const VIDEO_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+const VIDEO_INTERVAL_MS = 0.5 * 60 * 1000; // 30 seconds (testing)
 
 /* =========================================================
    2. Announcements. 

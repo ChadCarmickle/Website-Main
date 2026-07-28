@@ -48,7 +48,6 @@ const eventImages = [
 ]
 
 const departmentVideos = [
-  "videos/video_1.mp4", 
   "videos/video_2.mp4",
   "videos/video_3.mp4", 
   "videos/video_4.mp4"
