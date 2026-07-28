@@ -388,7 +388,7 @@ modalOverlay.addEventListener("touchstart", resetModalTimer);
 modalOverlay.addEventListener("click", resetModalTimer);
 modalOverlay.addEventListener("keydown", resetModalTimer);
 
-const MODAL_IDLE_TIME = 40;
+const MODAL_IDLE_TIME = 120;
 let modalTimer = null;
 let modalCountdown = MODAL_IDLE_TIME;
 

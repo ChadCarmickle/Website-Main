@@ -2,17 +2,7 @@
    analytics.js - Smart Board Analytics Logger
    ========================================================= */
 
-// ====================== MODE TOGGLE ======================
-// Set to true while developing/testing so you get a confirmation
-// before the page closes (handy so you don't lose test data).
-
-// Set to false before deploying to the live smart board — the
-// export still fires, but nothing blocks the window from closing.
-const DEV_MODE = true;
-
-
-
-const ANALYTICS_VERSION = "1.3";
+const ANALYTICS_VERSION = "1.5";
 
 let eventLog = [];
 let sessionStart = new Date().toISOString();
@@ -34,13 +24,34 @@ function saveLogs() {
   localStorage.setItem("smartboard_analytics", JSON.stringify(eventLog));
 }
 
-// Main logging function
+
+
+const ACTION_CATEGORIES = {
+  slideshow_next:    "Slideshow",
+  slideshow_prev:    "Slideshow",
+  slideshow_toggle:  "Slideshow",
+  swipe:             "Slideshow",
+  announcement_view: "Announcements",
+  resource_view:     "Campus Resources",
+  map_view:          "Map",
+  program_view:      "Programs",
+  program_back:      "Programs",
+  modal_close:       "Exit pop-up"
+};
+
+function getCategory(action, details) {
+  if (action === "button_click") return details.button || "Other";
+  return ACTION_CATEGORIES[action] || "Other";
+}
+
+// Main logging function — now tags each event with its category up front
 function logEvent(action, details = {}) {
   const now = new Date();
   const event = {
     date: now.toLocaleDateString(),
     time: now.toLocaleTimeString(),
-    action: action,
+    action,
+    category: getCategory(action, details),
     ...details
   };
 
@@ -50,13 +61,38 @@ function logEvent(action, details = {}) {
 }
 
 
+// Builds the readable, grouped report you sketched out —
+// a banner per category, a count, then each event underneath.
+function buildReport() {
+  const groups = {};
+  eventLog.forEach(evt => {
+    (groups[evt.category] ||= []).push(evt);
+  });
+
+  let out = "";
+  Object.keys(groups).forEach(category => {
+    out += `\n/* =========================================================\n`;
+    out += `   ${category.toUpperCase()}\n`;
+    out += `   ========================================================= */\n`;
+    out += `Amount: ${groups[category].length}\n\n`;
+
+    groups[category].forEach(evt => {
+      const detail = evt.label || evt.title || evt.program || evt.button || "";
+      out += `  ${evt.date} ${evt.time}  ${detail}\n`;
+    });
+  });
+
+  return out;
+}
+
+
 // Export logs
 function exportAnalytics(auto = false) {
   if (eventLog.length === 0) return;
 
-  const dataStr = JSON.stringify(eventLog, null, 2);
-  const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-  const exportFileDefaultName = `smartboard-analytics-${new Date().toISOString().slice(0,10)}-${Date.now()}.json`;
+  const reportStr = buildReport();
+  const dataUri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(reportStr);
+  const exportFileDefaultName = `smartboard-analytics-${new Date().toISOString().slice(0,10)}-${Date.now()}.txt`;
 
   const linkElement = document.createElement('a');
   linkElement.setAttribute('href', dataUri);
@@ -65,26 +101,8 @@ function exportAnalytics(auto = false) {
 
   console.log(`[Analytics] Exported ${eventLog.length} events ${auto ? '(auto on close)' : ''}`);
 
-  // Clear the log now that it's safely exported, so it doesn't keep growing forever
   eventLog = [];
   saveLogs();
-
-}
-
-// ====================== AUTO BACKUP ON CLOSE ======================
-
-function setupAutoBackupOnClose() {
-  window.addEventListener("beforeunload", (event) => {
-    if (eventLog.length === 0) return;
-
-    exportAnalytics(true); // fire off the auto backup regardless of mode
-
-    if (DEV_MODE) {
-      // Native "leave site?" confirmation — dev/testing only
-      event.preventDefault();
-      event.returnValue = "Closing this application. Analytics data will be saved.";
-    }
-  });
 }
 
 // ====================== SECRET EXPORT TRIGGER ======================
@@ -130,11 +148,9 @@ function triggerExport() {
 // Initialize
 loadLogs();
 setupSecretExportTrigger();
-setupAutoBackupOnClose();
 
 console.log(`✅ Smart Board Analytics v${ANALYTICS_VERSION} initialized.`);
 console.log(`   • Tap clock 5 times or hold 5s → manual export`);
-console.log(`   • Closing the program → auto backup (data stays until you reopen)`);
 
 // Expose API
 window.analytics = {

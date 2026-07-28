@@ -47,6 +47,16 @@ const eventImages = [
   "events/event_4.png"
 ]
 
+const departmentVideos = [
+  "videos/video_1.mp4", 
+  "videos/video_2.mp4",
+  "videos/video_3.mp4", 
+  "videos/video_4.mp4"
+];
+
+
+let videoIndex = 0;
+
 // Set bar colors
 document.getElementById("alert-bar-top").style.backgroundColor = NEWS_BANNER_Color;
 document.getElementById("alert-bar-bot").style.backgroundColor = NEWS_BANNER_Color;
@@ -71,6 +81,9 @@ let allSlides = [];
 let slideshowInterval = null;
 let resumeTimeout = null;
 let isPlaying = true;
+
+
+
 
 
 
@@ -150,6 +163,42 @@ function startAutoPlay() {
   slideshowInterval = setInterval(showNextSlide, SLIDE_INTERVAL_MS);
 }
 
+function insertAndShowVideo(src) {
+  stopAutoPlay(); // pause the normal image rotation while the video plays
+
+  const slides = slideshowEl.querySelectorAll("img, video");
+  if (slides[currentSlide]) slides[currentSlide].classList.remove("active");
+
+  const videoEl = document.createElement("video");
+  videoEl.src = src;
+  videoEl.autoplay = true;
+  videoEl.muted = true;       // start muted — this is always allowed to autoplay
+  videoEl.playsInline = true;
+  videoEl.classList.add("active");
+
+  videoEl.addEventListener("playing", () => {
+    videoEl.muted = false;    // unmute the instant it's actually playing
+  }, { once: true });
+
+  videoEl.addEventListener("ended", () => {
+    videoEl.remove();
+    if (isPlaying) startAutoPlay();
+    showNextSlide();
+  });
+
+  slideshowEl.appendChild(videoEl);
+}
+
+function playScheduledVideo() {
+  if (departmentVideos.length === 0) return; // no videos configured — resume like nothing happened
+
+  const videoSrc = departmentVideos[videoIndex % departmentVideos.length];
+  videoIndex++;
+  insertAndShowVideo(videoSrc);
+}
+
+
+
 function stopAutoPlay() {
   if (slideshowInterval) {
     clearInterval(slideshowInterval);
@@ -217,6 +266,7 @@ function hideSlideshowCountdown() {
 buildInterleavedSlideshow();
 startAutoPlay(); 
 updateAlertBars();
+setInterval(playScheduledVideo, VIDEO_INTERVAL_MS);
 
 
 // === Slideshow Button Controls ===
