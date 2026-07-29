@@ -21,6 +21,8 @@ updateClock();
 /* =========================================================
    2. MODAL SETUP & BUTTONS
    ========================================================= */
+
+// Global varaibles to call all the elements.    
 const modalOverlay = document.getElementById("modal-overlay");
 const modalTitle = document.getElementById("modal-title");
 const modalContent = document.getElementById("modal-content");
@@ -38,6 +40,7 @@ const modalCloseResource = document.getElementById("modal-close-resource");
 const modalCloseProgram = document.getElementById("modal-close-program");
 const modalCloseMap = document.getElementById("modal-close-map");
 const modalClose = document.getElementById("modal-close");
+const programBack = document.getElementById("program-back");
 
 const prevResource = document.getElementById("prev-resource");
 const nextResource = document.getElementById("next-resource");
@@ -121,7 +124,7 @@ document.querySelectorAll(".action-btn").forEach((btn) => {
 /* =========================================================
    3. Announcements.
    ========================================================= */
-
+// Changes the content on the Announcements page. 
 function showAnnouncement() {
   const ann = Announcements[currentAnnouncement];
   modalTitle.innerHTML = ann.title || "Announcement";
@@ -166,7 +169,7 @@ function showAnnouncement() {
   });
 }
 
-
+// Allows user to click labels to jump to that subject. 
 function buildAnnouncementJumpLinks() {
   resourceJumpLinks.innerHTML = "";  // Reuse resource jump links
   Announcements.forEach((ann, index) => {
@@ -187,8 +190,8 @@ buildAnnouncementJumpLinks();
 /* =========================================================
    3. CAMPUS RESOURCES
    ========================================================= */
-// Tracks the currently displayed campus resource
 
+// Allows users to jump to label. 
 function buildResourceJumpLinks() {
   resourceJumpLinks.innerHTML = "";
   CampusResources.forEach((resource, index) => {
@@ -209,7 +212,6 @@ buildResourceJumpLinks();
 /* =========================================================
    4. PROGRAMS (field -> program drill-down)
    ========================================================= */
-const programBack = document.getElementById("program-back");
 
 // null = showing the field grid. A number = index into ProgramFields.
 let currentFieldIndex = null;
@@ -227,7 +229,7 @@ function showProgram() {
 }
 
 function renderFieldGrid() {
-  modalTitle.innerHTML = ' <strong style="font-size: 24px;">Ivy tech Offers over 70+ Programs <br> Desngined for Indiana Jobs!</strong>'; 
+  modalTitle.innerHTML = ' <strong style="font-size: 24px;">Ivy Tech Offers over 70+ Programs <br> Designed for Indiana Jobs!</strong>'; 
   modalContent.innerHTML = "<i> Tap the subjects below to view each category. </i>"; 
   document.getElementById("program-image").classList.add("hidden");
   document.getElementById("program-video").classList.add("hidden");
@@ -354,7 +356,7 @@ programBack.addEventListener("click", () => {
   renderFieldGrid();
 });
 
-// Prev/Next now cycle within the CURRENT field's programs only
+// Button listener for the next > button. 
 nextProgram.addEventListener("click", () => {
   resetModalTimer();
   const programs = getCurrentPrograms();
@@ -363,6 +365,7 @@ nextProgram.addEventListener("click", () => {
   renderProgramDetail();
 });
 
+// button listener for the preview < button. 
 prevProgram.addEventListener("click", () => {
   resetModalTimer();
   const programs = getCurrentPrograms();
@@ -413,6 +416,7 @@ function resetModalTimer() {
   }, 1000);
 }
 
+// 
 function updateModalCountdown() {
   modalOverlay.querySelectorAll(".idle-countdown").forEach(counter => {
     if (modalCountdown <= 30 && modalCountdown > 0) {
@@ -437,8 +441,40 @@ function stopModalTimer() {
 
 }
 
+const IDLE_NUDGE_DELAY = 15000; // 45 seconds of no interaction
+let nudgeTimer = null;
 
+function startNudgeTimer() {
+  clearTimeout(nudgeTimer);
 
+  // Make sure no leftover animation is running
+  document.querySelectorAll(".action-btn").forEach(btn => {
+    btn.classList.remove("idle-nudge");
+  });
+
+  nudgeTimer = setTimeout(() => {
+    document.querySelectorAll(".action-btn").forEach(btn => {
+      btn.classList.add("idle-nudge");
+    });
+  }, IDLE_NUDGE_DELAY);
+}
+
+function resetNudge() {
+  document.querySelectorAll(".action-btn").forEach(btn => {
+    btn.classList.remove("idle-nudge");
+  });
+  startNudgeTimer();
+}
+
+// Restart the timer on any interaction
+["click", "touchstart", "mousemove"].forEach(evt => {
+  document.addEventListener(evt, resetNudge, { passive: true });
+});
+
+// Also call resetNudge() inside your main button click handlers
+// and when the modal opens, so the hop never runs while someone is using the board.
+
+startNudgeTimer(); // kick it off on page load
 
 
 /* =========================================================

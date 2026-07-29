@@ -2,7 +2,7 @@
    analytics.js - Smart Board Analytics Logger
    ========================================================= */
 
-const ANALYTICS_VERSION = "1.5";
+const ANALYTICS_VERSION = "2.0";
 
 let eventLog = [];
 let sessionStart = new Date().toISOString();
@@ -25,7 +25,7 @@ function saveLogs() {
 }
 
 
-
+// dispalys the categories when the analytics is used. 
 const ACTION_CATEGORIES = {
   slideshow_next:    "Slideshow",
   slideshow_prev:    "Slideshow",
@@ -39,6 +39,8 @@ const ACTION_CATEGORIES = {
   modal_close:       "Exit pop-up"
 };
 
+
+// calls the category 
 function getCategory(action, details) {
   if (action === "button_click") return details.button || "Other";
   return ACTION_CATEGORIES[action] || "Other";
@@ -158,3 +160,12 @@ window.analytics = {
   exportAnalytics,
   getLogCount: () => eventLog.length
 };
+
+function clearAnalyticsData() {
+  eventLog = [];
+  localStorage.removeItem("smartboard_analytics");
+  // or: localStorage.setItem("smartboard_analytics", "[]");
+}
+
+window.addEventListener("beforeunload", clearAnalyticsData);
+window.addEventListener("unload", clearAnalyticsData);

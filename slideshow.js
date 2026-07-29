@@ -55,6 +55,8 @@ const departmentVideos = [
 
 
 let videoIndex = 0;
+let videoQueue = [];       // videos waiting their turn — only played on an unattended (auto) advance
+let currentVideoEl = null; // the department video currently inserted/playing in the slideshow, if any
 
 // Set bar colors
 document.getElementById("alert-bar-top").style.backgroundColor = NEWS_BANNER_Color;
@@ -66,6 +68,7 @@ document.querySelectorAll(".AlertBar_Text").forEach(element => {
 });
 
 
+// Updates the alert bar based on user settings. 
 function updateAlertBars() {
   const alertBars = document.querySelectorAll(".alert-bar");
   alertBars.forEach((bar) => {
@@ -83,8 +86,19 @@ let isPlaying = true;
 
 
 
+// Cancels the video if prev or next is clicked. 
+function cancelActiveVideo() {
+  if (!currentVideoEl) return;
 
+  currentVideoEl.pause();
+  currentVideoEl.remove();          // removes from DOM
+  currentVideoEl = null;
 
+  // Make sure autoplay can resume later
+  if (isPlaying) {
+    // nothing extra needed – startAutoPlay() will be called by the callers
+  }
+}
 
 // Build the interleaved slideshow array
 function buildInterleavedSlideshow() {
@@ -122,7 +136,7 @@ function buildInterleavedSlideshow() {
 
 
 let fadeTimeout = null;
-const GAP_DURATION = 800;    // how long the blank gap lasts — bump this up
+const GAP_DURATION = 1000;    // how long the blank gap lasts — bump this up
 
 function showSlide(index) {
   const slides = slideshowEl.querySelectorAll("img");
@@ -159,7 +173,19 @@ function showNextSlide() {
 
 function startAutoPlay() {
   if (slideshowInterval) clearInterval(slideshowInterval);
-  slideshowInterval = setInterval(showNextSlide, SLIDE_INTERVAL_MS);
+  slideshowInterval = setInterval(autoAdvance, SLIDE_INTERVAL_MS);
+}
+
+// Called only by the unattended autoplay timer (never by manual next/prev/swipe).
+// If a video is queued and waiting, this is its moment to play; otherwise just
+// advance to the next image like normal.
+function autoAdvance() {
+  if (videoQueue.length > 0) {
+    const nextVideo = videoQueue.shift();
+    insertAndShowVideo(nextVideo);
+    return;
+  }
+  showNextSlide();
 }
 
 function insertAndShowVideo(src) {
@@ -175,12 +201,15 @@ function insertAndShowVideo(src) {
   videoEl.playsInline = true;
   videoEl.classList.add("active");
 
+  currentVideoEl = videoEl;
+
   videoEl.addEventListener("playing", () => {
     videoEl.muted = false;    // unmute the instant it's actually playing
   }, { once: true });
 
   videoEl.addEventListener("ended", () => {
     videoEl.remove();
+    currentVideoEl = null;
     if (isPlaying) startAutoPlay();
     showNextSlide();
   });
@@ -188,15 +217,14 @@ function insertAndShowVideo(src) {
   slideshowEl.appendChild(videoEl);
 }
 
+// Schedules a video to play — it's added to the queue and will only be
 function playScheduledVideo() {
-  if (departmentVideos.length === 0) return; // no videos configured — resume like nothing happened
-
+  if (departmentVideos.length === 0) return;
+  if (videoQueue.length > 0 || currentVideoEl) return; // already have one waiting or playing
   const videoSrc = departmentVideos[videoIndex % departmentVideos.length];
   videoIndex++;
-  insertAndShowVideo(videoSrc);
+  videoQueue.push(videoSrc);
 }
-
-
 
 function stopAutoPlay() {
   if (slideshowInterval) {
@@ -227,7 +255,11 @@ resumeTimeout = setTimeout(() => {
     if (toggleBtn) {
       toggleBtn.childNodes[0].textContent = "⏸ "; // update icon only, keep the countdown span intact
     }
-    startAutoPlay();
+    if (currentVideoEl) {
+      currentVideoEl.play(); // resume the video that was paused, rather than restarting image autoplay
+    } else {
+      startAutoPlay();
+    }
     hideSlideshowCountdown();
   }, AUTO_RESUME_DELAY);
 }
@@ -271,12 +303,14 @@ setInterval(playScheduledVideo, VIDEO_INTERVAL_MS);
 // === Slideshow Button Controls ===
   document.getElementById("next-slide").addEventListener("click", () => {
   window.analytics.logEvent("slideshow_next");
+  cancelActiveVideo();                 
   showNextSlide();
   if (isPlaying) startAutoPlay();
 });
 
 document.getElementById("prev-slide").addEventListener("click", () => {
   window.analytics.logEvent("slideshow_prev");
+  cancelActiveVideo();
   showSlide(currentSlide - 1);
   if (isPlaying) startAutoPlay();
 });
@@ -292,12 +326,21 @@ toggleBtn.addEventListener("click", () => {
   
   if (isPlaying) {
     toggleBtn.childNodes[0].textContent = "⏸ ";
-    stopAutoPlay();
-    startAutoPlay();
+    if (currentVideoEl) {
+      currentVideoEl.play(); // resume the paused video
+    } else {
+      cancelActiveVideo();
+      stopAutoPlay();
+      startAutoPlay();
+    }
     hideSlideshowCountdown(); // clears timer + hides countdown on manual resume
   } else {
     toggleBtn.childNodes[0].textContent = "▶ ";
-    stopAutoPlay();
+    if (currentVideoEl) {
+      currentVideoEl.pause(); // pause the video in place instead of removing/resetting it
+    } else {
+      stopAutoPlay();
+    }
     scheduleAutoResume();
   }
 });
@@ -336,12 +379,14 @@ if (deltaX < 0) {
   // log data. 
   window.analytics.logEvent("swipe", { direction: "left" });
   // Swipe left = next slide
+  cancelActiveVideo();
   flashSwipeArrow("left");
   showNextSlide();
 
 } else {
   window.analytics.logEvent("swipe", { direction: "right" });
   // Swipe right = previous slide
+  cancelActiveVideo();
   flashSwipeArrow("right");
   showSlide(currentSlide - 1);
 

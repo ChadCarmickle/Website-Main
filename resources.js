@@ -5,9 +5,9 @@
 /* =========================================================
    1. Global Variables. 
    ========================================================= */
-const SLIDE_INTERVAL_MS = 7000; // 7 seconds per slide. 
+const SLIDE_INTERVAL_MS = 8000; // 8 seconds per slide. 
 const COURSES_PER_BATCH = 3; // Number of course images to show between event images
-const AUTO_RESUME_DELAY = 300000; // 5 minutes in milliseconds
+const AUTO_RESUME_DELAY = 300000; // 5 minutes in milliseconds — used for both the slideshow idle countdown and resuming a paused video
 
 
 const NEWS_BANNER = false; // Set to true to enable news alerts. 
@@ -21,16 +21,17 @@ const slideshowCountdownEl = document.getElementById("slideshow-idle-countdown")
 
 
 // How often a video plays. 
-//const VIDEO_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
-const VIDEO_INTERVAL_MS = 0.5 * 60 * 1000; // 30 seconds (testing)
+const VIDEO_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+//const VIDEO_INTERVAL_MS = 0.5 * 60 * 1000; // 30 seconds (testing)
 
 /* =========================================================
    2. Announcements. 
    ========================================================= */
 
 const Announcements = [
+
     { 
-      label: "Fall Enrollment",   // Short label for jump buttons
+      label: "Fall Enrollment",   
       title: "Fall Classes Start August 24th",
       content: "📣 Fall classes start on August 24th — enroll now! ...",  
       image: null,     

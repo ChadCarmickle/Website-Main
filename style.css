@@ -98,8 +98,9 @@ background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* fit fully within frame at natural aspect ratio, no cropping/stretching */
   object-position: center;
+  background: transparent; /* lets the slideshow's gradient show through the letterboxed space */
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   display: block;
@@ -162,36 +163,26 @@ background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
     display: flex;
     justify-content: center;
     align-items: center;
-
-    gap: 20px;
-
+    gap: 30px;
     width: 100%;
-    padding: 20px;
+    padding: 16px 20px;
 }
 
 .action-btn {
-    flex: 1;
-    max-width: 250px;
-
+    flex: 0 1 auto;
+    max-width: 200px;
     background: rgba(255,255,255,0.15);
     backdrop-filter: blur(10px);
-
     border: 2px solid rgba(255,255,255,0.4);
-
     color: white;
-    font-size: 28px;
-
-    border-radius: 20px;
-
-    padding: 25px 20px;
-
-    min-height: 120px;
-
+    font-size: 22px;
+    border-radius: 14px;
+    padding: 14px 14px;
+    min-height: 85px;
     box-shadow:
         0 8px 20px rgba(0,0,0,0.25);
 
     transition: 0.25s ease;
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -565,4 +556,22 @@ background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
    light near the top, dark near the bottom */
 .app {
   background: linear-gradient(180deg, #8DC63F 0%, #41AD49 45%, #006648 100%);
-} 
+}
+
+
+@keyframes buttonJump {
+  0%, 100% { transform: translateY(0); }
+  40%      { transform: translateY(-10px); }
+  60%      { transform: translateY(-6px); }
+}
+
+.action-btn.idle-nudge {
+  animation: buttonJump 1.3s ease-in-out 1; /* ← plays exactly twice, then stops */
+}
+
+.action-btn.idle-nudge:nth-child(1) { animation-delay: 0s; }
+.action-btn.idle-nudge:nth-child(2) { animation-delay: 0.15s; }
+.action-btn.idle-nudge:nth-child(3) { animation-delay: 0.30s; }
+.action-btn.idle-nudge:nth-child(4) { animation-delay: 0.45s; }
+
+
