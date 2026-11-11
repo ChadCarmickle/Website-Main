@@ -575,3 +575,9 @@ background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
 .action-btn.idle-nudge:nth-child(4) { animation-delay: 0.45s; }
 
 
+img[src*="assets/campusResource_ITProf.png"] { 
+  width: 600px; 
+  height: 300px; 
+  object-fit:contain; 
+  max-width: 100%;
+}

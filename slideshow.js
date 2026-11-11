@@ -136,7 +136,7 @@ function buildInterleavedSlideshow() {
 
 
 let fadeTimeout = null;
-const GAP_DURATION = 1000;    // how long the blank gap lasts — bump this up
+const GAP_DURATION = 500;    // Adjusts the transition gap between slides. The speeds in MS. 
 
 function showSlide(index) {
   const slides = slideshowEl.querySelectorAll("img");

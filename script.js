@@ -378,7 +378,7 @@ prevProgram.addEventListener("click", () => {
    5. MAPS
    ========================================================= */
 const maps = [
-  { image: "assets/map_1.png", title: "Main Campus Map" },
+  { image: "assets/map_1.png", title: "Pfau Hall" },
   { image: "assets/map_2.png", title: "Ogle Hall" }
 ];
 

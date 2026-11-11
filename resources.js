@@ -11,7 +11,7 @@ const AUTO_RESUME_DELAY = 300000; // 5 minutes in milliseconds — used for both
 
 
 const NEWS_BANNER = false; // Set to true to enable news alerts. 
-const NEWS_BANNER_Text = "Display an Alert Message."; 
+const NEWS_BANNER_Text = "Classes start on Sepeter 21st"; 
 const NEWS_BANNER_Color = "red"; 
 
 // Countdown display logic for slideshow. 
@@ -21,8 +21,8 @@ const slideshowCountdownEl = document.getElementById("slideshow-idle-countdown")
 
 
 // How often a video plays. 
-const VIDEO_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
-//const VIDEO_INTERVAL_MS = 0.5 * 60 * 1000; // 30 seconds (testing)
+//const VIDEO_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+const VIDEO_INTERVAL_MS = 2 * 60 * 1000; // 30 seconds (testing)
 
 /* =========================================================
    2. Announcements. 
@@ -31,12 +31,20 @@ const VIDEO_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 const Announcements = [
 
     { 
-      label: "Fall Enrollment",   
-      title: "Fall Classes Start August 24th",
-      content: "📣 Fall classes start on August 24th — enroll now! ...",  
+      label: "Register for Spring 2027",   
+      title: "Spring 2027 Key Registration Dates",
+      content: "📣 Spring registration opens - September 14, 2026 <br> <br> <strong>Spring One</strong> <br> Last day to register - January 10, 2027 <br> Classes start - January 11, 2027 <br> <br> <strong>Spring Two </strong><br> Last day to register - March 14, 2027 <br> Classes start - March 15, 2027",  
       image: null,     
-      video: null,     
+      video: "videos/video_1.mp4",     
       qr: null,        
+    },
+    { 
+      label: "Pay for Spring 2027 Classes", 
+      title: "Spring Payment Due Dates",
+      content: "Payment of tuition and fees for the <strong> Spring 2027 </strong>semester is due based on your <i><strong>earliest course start date.</i></strong> <br><br> • If your earliest course start date is March 15, 2027, payment is due <strong>Friday, January 8, 2027.</strong> <br>If your earliest course start date is on or after March 15, 2027, payment is due <strong> Friday, March 12, 2027.</strong>",
+      image: "assets/ProgramResources/Healthcare/HealthInformationTechnology.jpg",
+      video: null,
+      qr: null,
     },
     { 
       label: "Library Hours", 
@@ -49,9 +57,9 @@ const Announcements = [
     {
       label: "Parking", 
       title: "Campus Parking Reminder",
-      content: "Please review the campus parking map and purchase your permit.",
+      content: "Main entrance to the Sellersburg campus is under construction. <br> Please use alternative entrance.",
       image: null,
-      video: "videos/video_1.mp4",
+      video: null,
       qr: null,
     },
 ];
@@ -61,69 +69,79 @@ const Announcements = [
    2. Campus Resources: 
    ========================================================= */
 const CampusResources = [
-  { 
-    label: "Registrar", 
-    title: "Office of the Registrar",
-    content: "The Office of the Registrar performs a variety of functions at Ivy Tech Community College. At some time during your connection with Ivy Tech, you will probably have contact with the office due to the nature of its responsibilities. Some of the functions of the office are listed below. <br><br>• Changing your demographic information <br>• Credit Hours / Load / Enrollment Status <br>• Student Loan Deferment Requests and Insurance Reporting, <br>• Adding / Dropping Courses <br>• Grading / Improving a Grade  <br>• Grade Point Average (GPA) / Dean's List <br>• Transfer of Credit <br>• Graduation <br>• Transcripts  <br>• Family Education Rights & Privacy Act of 1974, as amended  <br>• Voter Registration ",
-    image: "assets/CampusResources/Registar.jpg",
-    video: null,
-    qr: "assets/QR-Codes/CampusResources/QR_Registar.png",
-  },
-  { 
-    label: "Tutoring", 
-    title: "Ivy Tech<br> Offers free tutoring in the following subjects:",
-    content: "",
-    image: "/assets/_QR_tutor.png",
-    video: null,
-    qr: null,
-  },
   {
     label: "Academic Advising", 
     title: "Academic Advising at Ivy Tech",
-    content: "Academic advising serves to help students set and complete their programs and/or academic goals by building relationships within their student success network. Advising is a collaborative partnership where the student is the primary driver for success and their advisor serves as a navigator to support them through their educational journey. <br><br>Your academic advisor will be your guide as you determine which courses to take each semester. If your goal is to transfer to a four-year college or university, your advisor will help you with that too! <br><br> For more information, Scan the QR code!",
+    content: "Your academic advisor will be your guide as you determine which courses to take each semester. If your goal is to transfer to a four-year college or university, your advisor will help you with that too! <br><br> <strong> Hours of Operation </strong> <br> Monday, Wednesday, Thursday: 8 am to 5 pm <br> Tuesday: 8 am to 6 pm <br> Friday: 7:30 am to 4 pm <br> <br> <strong> Contact Us</strong> <br> Email: sl-advising@ivytech.edu <br> Phone: (812) 947-7843 <br> Location: Pfau Hall - G6 <br> <br> For more information, scan the QR code!",
     image: "assets/CampusResources/AcademicAdvising.jpg",
     video: null,
     qr: "assets/QR-Codes/CampusResources/QR_AcademicAdvising.png",
   },
+  { 
+    label: "Registrar/Transcripts", 
+    title: "Office of the Registrar",
+    content: "The Office of the Registrar maintains student profiles and academic records, conducts course registration activities, certifies enrollment and completion of degree requirements, issues transcripts, and more.  The registrar's office can help you with: <br> <br>• Updating your student record and demographic information <br>• Credit Hours / Enrollment Status <br>• Student Loan Deferment Requests and Insurance Reporting, <br>• Grade Point Average (GPA) / Dean's List <br>• Transfer of Credit <br>• Graduation <br>• Transcripts  <br><br> <strong> Hours of Operation </strong> <br> Monday, Wednesday, Thursday: 8 am to 5 pm <br> Tuesday: 8 am to 6 pm <br> Friday: 7:30 am to 4 pm <br> <br> <strong> Contact Us</strong>  <br> Email: sl-registrar@ivytech.edu <br> Phone: (812) 955-5849 <br> Location: Pfau Hall - A2 <br> ",
+    image: "assets/CampusResources/Registar.jpg",
+    video: null,
+    qr: "assets/QR-Codes/CampusResources/QR_Registar.png",
+  },
   {
-    label: "Disability Services", 
+    label: "Bursar/Payments", 
+    title: "Office of the Bursar",
+    content: "The Bursar's Office provides numerous ways to pay each semester's tuition and fees. At the Bursar's office you can: <br> <br>• Make a payment <br>• Setup a payment plan <br>• Find out about refunds <br>• Find your payment due dates <br>• Get help understanding your eBill <br><br> <strong> Hours of Operation </strong> <br> Monday to Thursday: 8 am to 5 pm <br> Friday: 7:30 am to 4 pm <br> <br> <strong> Contact Us</strong>  <br> Email: sellersburg-bursar@ivytech.edu <br> Phone: (812) 955-5736 <br> Location: Pfau Hall - G7 <br> ",
+    image: "assets/CampusResources/AcademicAdvising.jpg",
+    video: null,
+    qr: "assets/QR-Codes/CampusResources/QR_AcademicAdvising.png",
+  },
+  { 
+    label: "Tutoring", 
+    title: "Ogle Commons and Sellersburg Tutoring",
+    content: "Our campus offers free tutoring and library services that will help you to succeed in your courses. <br> <br> <strong> Our Ogle Learning Commons can also help you with: </strong> <br>• Conducting research using library services <br>• Using computer and internet applications <br>• Connecting to tutoring services <br>• Navigating MyIvy, IvyLearn, and Zoom <br>• Ordering print copies of textbooks <br>• Printing, scanning, and copying papers <br>•  Connecting to Ivy Tech student services <br><br><strong> Hours of Operation</strong> <br>Monday - Thursday: 9 am - 6 pm <br>Friday: 9 am - 12 pm <br> <br> <strong> Contact Us</strong>  <br> Email: sellersburg-tutoring@ivytech.edu <br> Phone: (812) 955-5897 <br> Location: Pfau Hall - Ogle Learning Commons - G24",
+    image: "assets/CampusResources/Tutoring.png",
+    video: null,
+    qr: null,
+  },
+  {
+    label: "IvyCares", 
+    title: "IvyCares",
+    content: "Everyone needs a little help sometimes, and IvyCares is here to provide additional support to you throught your academic journey. <br><br><strong> Ivy Cares can help with: </strong> <br>• Student Emergency Aid Fund <br>• Food Access <br>• Loaner Laptops & Hotspots <br>• Transportation Resources <br>• Mental Health <br>• Childcare Vouchers  <br>• IvyAssist (Community Resources) <br><br> <strong> Hours of Operation </strong><br> Monday, Wednesday, Thursday: 8 am to 5 pm <br> Tuesday: 8 am to 6 pm <br>Friday: 9 am - 12 pm <br> <br> <strong> Contact Us</strong>  <br> Email: sellersburg-ivycares@ivytech.edu <br> Phone: (812) 955-5892 <br> Location: Pfau Hall - B18",
+    image: "assets/CampusResources/IvyCares.png",
+    video: null,
+    qr: "assets/QR-Codes/CampusResources/QR_DisabilitySupport.png",
+  },
+  {
+    label: "Disability Support", 
     title: "Disability Support Services",
-    content: "As an Ivy Tech student, you have access to a wide variety of resources to meet your individual needs.  If you have a disability, you’ll want to learn more about Disability Support Services (DSS) and how they can support you?  DSS works with students on a case-by-case basis to determine what accommodations meet their specific needs in accordance with the Americans with Disabilities Act. <br> In addition, to ensuring you receive the best possible learning accommodations, DSS serves as an advocate for students with disabilities.  Get started by contacting the DSS office on your home campus or completing an Accommodation Request Form. <br><br> For additional Questions Scan the QR code below.",
+    content: "As an Ivy Tech student, you have access to a wide variety of resources to meet your individual needs.  DSS works with students on a case-by-case basis to determine what accommodations meet their specific needs in accordance with the Americans with Disabilities Act.  Get started by contacting the DSS office on your home campus or completing an Accommodation Request Form. <br><br> <strong> Hours of Operation </strong><br> Monday, Wednesday, Thursday: 8 am to 5 pm <br> Tuesday: 8 am to 6 pm <br>Friday: 9 am - 12 pm <br> <br> <strong> Contact Us</strong>  <br> Email: sellersburg-dss@ivytech.edu <br> Phone: (812) 955-5892 <br> Location: Pfau Hall - B18.",
     image: "assets/CampusResources/disabilitySupport.jpg",
     video: null,
     qr: "assets/QR-Codes/CampusResources/QR_DisabilitySupport.png",
   },
   {
     label: "Financial Aid", 
-    title: "Financial Aid",
-    content: "Financial aid is money to help pay for college or career school. Whether your goal is finding a career after graduation or continuing on to a four-year university, getting financial aid can help you pay for college now and finish with little to no debt or a more manageable payment plan. <br><br> Financial aid includes: <br> • Scholarships <br> • Grants <br> • Federal Work-Study <br> • Loans <br><br> For more information, Scan the QR code!  ",
+    title: "Office of Financial Aid",
+    content: "Financial aid is money to help pay for college or career school. <br><br> Financial aid includes: <br> • Scholarships <br> • Grants <br> • Loans <br> • Federal Work-Study <br><br> <strong> Hours of Operation </strong><br> Monday, Wednesday, Thursday: 8 am to 5 pm <br> Tuesday: 8 am to 6 pm <br>Friday: 9 am - 12 pm <br> <br> <strong> Contact Us</strong>  <br> Email: sellersburg-finaid@ivytech.edu <br> Phone: (812) 955-5820 <br> Location: Pfau Hall - A2",
     image: "assets/CampusResources/FinancialAid.jpg",
     video: null,
     qr: "assets/QR-Codes/CampusResources/QR_FinancialAid.png",
   },
   {
     label: "Career Link", 
-    title: "Career Link",
-    content: "Career Link is a team that provides transformative career development services for Ivy Tech students and alumni as well as a variety of talent connection opportunities and employee training for employers. The pool of resources we offer connects students, employers, alumni, and communities. <br><br> By focusing on honing the employability skills of our students and the state's workers, we are working to meet the specific skills and training needs of employers in Indiana and neighboring states. ",
-    image: "assets/CampusResources/Career.jpg",
+    title: "Ivy+ Career Link",
+    content: "Career Link is a team that provides transformative career development services for Ivy Tech students and alumni as well as a variety of talent connection opportunities and employee training for employers. <br><br> <strong> The Career Link Team can help you with :</strong> <br>•  Personalized career coaching <br>• Student work-and-learn experiences <br> • Finding a job <br> • Creating a Career Development Portfolio <br><br> <strong> Hours of Operation </strong> <br> Monday to Thursday: 8 am to 5 pm <br> Friday: 7:30 am to 4 pm <br> <br> <strong> Contact Us</strong>  <br> Email:  shammond25@ivytech.edu OR tcamplit@ivytech.edu <br> Phone: (930) 228-3653 <br> Location: Pfau Hall <br> ",
+    image: "assets/CampusResources/CareerLink.png",
     video: null,
     qr: "assets/QR-Codes/CampusResources/QR_CareerLink.png",
   },  
   {
-    label: "IT professors", 
-    title: "IT Professors",
-    image: "assets/campusResource_ITProf.png",
-    video: null,
-    qr: null,
-  },
-
-  {
-    label: "Video Example", 
-    title: "Video Example",
+    label: "More Resources", 
+    title: "More Resources | Video Example ",
     image: null,
     video: "videos/video_1.mp4",
     qr: null,
-  }
+    
+  },
+  
 ];
 
 
@@ -133,17 +151,40 @@ const CampusResources = [
 
 const ProgramFields = [
   {
-    label: "Advanced Manufacturing",
+    label: "School of Advanced Manufacturing, Engineering and Applied Science ",
     programs: [
       {
         label: "Advanced Automation & Robotics Technology",
-        title: "• Advanced Automation & Robotics Technology",
+        title: "Advanced Automation & Robotics Technology",
         content: "Advanced manufacturing helps build our modern world. Learn to program robotics and work with equipment like hydraulics. <br><br> Associate Degree: 4-5 semesters <br> Certificates (2): 3-5 semesters <br> Workforce Certifications (6): 0.5-3 semesters  ",
         image: "assets/ProgramResources/Advanced_Manufacturing/automationmanufacturing.jpg",
         video: null,
         qr: "assets/QR-Codes/Programs/Advanced_Manufacturing/QR_AdvancedAutomation.png",
       },
-     
+      {
+        label: "Automotive Technology",
+        title: "Automotive Technology",
+        content: " From EVs to self-driving cars, few industries are moving as fast as automotive. Be ready with training in today's high-tech vehicles. <br><br> Associate Degrees (3): 5 semesters <br> Certificates (8): 2-3 semesters <br><br>",
+        image: "assets/ProgramResources/Automotive/AutoMotiveTechnology.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Automotive/QR_automotivetechnology.png",
+      },
+      {
+        label: "Design Technology",
+        title: "Design Technology",
+        content: "From EVs to self-driving cars, few industries are moving as fast as automotive. Be ready with training in today's high-tech vehicles. <br><br> Associate Degrees (3): 5 semesters <br> Certificates (8): 2-3 semesters <br><br>",
+        image: "assets/ProgramResources/Advanced_Manufacturing/DesignTechnology.jpg",
+        video: null,
+        qr: null,
+      },
+      {
+        label: "Heating, Ventilation, & Air Conditioning Technology (HVAC)",
+        title: "Heating, Ventilation, & Air Conditioning Technology (HVAC)",
+        content: "Train with actual furnace and AC equipment while also learning about new technologies like solar, geothermal, and HVAC automation.  <br><br> Associate Degree: 4 semesters <br> Certificates (3): 2-3 semesters <br> Workforce Certifications (2): 0.5 semesters <br>",
+        image: "assets/ProgramResources/Construction/HVAC.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Construction/QR_HVAC.png",
+      },
       {
         label: "Industrial Technology",
         title: "Industrial Technology",
@@ -152,6 +193,7 @@ const ProgramFields = [
         video: null,
         qr: "assets/QR-Codes/Programs/Advanced_Manufacturing/QR_IndustrialTechnology.png",
       },
+      /*
      {
         label: "Machine Tool Technology",
         title: "Machine Tool Technology",
@@ -160,6 +202,7 @@ const ProgramFields = [
         video: null,
         qr: "assets/QR-Codes/Programs/Advanced_Manufacturing/QR_MachineToolTechnology.png",
       },
+      */
      {
         label: "Manufacturing Production & Operations",
         title: "Manufacturing Production & Operations",
@@ -176,12 +219,7 @@ const ProgramFields = [
         video: null,
         qr: "assets/QR-Codes/Programs/Advanced_Manufacturing/QR_SmartManufacturing.png",
       },  
-    ]
-  },
-
-  {
-    label: "Agriculture",
-    programs: [
+      /*
       {
         label: "Agriculture",
         title: "Agriculture",
@@ -199,24 +237,6 @@ const ProgramFields = [
         video: null,
         qr: "assets/QR-Codes/Programs/Agriculture/QR_PrecisionAgriculture.png",
       },
-
-    ]
-  },
-
-
-
-  
-  {
-    label: "Automotive",
-    programs: [
-      {
-        label: "Automotive Technology",
-        title: "Automotive Technology",
-        content: " From EVs to self-driving cars, few industries are moving as fast as automotive. Be ready with training in today's high-tech vehicles. <br><br> Associate Degrees (3): 5 semesters <br> Certificates (8): 2-3 semesters <br><br>",
-        image: "assets/ProgramResources/Automotive/AutoMotiveTechnology.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Automotive/QR_automotivetechnology.png",
-      },
       {
         label: "Diesel Technology",
         title: "Diesel Technology",
@@ -225,17 +245,7 @@ const ProgramFields = [
         video: null,
         qr: "assets/QR-Codes/Programs/Automotive/QR_DieselTechnology.png",
       },
-    ]
-  },
-
-
-
-  
-
-    {
-    label: "Aviation",
-    programs: [
-      {
+     {
         label: "Aviation Maintenance Technology",
         title: "Aviation Maintenance Technology",
         content: " Go wheels up on a great career with FAA-certified skills needed to perform maintenance, inspection, and repair of civilian aircraft. <br><br> Associate Degrees (3): 1-4 semesters <br> Certificate: 1 semesters <br><br>",
@@ -259,155 +269,7 @@ const ProgramFields = [
         video: null,
         qr: "assets/QR-Codes/Programs/Aviation/QR_AviationTechnologyManagement.png",
       },
-    ]
-  },
 
-
-
-  
-
-
-    {
-    label: "Business",
-    programs: [
-      {
-        label: "Accounting",
-        title: "Accounting",
-        content: " Gain real-world accounting experience with software such as QuickBooks and Sage 50, while also partnering with CPA firms across the state. <br><br> Associate Degrees (2): 4 semesters <br> Certificates (3): 1-2 semesters <br> ",
-        image: "assets/ProgramResources/Business/Accounting.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Business/QR_Accounting.png",
-      },
-      {
-        label: "Business Administration",
-        title: "Business Administration",
-        content: "Learn principles that build a background for success in business, including the creation of marketing plans, budgets, and case studies.  <br><br> Associate Degrees (6): 4-6 semesters <br> Certificates (7): 1-3 semesters <br> ",
-        image: "assets/ProgramResources/Business/BusinessAdministration.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Business/QR_BusinessAdministration.png",
-      },
-      {
-        label: "Office Administration and Technology (OTEC)",
-        title: "Office Administration and Technology (OTEC)",
-        content: " Prepare for a career as an administrative professional, helping all types of office environments, such as legal, medical, and others.  <br><br> Associate Degree: 4 semesters <br> Certificates (2): 1-2 semesters <br> ",
-        image: "assets/ProgramResources/Business/OfficeAdministrationTechnology.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Business/QR_OfficeAdministration.png",
-      },
-      {
-        label: "Professional Communication",
-        title: "Professional Communication",
-        content: "Get started on the path to Executive Assistant, Writer, or another communications career with skills for effective message delivery.  <br><br> Associate Degree: 4 semesters <br>  Certificate: 2 semesters <br>",
-        image: "assets/ProgramResources/Business/ProfessionalCommunication.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Business/QR_ProfessionalCommunication.png",
-      },
-      {
-        label: "Supply Chain Management",
-        title: "Supply Chain Management",
-        content: " Get your supply chain management career going by studying the technologies and systems used to track goods efficiently and keep the economy moving. <br><br> Associate Degrees (2): 4 semesters <br> Certificates (6): 1-3 semesters <br>",
-        image: "assets/ProgramResources/Business/SupplyChainManagement.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Business/QR_SupplyChainManagement.png",
-      },
-    ]
-  },
-
-
-
-  
-  {
-    label: "Computers & Information Technology",
-    programs: [
-      {
-        label: "Applied Artificial Intelligence",
-        title: "Applied Artificial Intelligence",
-        content: " Learn how to build and apply artificial intelligence solutions that automate tasks, analyze data, and solve real-world problems.  <br><br> Associate Degree: 4 semesters <br> Certificates (2): 2 semesters <br>",
-        image: "assets/ProgramResources/IT/AI.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/IT/QR_AppliedArtificialIntelligence.png",
-      },
-          {
-        label: "Cloud Technologies",
-        title: "Cloud Technologies",
-        content: "Get skills in essential Internet-based software and services, including platforms such as Amazon Web Services and Microsoft Azure.  <br><br> Associate Degree: 4 semesters <br> Certificates (3): 2-3 semesters <br>",
-        image: "assets/ProgramResources/IT/CloudTechnologies.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/IT/QR_CloudTechnologies.png",
-      },
-
-      {
-        label: "Computer Science",
-        title: "Computer Science",
-        content: "Learn essentials of extracting information from data, using tools such as data mining, statistical analysis, and business analytics. <br><br> Associate Degrees (2): 4 semesters <br> Certificates (2): 2 semesters <br>",
-        image: "assets/ProgramResources/IT/ComputerScience.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/IT/QR_ComputerScience.png",
-      },
-      
-            {
-        label: "Cybersecurity / Information Assurance",
-        title: "Cybersecurity / Information Assurance",
-        content: " This nationally recognized program helps students learn how to effectively secure computers, networks, and critical infrastructure.  <br><br> Associate Degrees (3): 2-4 semesters <br> Certificates (2): 2 semesters <br>",
-        image: "assets/ProgramResources/IT/CyberSecurity.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/IT/QR_Cybersecurity.png",
-      },
-
-      {
-        label: "Data Analytics",
-        title: "Data Analytics",
-        content: "This computer-focused electronics program leans into automated systems, offering background in networking and digital communications.  <br><br> Associate Degree: 4-8 semesters <br> Certificates (3): 2-4 semesters <br>",
-        image: "assets/ProgramResources/IT/DataAnalytics.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/IT/QR_DataAnalytics.png",
-      },
-      
-      {
-        label: "Informatics",
-        title: "Informatics",
-        content: "Learn how people and technology interact so you can develop skills to make tomorrow's computers and software more useful. <br><br> Associate Degrees (2): 4 semesters <br> Certificates (2): 2 semesters <br>",
-        image: "assets/ProgramResources/IT/Informatics.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/IT/QR_Informatics.png",
-      },
-      
-            {
-        label: "Information Technology Support",
-        title: "Information Technology Support",
-        content: "Prepare for a career in the IT field with knowledge and skills needed to build and maintain computing systems and technology. <br><br> Associate Degree: 4 semesters <br> Certificates (2): 2-3 semesters <br>",
-        image: "assets/ProgramResources/IT/InformationTechnologySupport.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/IT/QR_InformationTechnologySupport.png",
-      },
-
-      {
-        label: "Network Infrastructure",
-        title: "Network Infrastructure",
-        content: "Get the industry-standard hardware and software skills needed to master computer networks, the nerve center of our digital world.  <br><br> Associate Degree: 4 semesters <br> Certificates (2): 2 semesters <br>",
-        image: "assets/ProgramResources/IT/NetworkInfrastructure.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/IT/QR_NetworkInfrastructure.png",
-      },
-      
-      {
-        label: "Software Development",
-        title: "Software Development",
-        content: "Learn to develop, test, and maintain software by gaining a foundation in programming, web development, and application development.  <br><br> Associate Degrees (2): 4 semesters <br> Certificates (4): 2-3 semesters <br>",
-        image: "assets/ProgramResources/IT/SoftwareDev.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/IT/QR_SoftwareDevelopment.png",
-      },
-      
-    ]
-  },
-
-
-
-  
-  {
-    label: "Construction",
-    programs: [
       {
         label: "Building Construction Management",
         title: "Building Construction Management",
@@ -424,53 +286,6 @@ const ProgramFields = [
         video: null,
         qr: "assets/QR-Codes/Programs/Construction/QR_BuildingConstructionTechnology.png",
       },
-      {
-        label: "Heating, Ventilation, & Air Conditioning Technology (HVAC)",
-        title: "Heating, Ventilation, & Air Conditioning Technology (HVAC)",
-        content: " Train with actual furnace and AC equipment while also learning about new technologies like solar, geothermal, and HVAC automation.  <br><br> Associate Degree: 4 semesters <br> Certificates (3): 2-3 semesters <br> Workforce Certifications (2): 0.5 semesters <br>",
-        image: "assets/ProgramResources/Construction/HVAC.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Construction/QR_HVAC.png",
-      },
-    ]
-  },
-
-
-
-  
-    {
-    label: "Education",
-    programs: [
-      {
-        label: "Education - Early Childhood",
-        title: "Education - Early Childhood",
-        content: "Discover essentials of childhood development and growth in a variety of settings, such as traditional classrooms and on-campus labs. <br><br> Associate Degrees (2): 4 semesters <br> Certificates (7): 1-4 semesters <br>",
-        image: "assets/ProgramResources/Education/EducationEarlyChildhood.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Education/QR_EducationEarlyChildhood.png",
-      },
-      {
-        label: "Education - Elementary & Special",
-        title: "Education - Elementary & Special",
-        content: "From lesson plans to community engagement, future teachers learn to teach in a variety of authentic classroom and school settings.  <br><br> Associate Degrees (2): 4 semesters <br> Certificates (2): 2 semesters <br>",
-        image: "assets/ProgramResources/Education/EducationElementarySpecial.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Education/QR_EducationElementarySpecial.png",
-      },
-      {
-        label: "Education - Secondary",
-        title: "Education - Secondary",
-        content: "This program can lead to a teaching degree in biology, chemistry, or mathematics, areas where qualified teachers are sorely needed. <br><br> Associate Degrees (5): 4 semesters <br> Certificates (3): 1-2 semesters <br>",
-        image: "assets/ProgramResources/Education/EducationSecondary.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Education/QR_EducationSecondary.png",
-      },
-    ]
-  },
-
-    {
-    label: "Engineering",
-    programs: [
       {
         label: "Electrical Engineering Technology",
         title: "Electrical Engineering Technology",
@@ -503,11 +318,261 @@ const ProgramFields = [
         video: null,
         qr: "assets/QR-Codes/Programs/Engineering/QR_MechanicalEngineeringTechnology.png",
       },
+      {
+        label: "Biotechnology",
+        title: "Biotechnology",
+        content: "Biotechnology uses living cells to develop products, leading to careers that include research, pharmaceuticals, genomics, and others.  <br><br> Associate Degrees (2): 4 semesters <br> Certificates (4): 2-3 semesters <br>",
+        image: "assets/ProgramResources/Science/BioTechnology.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Science/QR_Biotechnology.png",  
+      },
+      {
+        label: "Energy Technology",
+        title: "Energy Technology",
+        content: "Get ready for the green energy future with skills in wind and solar power systems. Industry partners include Vectren, Siemens, and GE.  <br><br>  Associate Degree: 4 semesters <br> Certificates (5): 3 semesters <br> Workforce Certification: 1 semesters<br>",
+        image: "assets/ProgramResources/Science/EnergyTechnology.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Science/QR_EnergyTechnology.png",  
+      },
+
+      {
+        label: "Veterinary Nursing",
+        title: "Veterinary Nursing",
+        content: "An ideal environment to develop as a skilled veterinary technician, emphasizing professionalism and expertise. Gain hands-on experience through externships and partnerships with leading veterinary institutions across Indiana, ensuring a comprehensive education that prepares you for success in the field.  <br><br> Associate Degree: 4-5 semesters <br> Certificate: 2 semesters <br>",
+        image: "assets/ProgramResources/Science/VeterinaryNursing.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Science/QR_Veterinary.png",  
+      },
+      */
+    ]
+  },
+  
+
+    {
+    label: "School of Business, Logistics and Supply Chain",
+    programs: [
+      {
+        label: "Accounting",
+        title: "Accounting",
+        content: " Gain real-world accounting experience with software such as QuickBooks and Sage 50, while also partnering with CPA firms across the state. <br><br> Associate Degrees (2): 4 semesters <br> Certificates (3): 1-2 semesters <br> ",
+        image: "assets/ProgramResources/Business/Accounting.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Business/QR_Accounting.png",
+      },
+      {
+        label: "Business Administration",
+        title: "Business Administration",
+        content: "Learn principles that build a background for success in business, including the creation of marketing plans, budgets, and case studies.  <br><br> Associate Degrees (6): 4-6 semesters <br> Certificates (7): 1-3 semesters <br> ",
+        image: "assets/ProgramResources/Business/BusinessAdministration.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Business/QR_BusinessAdministration.png",
+      },
+      {
+        label: "Office Administration and Technology (OTEC)",
+        title: "Office Administration and Technology (OTEC)",
+        content: " Prepare for a career as an administrative professional, helping all types of office environments, such as legal, medical, and others.  <br><br> Associate Degree: 4 semesters <br> Certificates (2): 1-2 semesters <br> ",
+        image: "assets/ProgramResources/Business/OfficeAdministrationTechnology.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Business/QR_OfficeAdministration.png",
+      },
+      {
+        label: "Supply Chain Management",
+        title: "Supply Chain Management",
+        content: " Get your supply chain management career going by studying the technologies and systems used to track goods efficiently and keep the economy moving. <br><br> Associate Degrees (2): 4 semesters <br> Certificates (6): 1-3 semesters <br>",
+        image: "assets/ProgramResources/Business/SupplyChainManagement.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Business/QR_SupplyChainManagement.png",
+      },
+      {
+        label: "Visual Communications",
+        title: "Visual Communications",
+        content: "Careers in media and marketing begin with skills in visual communications. Here students learn both the technical and aesthetic aspects.  <br><br> Associate Degrees (3): 4 semesters <br> Certificates (4): 1-2 semesters <br>",
+        image: "assets/ProgramResources/ArtDesign/VisualCommunications.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/ArtDesign/QR_VisualCommunications.png",
+      },
     ]
   },
 
+
   {
-    label: "Entrepreneurship",
+    label: "School of Infomation Technology",
+    programs: [
+      {
+        label: "Applied Artificial Intelligence",
+        title: "Applied Artificial Intelligence",
+        content: " Learn how to build and apply artificial intelligence solutions that automate tasks, analyze data, and solve real-world problems.  <br><br> Associate Degree: 4 semesters <br> Certificates (2): 2 semesters <br>",
+        image: "assets/ProgramResources/IT/AI.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/IT/QR_AppliedArtificialIntelligence.png",
+      },
+
+      {
+        label: "Cloud Technologies",
+        title: "Cloud Technologies",
+        content: "Get skills in essential Internet-based software and services, including platforms such as Amazon Web Services and Microsoft Azure.  <br><br> Associate Degree: 4 semesters <br> Certificates (3): 2-3 semesters <br>",
+        image: "assets/ProgramResources/IT/CloudTechnologies.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/IT/QR_CloudTechnologies.png",
+      },
+
+      {
+        label: "Computer Science",
+        title: "Computer Science",
+        content: "Learn essentials of extracting information from data, using tools such as data mining, statistical analysis, and business analytics. <br><br> Associate Degrees (2): 4 semesters <br> Certificates (2): 2 semesters <br>",
+        image: "assets/ProgramResources/IT/ComputerScience.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/IT/QR_ComputerScience.png",
+      },
+      
+      {
+        label: "Cybersecurity / Information Assurance",
+        title: "Cybersecurity / Information Assurance",
+        content: " This nationally recognized program helps students learn how to effectively secure computers, networks, and critical infrastructure.  <br><br> Associate Degrees (3): 2-4 semesters <br> Certificates (2): 2 semesters <br>",
+        image: "assets/ProgramResources/IT/CyberSecurity.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/IT/QR_Cybersecurity.png",
+      },
+
+      {
+        label: "Data Analytics",
+        title: "Data Analytics",
+        content: "This computer-focused electronics program leans into automated systems, offering background in networking and digital communications.  <br><br> Associate Degree: 4-8 semesters <br> Certificates (3): 2-4 semesters <br>",
+        image: "assets/ProgramResources/IT/DataAnalytics.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/IT/QR_DataAnalytics.png",
+      },
+      
+      {
+        label: "Informatics",
+        title: "Informatics",
+        content: "Learn how people and technology interact so you can develop skills to make tomorrow's computers and software more useful. <br><br> Associate Degrees (2): 4 semesters <br> Certificates (2): 2 semesters <br>",
+        image: "assets/ProgramResources/IT/Informatics.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/IT/QR_Informatics.png",
+      },
+      
+      {
+        label: "Information Technology Support",
+        title: "Information Technology Support",
+        content: "Prepare for a career in the IT field with knowledge and skills needed to build and maintain computing systems and technology. <br><br> Associate Degree: 4 semesters <br> Certificates (2): 2-3 semesters <br>",
+        image: "assets/ProgramResources/IT/InformationTechnologySupport.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/IT/QR_InformationTechnologySupport.png",
+      },
+
+      {
+        label: "Network Infrastructure",
+        title: "Network Infrastructure",
+        content: "Get the industry-standard hardware and software skills needed to master computer networks, the nerve center of our digital world.  <br><br> Associate Degree: 4 semesters <br> Certificates (2): 2 semesters <br>",
+        image: "assets/ProgramResources/IT/NetworkInfrastructure.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/IT/QR_NetworkInfrastructure.png",
+      },
+      
+      {
+        label: "Software Development",
+        title: "Software Development",
+        content: "Learn to develop, test, and maintain software by gaining a foundation in programming, web development, and application development.  <br><br> Associate Degrees (2): 4 semesters <br> Certificates (4): 2-3 semesters <br>",
+        image: "assets/ProgramResources/IT/SoftwareDev.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/IT/QR_SoftwareDevelopment.png",
+      },
+
+      {
+        label: "Meet your Professors!", 
+        title: "IT Professors",
+        image: "assets/campusResource_ITProf.png",
+        video: null,
+        qr: null,
+      },
+      
+    ]
+  },
+ 
+  {
+    label: "School of Arts, Sciences and Education",
+    programs: [
+            {
+        label: "Biology",
+        title: "Biology",
+        content: "Biology is the study of life itself–and your first step to a career in medicine, pharmacology, agriculture, research, and many others.  <br><br> Associate Degree: 4 semesters <br>",
+        image: "assets/ProgramResources/Science/Biology.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Science/QR_Biology.png",  
+      },
+      {
+        label: "Chemistry",
+        title: "Chemistry",
+        content: "Your formula for earning skills in organic and physical chemistry, atomic structure, and more before transferring to a 4-year school.  <br><br> Associate Degree: 4 semesters  <br>",
+        image: "assets/ProgramResources/Science/Chemistry.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Science/QR_Chemistry.png",  
+      },
+      {
+        label: "Education - Early Childhood",
+        title: "Education - Early Childhood",
+        content: "Discover essentials of childhood development and growth in a variety of settings, such as traditional classrooms and on-campus labs. <br><br> Associate Degrees (2): 4 semesters <br> Certificates (7): 1-4 semesters <br>",
+        image: "assets/ProgramResources/Education/EducationEarlyChildhood.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Education/QR_EducationEarlyChildhood.png",
+      },
+      {
+        label: "Education - Elementary & Special",
+        title: "Education - Elementary & Special",
+        content: "From lesson plans to community engagement, future teachers learn to teach in a variety of authentic classroom and school settings.  <br><br> Associate Degrees (2): 4 semesters <br> Certificates (2): 2 semesters <br>",
+        image: "assets/ProgramResources/Education/EducationElementarySpecial.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Education/QR_EducationElementarySpecial.png",
+      },
+      {
+        label: "Education - Secondary",
+        title: "Education - Secondary",
+        content: "This program can lead to a teaching degree in biology, chemistry, or mathematics, areas where qualified teachers are sorely needed. <br><br> Associate Degrees (5): 4 semesters <br> Certificates (3): 1-2 semesters <br>",
+        image: "assets/ProgramResources/Education/EducationSecondary.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Education/QR_EducationSecondary.png",
+      },
+      
+     {
+        label: "General Studies",
+        title: "General Studies",
+        content: " Get broad exposure to a solid core of courses largely transferable to 4-year institutions as required for a bachelor's degree.  <br><br> Associate Degree: 4 semesters ",
+        image: "assets/ProgramResources/GeneralStudies/GeneralStudies.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/GeneralStudies/QR_GeneralStudies.png",
+      },
+      {
+        label: "Indiana College Core",
+        title: "Indiana College Core",
+        content: "Fulfills core requirements equivalent to your first year of college so you can start as a sophomore at any Indiana 4-year institution.  <br><br> Certificate: 2-4 semesters",
+        image: "assets/ProgramResources/GeneralStudies/IndianaCollegeCore.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/GeneralStudies/QR_IndianaCollegeCore.png",
+      },
+      {
+        label: "Liberal Arts",
+        title: "Liberal Arts",
+        content: "Explore personal and academic growth in areas from critical thinking to creative expression as you build toward a bachelor’s degree. <br><br> Associate Degrees (2): 4 semesters ",
+        image: "assets/ProgramResources/GeneralStudies/LiberalArts.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/GeneralStudies/QR_LiberalArts.png",
+      },
+      {
+        label: "Psychology",
+        title: "Psychology",
+        content: " Psychology is the study of behavior, a highly valuable career skill. Studies include human sexuality and theories of personality.  <br><br> Associate Degree: 4 semesters <br>",
+        image: "assets/ProgramResources/SocialServices/Psychology.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/SocialServices/QR_Psychology.png",  
+      },
+
+    ]
+  },
+
+
+  {
+    label: "Garatoni School of Entrepreneurship & Innovation",
     programs: [
       {
         label: "Entrepreneurship",
@@ -519,10 +584,7 @@ const ProgramFields = [
       },
     ]
   },
-
-
-
-  
+  /* 
   {
     label: "Fine Arts & Design",
     programs: [
@@ -550,55 +612,13 @@ const ProgramFields = [
         video: null,
         qr: "assets/QR-Codes/Programs/ArtDesign/QR_InteriorDesign.png",
       },
-      {
-        label: "Visual Communications",
-        title: "Visual Communications",
-        content: " Careers in media and marketing begin with skills in visual communications. Here students learn both the technical and aesthetic aspects.  <br><br> Associate Degrees (3): 4 semesters <br> Certificates (4): 1-2 semesters <br>",
-        image: "assets/ProgramResources/ArtDesign/VisualCommunications.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/ArtDesign/QR_VisualCommunications.png",
-      },
+
     ]
-  },
-
-
-
+    },
+    */ 
   
     {
-    label: "General Studies",
-    programs: [
-      {
-        label: "General Studies",
-        title: "General Studies",
-        content: " Get broad exposure to a solid core of courses largely transferable to 4-year institutions as required for a bachelor's degree.  <br><br> Associate Degree: 4 semesters ",
-        image: "assets/ProgramResources/GeneralStudies/GeneralStudies.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/GeneralStudies/QR_GeneralStudies.png",
-      },
-      {
-        label: "Indiana College Core",
-        title: "Indiana College Core",
-        content: "Fulfills core requirements equivalent to your first year of college so you can start as a sophomore at any Indiana 4-year institution.  <br><br> Certificate: 2-4 semesters",
-        image: "assets/ProgramResources/GeneralStudies/IndianaCollegeCore.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/GeneralStudies/QR_IndianaCollegeCore.png",
-      },
-      {
-        label: "Liberal Arts",
-        title: "Liberal Arts",
-        content: "Explore personal and academic growth in areas from critical thinking to creative expression as you build toward a bachelor’s degree. <br><br> Associate Degrees (2): 4 semesters ",
-        image: "assets/ProgramResources/GeneralStudies/LiberalArts.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/GeneralStudies/QR_LiberalArts.png",
-      },
-    ]
-  },
-
-
-
-  
-    {
-    label: "Healthcare",
+    label: "School of Health Sciences",
     programs: [
       {
         label: "Dental Assisting",
@@ -667,14 +687,6 @@ const ProgramFields = [
       },
 
       {
-        label: "Nursing",
-        title: "Nursing",
-        content: " Work toward an LPN, ASN, or transfer as a junior. Learn to care for patients and qualify to work in hospitals, home health, and more. <br><br> Associate Degrees (2): 3-4 semesters <br> Certificate: 3 semesters",
-        image: "assets/ProgramResources/Healthcare/Nursing.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Healthcare/QR_Nursing.png",   
-      },
-      {
         label: "Occupational Therapy Assistant",
         title: "Occupational Therapy Assistant",
         content: "Students in the Occupational Therapy Assistant (OTA) program gain workforce-ready skills through a hybrid learning model that combines classroom, lab, online, and clinical instruction. The curriculum covers OTA foundations, patient care techniques, assistive technologies, and hands-on fieldwork, preparing graduates for a rewarding, in-demand career upon licensure.  <br><br> Associate Degree: 4-5 semesters <br>",
@@ -742,7 +754,7 @@ const ProgramFields = [
   },
 
   {
-    label: "Hospitality & Culinary",
+    label: "School of Culinary Arts and Hospitality Management",
     programs: [
       {
         label: "Culinary Arts / Hospitality Administration & Events",
@@ -756,27 +768,26 @@ const ProgramFields = [
   },
 
   {
-    label: "Law",
+    label: "School of Nursing",
     programs: [
-      {
-        label: "Legal & Paralegal Studies",
-        title: "Legal & Paralegal Studies",
-        content: "The starting point for students interested in the law. Learn about sources of law, legal research, civil procedure, ethics, and more.  <br><br> Associate Degrees (2): 5-6 semesters <br> Certificates (3): 2-5 semesters <br>",
-        image: "assets/ProgramResources/Law/LegalParalegalStudies.jpg",
+    {
+        label: "Nursing",
+        title: "Nursing",
+        content: " Work toward an LPN, ASN, or transfer as a junior. Learn to care for patients and qualify to work in hospitals, home health, and more. <br><br> Associate Degrees (2): 3-4 semesters <br> Certificate: 3 semesters",
+        image: "assets/ProgramResources/Healthcare/Nursing.jpg",
         video: null,
-        qr: "assets/QR-Codes/Programs/law/QR_law.png",  
+        qr: "assets/QR-Codes/Programs/Healthcare/QR_Nursing.png",   
       },
     ]
   },
 
-
-    {
-    label: "Public Safety",
+  {
+    label: "School of Public Affairs and Social Services",
     programs: [
       {
         label: "Criminal Justice",
         title: "Criminal Justice",
-        content: "  Learn from instructors with real-world experience in career fields like law enforcement, court services, security, and others.  <br><br> Associate Degrees (2): 4 semesters <br> Certificates (5): 2 semesters <br>",
+        content: "Learn from instructors with real-world experience in career fields like law enforcement, court services, security, and others.  <br><br> Associate Degrees (2): 4 semesters <br> Certificates (5): 2 semesters <br>",
         image: "assets/ProgramResources/PublicSafety/CriminalJustice.jpg",
         video: null,
         qr: "assets/QR-Codes/Programs/PublicSafety/QR_CriminalJustice.png",  
@@ -789,71 +800,6 @@ const ProgramFields = [
         video: null,
         qr: "assets/QR-Codes/Programs/PublicSafety/QR_HomelandSecurity.png",  
       },
-
-    ]
-  },
-
-    {
-    label: "Science & Applied Science",
-    programs: [
-
-      {
-        label: "Biology",
-        title: "Biology",
-        content: "Biology is the study of life itself–and your first step to a career in medicine, pharmacology, agriculture, research, and many others.  <br><br> Associate Degree: 4 semesters <br>",
-        image: "assets/ProgramResources/Science/Biology.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Science/QR_Biology.png",  
-      },
-      {
-        label: "Biotechnology",
-        title: "Biotechnology",
-        content: "Biotechnology uses living cells to develop products, leading to careers that include research, pharmaceuticals, genomics, and others.  <br><br> Associate Degrees (2): 4 semesters <br> Certificates (4): 2-3 semesters <br>",
-        image: "assets/ProgramResources/Science/BioTechnology.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Science/QR_Biotechnology.png",  
-      },
-      {
-        label: "Chemistry",
-        title: "Chemistry",
-        content: "Your formula for earning skills in organic and physical chemistry, atomic structure, and more before transferring to a 4-year school.  <br><br> Associate Degree: 4 semesters  <br>",
-        image: "assets/ProgramResources/Science/Chemistry.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Science/QR_Chemistry.png",  
-      },
-      {
-        label: "Energy Technology",
-        title: "Energy Technology",
-        content: "Get ready for the green energy future with skills in wind and solar power systems. Industry partners include Vectren, Siemens, and GE.  <br><br>  Associate Degree: 4 semesters <br> Certificates (5): 3 semesters <br> Workforce Certification: 1 semesters<br>",
-        image: "assets/ProgramResources/Science/EnergyTechnology.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Science/QR_EnergyTechnology.png",  
-      },
-      {
-        label: "Mortuary Science",
-        title: "Mortuary Science",
-        content: "Gain expertise in all aspects of this essential career, including working with bereaved families, embalming, and restorative art. <br><br> Associate Degree: 5-6 semesters <br>",
-        image: "assets/ProgramResources/Science/MortuaryScience.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Science/QR_Mortuary.png",  
-      },
-      {
-        label: "Veterinary Nursing",
-        title: "Veterinary Nursing",
-        content: "An ideal environment to develop as a skilled veterinary technician, emphasizing professionalism and expertise. Gain hands-on experience through externships and partnerships with leading veterinary institutions across Indiana, ensuring a comprehensive education that prepares you for success in the field.  <br><br> Associate Degree: 4-5 semesters <br> Certificate: 2 semesters <br>",
-        image: "assets/ProgramResources/Science/VeterinaryNursing.jpg",
-        video: null,
-        qr: "assets/QR-Codes/Programs/Science/QR_Veterinary.png",  
-      },
-    ]
-  },
-
-
-
-  
-  {
-    label: "Social Services",
-    programs: [
       {
         label: "Human Services",
         title: "Human Services",
@@ -863,13 +809,22 @@ const ProgramFields = [
         qr: "assets/QR-Codes/Programs/SocialServices/QR_HumanServices.png",  
       },
       {
-        label: "Psychology",
-        title: "Psychology",
-        content: " Psychology is the study of behavior, a highly valuable career skill. Studies include human sexuality and theories of personality.  <br><br> Associate Degree: 4 semesters <br>",
-        image: "assets/ProgramResources/SocialServices/Psychology.jpg",
+        label: "Legal and Paralegal Studies",
+        title: "Legal and Paralegal Studies",
+        content: "Are you looking for a meaningful career that empowers you to help others? Are you passionate about justice, equity, and equality?  <br><br> Associate Degrees (2): 4 semesters <br> Certificates (2): 2 semesters <br>",
+        image: "assets/ProgramResources/Law/LegalParalegalStudies.jpg",
         video: null,
-        qr: "assets/QR-Codes/Programs/SocialServices/QR_Psychology.png",  
+        qr: null,  
+      },
+      {
+        label: "Mortuary Science",
+        title: "Mortuary Science",
+        content: "Gain expertise in all aspects of this essential career, including working with bereaved families, embalming, and restorative art. <br><br> Associate Degree: 5-6 semesters <br>",
+        image: "assets/ProgramResources/Science/MortuaryScience.jpg",
+        video: null,
+        qr: "assets/QR-Codes/Programs/Science/QR_Mortuary.png",  
       },
     ]
   },
+
 ];
