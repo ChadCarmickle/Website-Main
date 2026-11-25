@@ -1,0 +1,17 @@
+{
+  "name": "ivytech-kiosk",
+  "version": "1.0.0",
+  "private": true,
+  "main": "expo/AppEntry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo prebuild --platform android && expo run:android",
+    "prebuild": "expo prebuild --platform android"
+  },
+  "dependencies": {
+    "expo": "~54.0.33",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-webview": "13.15.0"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "Ivy Tech Kiosk",
+    "slug": "campus-display-kiosk",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "android": { "package": "com.ivytech.kiosk" },
+    "plugins": ["./plugins/withKioskAssets"]
+  }
+}
