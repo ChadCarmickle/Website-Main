@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Ivy Tech Kiosk Simulator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #181818;
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        header {
+            height: 60px;
+            background: #252525;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        button {
+            background: #006648;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #preview {
+            width: 100vw;
+            height: calc(100vh - 60px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+        }
+
+        #frameContainer {
+            position: relative;
+            flex-shrink: 0;
+            background: black;
+        }
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1080px;
+            height: 1920px;
+            border: none;
+            transform-origin: top left;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div>
+            <strong>Ivy Tech Kiosk Simulator</strong>
+            | 1080 x 1920 | Portrait
+        </div>
+
+        <div>
+            <button onclick="resizeKiosk()">Fit Screen</button>
+            <button onclick="setScale(0.25)">25%</button>
+            <button onclick="setScale(0.50)">50%</button>
+            <button onclick="setScale(1)">100%</button>
+            <button onclick="reloadKiosk()">Reload</button>
+        </div>
+    </header>
+
+    <main id="preview">
+        <div id="frameContainer">
+            <iframe
+                id="kiosk"
+                src="./Kisok/"
+                title="Ivy Tech Kiosk"
+                allow="autoplay; fullscreen">
+            </iframe>
+        </div>
+    </main>
+
+    <script>
+        const kiosk = document.getElementById("kiosk");
+        const preview = document.getElementById("preview");
+        const container = document.getElementById("frameContainer");
+
+        const WIDTH = 1080;
+        const HEIGHT = 1920;
+
+        let fitMode = true;
+
+        function setScale(scale) {
+            fitMode = false;
+
+            container.style.width = `${WIDTH * scale}px`;
+            container.style.height = `${HEIGHT * scale}px`;
+
+            kiosk.style.transform = `scale(${scale})`;
+
+            preview.style.alignItems =
+                HEIGHT * scale > preview.clientHeight
+                ? "flex-start" : "center";
+
+            preview.style.justifyContent =
+                WIDTH * scale > preview.clientWidth
+                ? "flex-start" : "center";
+        }
+
+        function resizeKiosk() {
+            const scale = Math.min(
+                (preview.clientWidth - 24) / WIDTH,
+                (preview.clientHeight - 24) / HEIGHT,
+                1
+            );
+
+            setScale(scale);
+            fitMode = true;
+        }
+
+        function reloadKiosk() {
+                kiosk.src = "./Kisok/?t=" + Date.now();
+        }
+
+        window.addEventListener("resize", () => {
+            if (fitMode) {
+                resizeKiosk();
+            }
+        });
+
+        resizeKiosk();
+    </script>
+
+</body>
+</html>

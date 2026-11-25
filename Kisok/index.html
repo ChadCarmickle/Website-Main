@@ -188,18 +188,28 @@
 </div>
 
   <!-- Alert for website under construction. -->  
+<!-- Display welcome alert once per browser session -->
 <script>
-  function showProjectAlert() {
-    alert(
-      "Welcome!\n\n" +
-      "This website is helping me with a project right now. " +
-      "While I put the finishing touches on it, feel free to visit my \n LinkedIn:\n" +
-      "https://www.linkedin.com/in/chad-carmickle/\n" +
-      "or explore my work on \nGitHub:\n" +
-      "https://github.com/ChadCarmickle\n" +
-      "Thanks for stopping by—I hope to see you again soon!"
-    );
-  }
+    function showProjectAlert() {
+
+        // Check if the visitor has already seen the alert
+        if (sessionStorage.getItem("projectAlertShown") === "true") {
+            return;
+        }
+
+        // Remember that the alert has been displayed
+        sessionStorage.setItem("projectAlertShown", "true");
+
+        alert(
+            "Welcome!\n\n" +
+            "This website is helping me with a project right now. " +
+            "While I put the finishing touches on it, feel free to visit my LinkedIn:\n" +
+            "https://www.linkedin.com/in/chad-carmickle/\n\n" +
+            "Or explore my work on GitHub:\n" +
+            "https://github.com/ChadCarmickle\n\n" +
+            "Thanks for stopping by—I hope to see you again soon!"
+        );
+    }
 </script>
 
 
