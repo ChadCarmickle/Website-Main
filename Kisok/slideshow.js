@@ -233,6 +233,56 @@ function stopAutoPlay() {
   }
 }
 
+/* =========================================================
+   FLOATING SLIDESHOW NOTIFICATION
+   ========================================================= */
+
+let notificationTimeout = null;
+
+function showSlideshowNotification(message, position = "center") {
+
+    const notification = document.getElementById(
+        "slideshow-notification"
+    );
+
+    if (!notification) return;
+
+    // Clear previous notification
+    clearTimeout(notificationTimeout);
+
+    // Reset animation and position
+    notification.classList.remove(
+        "visible", "previous", "next"
+    );
+
+    notification.textContent = message;
+
+    // Set notification position
+    if (position !== "center") {
+        notification.classList.add(position);
+    }
+
+    // Restart animation
+    void notification.offsetWidth;
+
+    notification.classList.add("visible");
+
+    // Remove notification after 4 seconds
+    notificationTimeout = setTimeout(() => {
+        notification.classList.remove(
+            "visible", "previous", "next"
+        );
+
+        notification.textContent = "";
+    }, 4000);
+}
+
+
+
+/* =========================================================
+   AUTO-RESUME COUNTDOWN
+   ========================================================= */
+   
 function scheduleAutoResume() {
   if (resumeTimeout) clearTimeout(resumeTimeout);
   if (resumeCountdownInterval) clearInterval(resumeCountdownInterval);
@@ -253,7 +303,7 @@ resumeTimeout = setTimeout(() => {
     isPlaying = true;
     const toggleBtn = document.getElementById("toggle-play");
     if (toggleBtn) {
-      toggleBtn.childNodes[0].textContent = "⏸ "; // update icon only, keep the countdown span intact
+      toggleBtn.childNodes[0].textContent = "❚❚";// update icon only, keep the countdown span intact
     }
     if (currentVideoEl) {
       currentVideoEl.play(); // resume the video that was paused, rather than restarting image autoplay
@@ -301,18 +351,27 @@ setInterval(playScheduledVideo, VIDEO_INTERVAL_MS);
 
 
 // === Slideshow Button Controls ===
-  document.getElementById("next-slide").addEventListener("click", () => {
-  window.analytics.logEvent("slideshow_next");
-  cancelActiveVideo();                 
-  showNextSlide();
-  if (isPlaying) startAutoPlay();
+
+document.getElementById("next-slide").addEventListener("click", () => {
+    window.analytics.logEvent("slideshow_next");
+
+    showSlideshowNotification("Viewing next slide", "next");
+
+    cancelActiveVideo();
+    showNextSlide();
+
+    if (isPlaying) startAutoPlay();
 });
 
 document.getElementById("prev-slide").addEventListener("click", () => {
-  window.analytics.logEvent("slideshow_prev");
-  cancelActiveVideo();
-  showSlide(currentSlide - 1);
-  if (isPlaying) startAutoPlay();
+    window.analytics.logEvent("slideshow_prev");
+
+    showSlideshowNotification("Viewing previous slide", "previous");
+
+    cancelActiveVideo();
+    showSlide(currentSlide - 1);
+
+    if (isPlaying) startAutoPlay();
 });
 
 // Toggle play/pause functionality
@@ -325,7 +384,8 @@ toggleBtn.addEventListener("click", () => {
   });
   
   if (isPlaying) {
-    toggleBtn.childNodes[0].textContent = "⏸ ";
+    toggleBtn.childNodes[0].textContent = "❚❚ ";
+    showSlideshowNotification("Slideshow resumed");
     if (currentVideoEl) {
       currentVideoEl.play(); // resume the paused video
     } else {
@@ -335,7 +395,10 @@ toggleBtn.addEventListener("click", () => {
     }
     hideSlideshowCountdown(); // clears timer + hides countdown on manual resume
   } else {
-    toggleBtn.childNodes[0].textContent = "▶ ";
+      toggleBtn.childNodes[0].textContent = "► ";
+      showSlideshowNotification(
+      `Slideshow paused for ${AUTO_RESUME_DELAY / 60000} mins`
+      );
     if (currentVideoEl) {
       currentVideoEl.pause(); // pause the video in place instead of removing/resetting it
     } else {

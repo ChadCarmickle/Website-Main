@@ -22,11 +22,12 @@ html, body {
   /* Deep ivy -> woodland -> banks of the wabash */
 /* Ivy green with a cooler contrast (grey) */
 /* Bright green glow look */
-background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
-  height: 100vh;
+    background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
   
 }
 
@@ -41,6 +42,7 @@ background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
   justify-content: space-between;
   align-items: center;
   padding: 0 3vw;
+  padding-top: 20px; 
 }
 
 #date {
@@ -72,6 +74,7 @@ background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
   position: relative;
   overflow: hidden;
   background-color: rgb(22, 110, 86);
+  padding: 2vh 2vw 0;
 }
 
 #slideshow {
@@ -107,6 +110,11 @@ background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
   pointer-events: none; /* Prevents hover triggering modals */
 }
 
+#slideshow img,
+#slideshow video {
+    object-position: center center; /* ensures the media is centered in the slideshow frame */
+}
+
 /* Currently-visible slide (image or video) fades in */
 #slideshow img.active,
 #slideshow video.active {
@@ -117,42 +125,68 @@ background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
 /* =============================================================
    SLIDESHOW CONTROLS (prev / play-pause / next)
    ============================================================= */
-.slideshow-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  margin: 5px auto;
-  padding: 0px 40px;
-  border-radius: 5px;
-  width: fit-content;
+
+   .slideshow-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2vw;
+    margin: 1vh auto;
+    padding: 0 20px;
+    width: fit-content;
 }
 
 /* Base button style shared by prev/next/play-pause */
 .control-btn {
-  padding: 16px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #ffffff;
-  background-color: #006648;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    /* Appearance */
+    background: linear-gradient(180deg, #168365, #00543C);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 14px;
+    color: #ffffff;
+
+    /* Font */
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+
+    /* Shadows */
+    box-shadow:
+        0 6px 12px rgba(0, 0, 0, 0.25),
+        0 10px 20px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+    /* Interaction */
+    cursor: pointer;
+    transition: 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.control-btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 /* Previous & Next slide buttons */
-#prev-slide, #next-slide {
-  font-size: 26px;
-  padding: 16px 26px;
-  min-width: 70px;
+#prev-slide,
+#next-slide {
+    width: 30vw;
+    height: 4vh;
+    min-width: 0;
+    padding: 0;
+    font-size: 3.5vw;
 }
 
 /* Pause/Play button */
 #toggle-play {
-  padding: 16px 40px;
-  min-width: 170px;
-  font-size: 18px;
+    width: 22vw;
+    height: 4.5vh;
+    min-width: 0;
+    padding: 0;
+    font-size: 3vw;
 }
 
 
@@ -163,35 +197,79 @@ background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 2vw;
     width: 100%;
-    padding: 16px 20px;
+    padding: 2vh 3vw 3vh;
 }
 
 .action-btn {
-    flex: 0 1 auto;
-    max-width: 200px;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255,255,255,0.4);
-    color: white;
-    font-size: 22px;
-    border-radius: 14px;
-    padding: 14px 14px;
-    min-height: 85px;
-    box-shadow:
-        0 8px 20px rgba(0,0,0,0.25);
+    /* Button sizing */
+    flex: 1;
+    max-width: none;
+    min-width: 0;
+    min-height: 8vh;
+    padding: 16px 10px;
 
-    transition: 0.25s ease;
+    /* Background and border */
+    background: linear-gradient(
+        180deg,
+        #27876B 0%,
+        #12664F 100%
+    );
+
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    border-radius: 18px;
+
+    /* Professional typography */
+    font-family: "Montserrat", sans-serif;
+    font-size: 2.4vw;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    line-height: 1.3;
+    color: #ffffff;
+
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+
+    /* Button depth and shadows */
+    box-shadow:
+        0 8px 0 #004B35,
+        0 12px 20px rgba(0, 0, 0, 0.30),
+        inset 0 2px 0 rgba(255, 255, 255, 0.12);
+
+    /* Content alignment */
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
+
+    /* Interaction */
+    cursor: pointer;
+    transition: 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.action-btn:active {
+    transform: translateY(5px);
+
+    box-shadow:
+        0 3px 0 #004B35,
+        0 5px 10px rgba(0, 0, 0, 0.25);
+
+    filter: brightness(1.1);
+}
+/* Touchscreen press feedback */
+.action-btn:active {
+    transform: scale(0.96);
+    filter: brightness(1.15);
+
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .action-btn:active {
   transform: scale(0.96);
 }
+
 /* =============================================================
    MODAL (popup shown when an action button is clicked)
    ============================================================= */
@@ -580,4 +658,69 @@ img[src*="assets/campusResource_ITProf.png"] {
   height: 300px; 
   object-fit:contain; 
   max-width: 100%;
+}
+
+
+/* =============================================================
+   FLOATING SLIDESHOW NOTIFICATION
+   ============================================================= */
+/* This notification appears when the slideshow is paused or resumed,
+   floating downwards and fading out after a few seconds. */
+#slideshow-notification {
+    position: absolute;
+    bottom: calc(12.5vh - 10px);
+    left: 0;
+    width: 100%;
+
+    /* Font styling */
+    text-align: center;
+    color: #ffffff;
+    font-family: "Montserrat", sans-serif;
+    font-size: 2.2vw;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+
+    /* Overlay behavior */
+    opacity: 0;
+    z-index: 20;
+    pointer-events: none;
+}
+
+/* Start animation */
+#slideshow-notification.visible {
+    animation: floatNotification 4s linear forwards;
+}
+
+/* Previous slide notification */
+#slideshow-notification.previous {
+    left: 8%;
+    width: 30%;
+}
+
+/* Next slide notification */
+#slideshow-notification.next {
+    left: 62%;
+    width: 30%;
+}
+
+/* Float downward and disappear */
+@keyframes floatNotification {
+    0% {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    65% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
 }
