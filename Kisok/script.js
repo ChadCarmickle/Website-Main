@@ -1,28 +1,36 @@
 /* =========================================================
-   1. CLOCK
+   1. CLOCK AND DATE DISPLAY
    ========================================================= */
+
+const timeEl = document.getElementById("time");
+const dateEl = document.getElementById("date");
+
 function updateClock() {
-  const now = new Date();
-  const timeEl = document.getElementById("time");
-  const dateEl = document.getElementById("date");
+    const now = new Date();
 
-  const timeString = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-  const dateString = now.toLocaleDateString([], { 
-    weekday: "long", year: "numeric", month: "long", day: "numeric" 
-  });
+    timeEl.textContent = now.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit"
+    });
 
-  timeEl.textContent = timeString;
-  dateEl.textContent = dateString;
+    dateEl.textContent = now.toLocaleDateString([], {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    });
 }
 
-setInterval(updateClock, 1000);
+// Initialize and update the clock
 updateClock();
+setInterval(updateClock, 1000);
 
 /* =========================================================
    2. MODAL SETUP & BUTTONS
    ========================================================= */
 
-// Global varaibles to call all the elements.    
+// Cached DOM elements
+const modalBox = document.getElementById("modal-box");
 const modalOverlay = document.getElementById("modal-overlay");
 const modalTitle = document.getElementById("modal-title");
 const modalContent = document.getElementById("modal-content");
@@ -55,159 +63,240 @@ let currentProgram = 0;
 let currentMap = 0;
 let currentAnnouncement = 0;
 let currentModalMode = null;  // 'announcements', 'resources', 'map', etc.
+let currentResourcePage = 1;
 
-// Button handler
-document.querySelectorAll(".action-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const btnType = btn.textContent.trim() || btn.dataset.title || "Unknown";
-    window.analytics.logEvent("button_click", { button: btnType });
-    
-    // Reset modal
-    modalTitle.innerHTML = btn.dataset.title || "";
-    modalContent.innerHTML = btn.dataset.content || "";
-    modalImage.classList.add("hidden");
+// Main navigation button handlers
+document.querySelectorAll(".action-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const btnType = btn.textContent.trim()
+            || btn.dataset.title
+            || "Unknown";
 
-    if (btn.dataset.image) {
-      modalImage.src = btn.dataset.image;
-      modalImage.classList.remove("hidden");
-    }
+        window.analytics.logEvent("button_click", {
+            button: btnType
+        });
 
-    // Hide all special controls
-    mapControls.classList.add("hidden");
-    resourceControls.classList.add("hidden");
-    programControls.classList.add("hidden");
-    generalModalControls.classList.remove("hidden");
+        // Reset modal content and layout
+        modalTitle.innerHTML = btn.dataset.title || "";
+        modalContent.innerHTML = btn.dataset.content || "";
+        modalImage.classList.add("hidden");
 
-    // Show the correct mode
-    if (btn.dataset.map) {
-      currentMap = 0;
-      currentModalMode = 'map';
-      showMap();
-      mapControls.classList.remove("hidden");
-      generalModalControls.classList.add("hidden");
-      document.getElementById("modal-box").classList.add("map-mode");
-    } else if (btn.dataset.resources) {
-      currentResource = 0;
-      currentModalMode = 'resources';
-      showResource();
-      resourceControls.classList.remove("hidden");
-      generalModalControls.classList.add("hidden");
-      document.getElementById("modal-box").classList.remove("map-mode");
-      buildResourceJumpLinks();           // ← Added
-    } else if (btn.dataset.programs) {
-      currentProgram = 0;
-      currentModalMode = 'programs';
-      showProgram();
-      programControls.classList.remove("hidden");
-      generalModalControls.classList.add("hidden");
-      document.getElementById("modal-box").classList.remove("map-mode");
-    } else if (btn.dataset.announcements) {
-      currentAnnouncement = 0;
-      currentModalMode = 'announcements';
-      showAnnouncement();
-      resourceControls.classList.remove("hidden");  
-      generalModalControls.classList.add("hidden");
-      document.getElementById("modal-box").classList.remove("map-mode");
-      buildAnnouncementJumpLinks();       // ← Added (this was the fix)
-    } else {
-      currentModalMode = null;
-      document.getElementById("modal-box").classList.remove("map-mode");
-    }
+        modalBox.classList.remove(
+            "map-mode",
+            "resource-mode",
+            "program-mode"
+        );
 
-    // THIS WAS MISSING — SHOW THE MODAL
-    modalOverlay.classList.remove("hidden");
-    resetModalTimer();   // Start idle timer
-  });
+        if (btn.dataset.image) {
+            modalImage.src = btn.dataset.image;
+            modalImage.classList.remove("hidden");
+        }
+
+        // Reset navigation controls
+        mapControls.classList.add("hidden");
+        resourceControls.classList.add("hidden");
+        programControls.classList.add("hidden");
+        generalModalControls.classList.remove("hidden");
+
+        // Select the appropriate modal mode
+        if (btn.dataset.map) {
+            currentMap = 0;
+            currentModalMode = "map";
+
+            showMap();
+            mapControls.classList.remove("hidden");
+
+        } else if (btn.dataset.resources) {
+            currentResource = 0;
+            currentResourcePage = 1;
+            currentModalMode = "resources";
+
+            modalBox.classList.add("resource-mode");
+
+            buildResourceJumpLinks();
+            showResource();
+
+            resourceControls.classList.remove("hidden");
+
+        } else if (btn.dataset.programs) {
+            currentModalMode = "programs";
+
+            modalBox.classList.add("program-mode");
+
+            showProgram();
+            programControls.classList.remove("hidden");
+
+        } else if (btn.dataset.announcements) {
+            currentAnnouncement = 0;
+            currentModalMode = "announcements";
+
+            buildAnnouncementJumpLinks();
+            showAnnouncement();
+
+            resourceControls.classList.remove("hidden");
+
+        } else {
+            currentModalMode = null;
+        }
+
+        // Hide general controls when using specialized navigation
+        if (currentModalMode !== null) {
+            generalModalControls.classList.add("hidden");
+        }
+
+        // Display the modal and initialize its idle timer
+        modalOverlay.classList.remove("hidden");
+        resetModalTimer();
+    });
 });
 
+/* =========================================================
+   SHARED MEDIA HANDLING
+   ========================================================= */
+
+function renderMedia(item, prefix) {
+    const image = document.getElementById(`${prefix}-image`);
+    const video = document.getElementById(`${prefix}-video`);
+    const videoSource = document.getElementById(`${prefix}-video-source`);
+    const qr = document.getElementById(`${prefix}-qr`);
+    const videoWrap = document.getElementById(`${prefix}-video-wrap`);
+
+    // Reset previous media
+    image.classList.add("hidden");
+    video.classList.add("hidden");
+    qr.classList.add("hidden");
+
+    video.pause();
+    video.currentTime = 0;
+
+    // Display an image or video
+    if (item.image) {
+        image.src = item.image;
+        image.classList.remove("hidden");
+
+    } else if (item.video) {
+        videoSource.src = item.video;
+        video.load();
+        video.classList.remove("hidden");
+    }
+
+    // Display the optional QR code
+    if (item.qr) {
+        qr.src = item.qr;
+        qr.classList.remove("hidden");
+    }
+
+    // Collapse the media container when empty
+    const hasMedia = Boolean(item.image || item.video || item.qr);
+
+    videoWrap.classList.toggle("empty", !hasMedia);
+}
 
 /* =========================================================
-   3. Announcements.
+   SHARED NAVIGATION BUTTON GENERATOR
    ========================================================= */
-// Changes the content on the Announcements page. 
-function showAnnouncement() {
-  const ann = Announcements[currentAnnouncement];
-  modalTitle.innerHTML = ann.title || "Announcement";
-  modalContent.innerHTML = ann.content || "";
 
-  const resourceImage = document.getElementById("resource-image");
-  const resourceQr = document.getElementById("resource-qr");
-  const video = document.getElementById("resource-video");
-  const videoSource = document.getElementById("resource-video-source");
-  const videoWrap = document.getElementById("resource-video-wrap");
+function buildJumpLinks(container, items, onSelect) {
+    container.innerHTML = "";
 
-  resourceImage.classList.add("hidden");
-  resourceQr.classList.add("hidden");
-  video.classList.add("hidden");
-  video.pause();
-  video.currentTime = 0;
+    items.forEach((item, index) => {
+        const btn = document.createElement("button");
 
-  if (ann.image) {
-    resourceImage.src = ann.image;
-    resourceImage.classList.remove("hidden");
-  } else if (ann.video) {
-    videoSource.src = ann.video;
-    video.load();
-    video.classList.remove("hidden");
-  }
+        btn.textContent = item.label || item.title;
+        btn.dataset.index = index;
 
-  if (ann.qr) {
-    resourceQr.src = ann.qr;
-    resourceQr.classList.remove("hidden");
-  }
+        btn.addEventListener("click", () => {
+            resetModalTimer();
+            onSelect(index);
+        });
 
-  const hasMedia = Boolean(ann.image || ann.video || ann.qr);
-  videoWrap.classList.toggle("empty", !hasMedia);
-
-  resourceJumpLinks.querySelectorAll("button").forEach(btn => {
-    btn.classList.toggle("active-resource", Number(btn.dataset.index) === currentAnnouncement);
-  });
-
-  window.analytics.logEvent("announcement_view", {
-    index: currentAnnouncement,
-    label: ann.label || ann.title || "Unknown"
-  });
-}
-
-// Allows user to click labels to jump to that subject. 
-function buildAnnouncementJumpLinks() {
-  resourceJumpLinks.innerHTML = "";  // Reuse resource jump links
-  Announcements.forEach((ann, index) => {
-    const btn = document.createElement("button");
-    btn.textContent = ann.label || ann.title;
-    btn.dataset.index = index;
-    btn.addEventListener("click", () => {
-      resetModalTimer();
-      currentAnnouncement = index;
-      showAnnouncement();
+        container.appendChild(btn);
     });
-    resourceJumpLinks.appendChild(btn);
-  });
+}
+/* =========================================================
+   3. ANNOUNCEMENTS
+   ========================================================= */
+
+function showAnnouncement() {
+    const ann = Announcements[currentAnnouncement];
+
+    if (!ann) return;
+
+    modalTitle.innerHTML = ann.title || "Announcement";
+    modalContent.innerHTML = ann.content || "";
+
+    renderMedia(ann, "resource");
+
+    resourceJumpLinks.querySelectorAll("button").forEach(btn => {
+        btn.classList.toggle(
+            "active-resource",
+            Number(btn.dataset.index) === currentAnnouncement
+        );
+    });
+
+    window.analytics.logEvent("announcement_view", {
+        index: currentAnnouncement,
+        label: ann.label || ann.title || "Unknown"
+    });
 }
 
-buildAnnouncementJumpLinks();
+// Generate announcement navigation buttons
+function buildAnnouncementJumpLinks() {
+    buildJumpLinks(
+        resourceJumpLinks,
+        Announcements,
+        index => {
+            currentAnnouncement = index;
+            showAnnouncement();
+        }
+    );
+}
 
 /* =========================================================
    3. CAMPUS RESOURCES
    ========================================================= */
 
-// Allows users to jump to label. 
-function buildResourceJumpLinks() {
-  resourceJumpLinks.innerHTML = "";
-  CampusResources.forEach((resource, index) => {
-    const btn = document.createElement("button");
-    btn.textContent = resource.label || resource.title;
-    btn.dataset.index = index;
-    btn.addEventListener("click", () => {
-      resetModalTimer();
-      currentResource = index;
-      showResource();
-    });
-    resourceJumpLinks.appendChild(btn);
-  });
+// Get the currently selected resource page
+function getActiveResources() {
+    return currentResourcePage === 1
+        ? CampusResources
+        : MoreResources;
 }
 
-buildResourceJumpLinks();
+// Generate Student Services navigation buttons
+function buildResourceJumpLinks() {
+    buildJumpLinks(
+        resourceJumpLinks,
+        getActiveResources(),
+        index => {
+            currentResource = index;
+            showResource();
+        }
+    );
+
+    // Add a back button on the second page
+    if (currentResourcePage === 2) {
+        const backBtn = document.createElement("button");
+
+        backBtn.textContent = "Back to Student Services";
+
+        backBtn.addEventListener("click", () => {
+            resetModalTimer();
+
+            window.analytics.logEvent("resource_view", {
+                label: "Back to Student Services"
+            });
+
+            currentResourcePage = 1;
+            currentResource = 0;
+
+            buildResourceJumpLinks();
+            showResource();
+        });
+
+        resourceJumpLinks.appendChild(backBtn);
+    }
+}
 
 /* =========================================================
    4. PROGRAMS (field -> program drill-down)
@@ -228,22 +317,70 @@ function showProgram() {
   renderFieldGrid();
 }
 
-function renderFieldGrid() {
-  modalTitle.innerHTML = ' <strong style="font-size: 24px;">Ivy Tech Offers over 70+ Programs <br> Designed for Indiana Jobs!</strong>'; 
-  modalContent.innerHTML = "<i> Tap the subjects below to view each category. </i>"; 
-  document.getElementById("program-image").classList.add("hidden");
-  document.getElementById("program-video").classList.add("hidden");
-  document.getElementById("program-qr").classList.add("hidden");
-  document.getElementById("program-video-wrap").classList.add("empty");
+// School selection icons
+const SCHOOL_ICONS = [
+    // Advanced Manufacturing
+    '<path d="M3 21V10l6 4V9l6 4V3h4l2 18z"/><path d="M7 17v1m5-1v1m5-1v1"/>',
 
-  document.getElementById("prev-program").classList.add("hidden");
-  document.getElementById("next-program").classList.add("hidden");
+    // Business
+    '<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M3 13h18M10 13v2h4v-2"/>',
+
+    // Information Technology
+    '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M12 17v4M7 21h10"/>',
+
+    // Arts, Sciences and Education
+    '<path d="m2 10 10-6 10 6-10 6zM6 13v5c4 3 8 3 12 0v-5M22 10v8"/>',
+
+    // Entrepreneurship
+    '<path d="M9 18h6M10 22h4M9 15c0-3-4-3-4-8a7 7 0 0 1 14 0c0 5-4 5-4 8z"/>',
+
+    // Health Sciences
+    '<path d="M20 4a5 5 0 0 0-8 2 5 5 0 0 0-8-2c-5 5 2 12 8 17 6-5 13-12 8-17z"/><path d="M3 12h5l2-4 4 8 2-4h5"/>',
+
+    // Culinary Arts and Hospitality
+    '<path d="M6 14a5 5 0 1 1 2-9 5 5 0 0 1 8 0 5 5 0 1 1 2 9v7H6zM6 17h12"/>',
+
+    // Nursing
+    '<path d="M4 3v7a5 5 0 0 0 10 0V3M9 15v2a5 5 0 0 0 10 0v-3"/><circle cx="19" cy="11" r="3"/>',
+
+    // Public Affairs and Social Services
+    '<path d="m2 8 10-6 10 6zM4 21h16M6 10v8M12 10v8M18 10v8M3 18h18"/>'
+];
+
+// Render the field selection grid
+function renderFieldGrid() {
+
+  // Activate the school selection grid
+  programJumpLinks.classList.add("school-grid");
+  modalTitle.innerHTML = '<span class="programs-heading">Explore Our Programs</span><span class="programs-subheading">70+ Programs Designed for Indiana Jobs!</span>';
+  modalContent.innerHTML = "<i>Select a school below to explore available programs.</i>";
+
+    renderMedia({}, "program");
+
+  prevProgram.classList.add("hidden");
+  nextProgram.classList.add("hidden");
   programBack.classList.add("hidden");
 
   programJumpLinks.innerHTML = "";
   ProgramFields.forEach((field, index) => {
-    const btn = document.createElement("button");
-    btn.textContent = field.label;
+      const btn = document.createElement("button");
+      btn.innerHTML = `
+      <svg class="school-icon"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true">
+            ${SCHOOL_ICONS[index] || SCHOOL_ICONS[2]}
+        </svg>
+
+        <span>${field.label}</span>
+      `;
+
     btn.dataset.index = index;
     btn.addEventListener("click", () => {
       resetModalTimer();
@@ -255,6 +392,8 @@ function renderFieldGrid() {
 }
 
 function openField(fieldIndex) {
+  // preserve the original grid layout for the program jump links, but remove the "school-grid" class
+  programJumpLinks.classList.remove("school-grid");
   currentFieldIndex = fieldIndex;
   currentProgram = 0;
 
@@ -263,12 +402,10 @@ function openField(fieldIndex) {
   if (programs.length === 0) {
     modalTitle.innerHTML = ProgramFields[fieldIndex].label;
     modalContent.innerHTML = "Programs for this field are coming soon.";
-    document.getElementById("program-image").classList.add("hidden");
-    document.getElementById("program-video").classList.add("hidden");
-    document.getElementById("program-qr").classList.add("hidden");
-    document.getElementById("program-video-wrap").classList.add("empty");
-    document.getElementById("prev-program").classList.add("hidden");
-    document.getElementById("next-program").classList.add("hidden");
+    renderMedia({}, "program");
+
+    prevProgram.classList.add("hidden");
+    nextProgram.classList.add("hidden");
     programJumpLinks.innerHTML = "";
     programBack.classList.remove("hidden");
     return;
@@ -280,24 +417,19 @@ function openField(fieldIndex) {
   programBack.classList.remove("hidden");
 
   const showArrows = programs.length > 1;
-  document.getElementById("prev-program").classList.toggle("hidden", !showArrows);
-  document.getElementById("next-program").classList.toggle("hidden", !showArrows);
+  prevProgram.classList.toggle("hidden", !showArrows);
+  nextProgram.classList.toggle("hidden", !showArrows);
 }
 
 function renderProgramJumpLinks() {
-  const programs = getCurrentPrograms();
-  programJumpLinks.innerHTML = "";
-  programs.forEach((prog, index) => {
-    const btn = document.createElement("button");
-    btn.textContent = prog.label || prog.title;
-    btn.dataset.index = index;
-    btn.addEventListener("click", () => {
-      resetModalTimer();
-      currentProgram = index;
-      renderProgramDetail();
-    });
-    programJumpLinks.appendChild(btn);
-  });
+    buildJumpLinks(
+        programJumpLinks,
+        getCurrentPrograms(),
+        index => {
+            currentProgram = index;
+            renderProgramDetail();
+        }
+    );
 }
 
 function renderProgramDetail() {
@@ -309,33 +441,7 @@ function renderProgramDetail() {
   modalTitle.innerHTML = `${fieldLabel} <br><span style="font-size:0.6em;opacity:0.8;">${program.title || ""}</span>`;
   modalContent.innerHTML = program.content || "";
 
-  const progImage = document.getElementById("program-image");
-  const progVideo = document.getElementById("program-video");
-  const progVideoSource = document.getElementById("program-video-source");
-  const progQr = document.getElementById("program-qr");
-  const videoWrap = document.getElementById("program-video-wrap");
-
-  progImage.classList.add("hidden");
-  progVideo.classList.add("hidden");
-  progQr.classList.add("hidden");
-  progVideo.pause();
-  progVideo.currentTime = 0;
-
-  if (program.image) {
-    progImage.src = program.image;
-    progImage.classList.remove("hidden");
-  } else if (program.video) {
-    progVideoSource.src = program.video;
-    progVideo.load();
-    progVideo.classList.remove("hidden");
-  }
-
-  if (program.qr) {
-    progQr.src = program.qr;
-    progQr.classList.remove("hidden");
-  }
-
-  videoWrap.classList.toggle("empty", !Boolean(program.image || program.video || program.qr));
+  renderMedia(program, "program");
 
   programJumpLinks.querySelectorAll("button").forEach(btn => {
     btn.classList.toggle("active-resource", Number(btn.dataset.index) === currentProgram);
@@ -386,173 +492,188 @@ const maps = [
 /* =========================================================
    6. IDLE TIMER + DISPLAY FUNCTIONS
    ========================================================= */
-modalOverlay.addEventListener("mousemove", resetModalTimer);
-modalOverlay.addEventListener("touchstart", resetModalTimer);
-modalOverlay.addEventListener("click", resetModalTimer);
-modalOverlay.addEventListener("keydown", resetModalTimer);
-
 const MODAL_IDLE_TIME = 120;
+const COUNTDOWN_WARNING = 30;
+
 let modalTimer = null;
 let modalCountdown = MODAL_IDLE_TIME;
 
+const countdownElements =
+    modalOverlay.querySelectorAll(".idle-countdown");
+
+// Reset the timer when interacting with an open modal
+["mousemove", "touchstart", "click", "keydown"].forEach(event => {
+    modalOverlay.addEventListener(event, resetModalTimer);
+});
+
 function resetModalTimer() {
-  if (modalTimer) clearInterval(modalTimer);
-  modalCountdown = MODAL_IDLE_TIME;
+    // Do not start a timer when the modal is closed
+    if (modalOverlay.classList.contains("hidden")) return;
 
-  modalOverlay.querySelectorAll(".idle-countdown").forEach(counter => {
-    counter.textContent = "";
-    counter.classList.add("hidden");
-  });
+    clearInterval(modalTimer);
 
-  modalTimer = setInterval(() => {
-    modalCountdown--;
+    modalCountdown = MODAL_IDLE_TIME;
     updateModalCountdown();
 
-    if (modalCountdown <= 0) {
-      clearInterval(modalTimer);
-      closeModal();
-      window.analytics.logEvent("modal_close", { reason: "idle_timeout", seconds: MODAL_IDLE_TIME });
-    }
-  }, 1000);
+    modalTimer = setInterval(() => {
+        modalCountdown--;
+
+        updateModalCountdown();
+
+        if (modalCountdown <= 0) {
+            closeModal("idle_timeout");
+        }
+    }, 1000);
 }
 
-// 
 function updateModalCountdown() {
-  modalOverlay.querySelectorAll(".idle-countdown").forEach(counter => {
-    if (modalCountdown <= 30 && modalCountdown > 0) {
-      counter.textContent = `(${modalCountdown}s)`;
-      counter.classList.remove("hidden");
-    } else {
-      counter.textContent = "";
-      counter.classList.add("hidden");
-    }
-  });
+    const showCountdown =
+        modalCountdown <= COUNTDOWN_WARNING &&
+        modalCountdown > 0;
+
+    countdownElements.forEach(counter => {
+        counter.textContent = showCountdown
+            ? `(${modalCountdown}s)`
+            : "";
+
+        counter.classList.toggle("hidden", !showCountdown);
+    });
 }
 
 function stopModalTimer() {
-  if (modalTimer) {
     clearInterval(modalTimer);
     modalTimer = null;
-  }
-  modalOverlay.querySelectorAll(".idle-countdown").forEach(counter => {
-    counter.textContent = "";
-    counter.classList.add("hidden");
-  });
 
+    modalCountdown = MODAL_IDLE_TIME;
+    updateModalCountdown();
 }
-
-const IDLE_NUDGE_DELAY = 15000; // 45 seconds of no interaction
+const IDLE_NUDGE_DELAY = 10000; // 10 seconds
 let nudgeTimer = null;
 
 function startNudgeTimer() {
-  clearTimeout(nudgeTimer);
+    clearTimeout(nudgeTimer);
 
-  // Make sure no leftover animation is running
-  document.querySelectorAll(".action-btn").forEach(btn => {
-    btn.classList.remove("idle-nudge");
-  });
+    nudgeTimer = setTimeout(() => {
 
-  nudgeTimer = setTimeout(() => {
-    document.querySelectorAll(".action-btn").forEach(btn => {
-      btn.classList.add("idle-nudge");
-    });
-  }, IDLE_NUDGE_DELAY);
+        // Only bounce when no popup is open
+        if (modalOverlay.classList.contains("hidden")) {
+
+            document.querySelectorAll(".action-btn").forEach(btn => {
+
+                // Reset the animation
+                btn.classList.remove("idle-nudge");
+
+                // Force browser reflow
+                void btn.offsetWidth;
+
+                // Restart animation
+                btn.classList.add("idle-nudge");
+            });
+
+            console.log("[Kiosk] Idle bounce triggered");
+        }
+
+        // Schedule the next bounce
+        startNudgeTimer();
+
+    }, IDLE_NUDGE_DELAY);
 }
 
 function resetNudge() {
-  document.querySelectorAll(".action-btn").forEach(btn => {
-    btn.classList.remove("idle-nudge");
-  });
-  startNudgeTimer();
+    document.querySelectorAll(".action-btn").forEach(btn => {
+        btn.classList.remove("idle-nudge");
+    });
+
+    startNudgeTimer();
 }
 
-// Restart the timer on any interaction
+// Restart timer on user interaction
 ["click", "touchstart", "mousemove"].forEach(evt => {
-  document.addEventListener(evt, resetNudge, { passive: true });
+    document.addEventListener(evt, resetNudge, { passive: true });
 });
 
-// Also call resetNudge() inside your main button click handlers
-// and when the modal opens, so the hop never runs while someone is using the board.
-
-startNudgeTimer(); // kick it off on page load
-
+// Start timer on page load
+startNudgeTimer();
 
 /* =========================================================
    6. MODAL DISPLAY FUNCTIONS
    ========================================================= */
-   function closeModal() {
-  currentFieldIndex = null;
-  currentProgram = 0;
-  currentAnnouncement = 0;
-  currentModalMode = null;
-  stopModalTimer();
-  modalOverlay.classList.add("hidden");
-  
-  // Hide all special controls
-  mapControls.classList.add("hidden");
-  resourceControls.classList.add("hidden");
-  programControls.classList.add("hidden");
-  
-  generalModalControls.classList.remove("hidden");
+function closeModal(reason = "manual") {
+    // Prevent duplicate closure events
+    if (modalOverlay.classList.contains("hidden")) return;
 
-  // Stop any playing videos
-  const resourceVideo = document.getElementById("resource-video");
-  if (resourceVideo) {
-    resourceVideo.pause();
-    resourceVideo.currentTime = 0;
-  }
+    modalBox.classList.remove("program-mode", "resource-mode");
 
-  const programVideo = document.getElementById("program-video");
-  if (programVideo) {
-    programVideo.pause();
-    programVideo.currentTime = 0;
-  }
+    // Reset navigation state
+    currentFieldIndex = null;
+    currentProgram = 0;
+    currentAnnouncement = 0;
+    currentModalMode = null;
 
-  window.analytics.logEvent("modal_close", { reason: "manual" });
+    stopModalTimer();
+
+    // Reset modal visibility and controls
+    modalOverlay.classList.add("hidden");
+    mapControls.classList.add("hidden");
+    resourceControls.classList.add("hidden");
+    programControls.classList.add("hidden");
+    generalModalControls.classList.remove("hidden");
+
+    // Stop and reset all modal media
+    renderMedia({}, "resource");
+    renderMedia({}, "program");
+
+    // Record a single closure event
+    const details = { reason };
+
+    if (reason === "idle_timeout") {
+        details.seconds = MODAL_IDLE_TIME;
+    }
+
+    window.analytics.logEvent("modal_close", details);
 }
 
-// Close buttons listener (one single clean listener)
-[modalCloseResource, modalCloseProgram, modalCloseMap, modalClose].forEach(btn => {
-  if (btn) btn.addEventListener("click", closeModal);
+// Close button handlers
+[
+    modalCloseResource,
+    modalCloseProgram,
+    modalCloseMap,
+    modalClose
+].forEach(btn => {
+    if (btn) {
+        btn.addEventListener("click", () => closeModal());
+    }
 });
 
-modalOverlay.addEventListener("click", (e) => {
-  if (e.target === modalOverlay) closeModal();
+// Close when clicking outside the popup
+modalOverlay.addEventListener("click", e => {
+    if (e.target === modalOverlay) {
+        closeModal();
+    }
 });
 
 function showResource() {
-  const resource = CampusResources[currentResource];
-  modalTitle.innerHTML = resource.title || "";
-  modalContent.innerHTML = resource.content || "";
 
-  const resourceImage = document.getElementById("resource-image");
-  const resourceQr = document.getElementById("resource-qr");
-  const video = document.getElementById("resource-video");
-  const videoSource = document.getElementById("resource-video-source");
-  const videoWrap = document.getElementById("resource-video-wrap");
+    const resource = getActiveResources()[currentResource];
 
-  resourceImage.classList.add("hidden");
-  resourceQr.classList.add("hidden");
-  video.classList.add("hidden");
-  video.pause();
-  video.currentTime = 0;
+    if (!resource) return;
 
-  if (resource.image) {
-    resourceImage.src = resource.image;
-    resourceImage.classList.remove("hidden");
-  } else if (resource.video) {
-    videoSource.src = resource.video;
-    video.load();
-    video.classList.remove("hidden");
-  }
+    // Open the second Student Services page
+    if (resource.submenu) {
 
-  if (resource.qr) {
-    resourceQr.src = resource.qr;
-    resourceQr.classList.remove("hidden");
-  }
+        currentResourcePage = 2;
+        currentResource = 0;
 
-  const hasMedia = Boolean(resource.image || resource.video || resource.qr);
-  videoWrap.classList.toggle("empty", !hasMedia);
+        buildResourceJumpLinks();
+        showResource();
+
+        return;
+    }
+
+    modalTitle.innerHTML = resource.title || "";
+    modalContent.innerHTML = resource.content || "";
+
+  renderMedia(resource, "resource");
 
   resourceJumpLinks.querySelectorAll("button").forEach(btn => {
     btn.classList.toggle("active-resource", Number(btn.dataset.index) === currentResource);
@@ -575,27 +696,49 @@ function showMap() {
   });
 }
 
-// Navigation listeners 
+// Navigation listeners
 nextResource.addEventListener("click", () => {
-  resetModalTimer();
-  if (currentModalMode === 'announcements') {
-    currentAnnouncement = (currentAnnouncement + 1) % Announcements.length;
-    showAnnouncement();
-  } else {
-    currentResource = (currentResource + 1) % CampusResources.length;
-    showResource();
-  }
+    resetModalTimer();
+
+    if (currentModalMode === 'announcements') {
+
+        currentAnnouncement =
+            (currentAnnouncement + 1) % Announcements.length;
+
+        showAnnouncement();
+
+    } else {
+
+        const resources = getActiveResources();
+
+        currentResource =
+            (currentResource + 1) % resources.length;
+
+        showResource();
+    }
 });
 
 prevResource.addEventListener("click", () => {
-  resetModalTimer();
-  if (currentModalMode === 'announcements') {
-    currentAnnouncement = (currentAnnouncement - 1 + Announcements.length) % Announcements.length;
-    showAnnouncement();
-  } else {
-    currentResource = (currentResource - 1 + CampusResources.length) % CampusResources.length;
-    showResource();
-  }
+    resetModalTimer();
+
+    if (currentModalMode === 'announcements') {
+
+        currentAnnouncement =
+            (currentAnnouncement - 1 + Announcements.length)
+            % Announcements.length;
+
+        showAnnouncement();
+
+    } else {
+
+        const resources = getActiveResources();
+
+        currentResource =
+            (currentResource - 1 + resources.length)
+            % resources.length;
+
+        showResource();
+    }
 });
 
 nextMap.addEventListener("click", () => {
@@ -609,3 +752,5 @@ prevMap.addEventListener("click", () => {
   currentMap = (currentMap - 1 + maps.length) % maps.length;
   showMap();
 });
+
+

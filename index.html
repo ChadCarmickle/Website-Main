@@ -93,57 +93,79 @@
             </iframe>
         </div>
     </main>
+<script>
+    /* =========================================================
+       KIOSK SIMULATOR CONFIGURATION
+       ========================================================= */
 
-    <script>
-        const kiosk = document.getElementById("kiosk");
-        const preview = document.getElementById("preview");
-        const container = document.getElementById("frameContainer");
+    const kiosk = document.getElementById("kiosk");
+    const preview = document.getElementById("preview");
+    const container = document.getElementById("frameContainer");
 
-        const WIDTH = 1080;
-        const HEIGHT = 1920;
+    const WIDTH = 1080;
+    const HEIGHT = 1920;
+    const PREVIEW_PADDING = 24;
 
-        let fitMode = true;
+    let fitMode = true;
 
-        function setScale(scale) {
-            fitMode = false;
+    /* =========================================================
+       DISPLAY SCALING
+       ========================================================= */
 
-            container.style.width = `${WIDTH * scale}px`;
-            container.style.height = `${HEIGHT * scale}px`;
+    function applyScale(scale) {
+        const scaledWidth = WIDTH * scale;
+        const scaledHeight = HEIGHT * scale;
 
-            kiosk.style.transform = `scale(${scale})`;
+        container.style.width = `${scaledWidth}px`;
+        container.style.height = `${scaledHeight}px`;
 
-            preview.style.alignItems =
-                HEIGHT * scale > preview.clientHeight
+        kiosk.style.transform = `scale(${scale})`;
+
+        preview.style.alignItems =
+            scaledHeight > preview.clientHeight
                 ? "flex-start" : "center";
 
-            preview.style.justifyContent =
-                WIDTH * scale > preview.clientWidth
+        preview.style.justifyContent =
+            scaledWidth > preview.clientWidth
                 ? "flex-start" : "center";
+    }
+
+    // Apply a manually selected zoom level
+    function setScale(scale) {
+        fitMode = false;
+        applyScale(scale);
+    }
+
+    // Automatically fit the kiosk within the browser
+    function resizeKiosk() {
+        fitMode = true;
+
+        const scale = Math.max(0.01, Math.min(
+            (preview.clientWidth - PREVIEW_PADDING) / WIDTH,
+            (preview.clientHeight - PREVIEW_PADDING) / HEIGHT,
+            1
+        ));
+
+        applyScale(scale);
+    }
+
+    /* =========================================================
+       RELOAD AND WINDOW EVENTS
+       ========================================================= */
+
+    function reloadKiosk() {
+        kiosk.src = `./Kisok/?t=${Date.now()}`;
+    }
+
+    window.addEventListener("resize", () => {
+        if (fitMode) {
+            resizeKiosk();
         }
+    });
 
-        function resizeKiosk() {
-            const scale = Math.min(
-                (preview.clientWidth - 24) / WIDTH,
-                (preview.clientHeight - 24) / HEIGHT,
-                1
-            );
-
-            setScale(scale);
-            fitMode = true;
-        }
-
-        function reloadKiosk() {
-                kiosk.src = "./Kisok/?t=" + Date.now();
-        }
-
-        window.addEventListener("resize", () => {
-            if (fitMode) {
-                resizeKiosk();
-            }
-        });
-
-        resizeKiosk();
-    </script>
+    // Initialize the simulator
+    resizeKiosk();
+</script>
 
 </body>
 </html>

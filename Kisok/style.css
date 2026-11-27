@@ -1,48 +1,56 @@
 /* =============================================================
-   GLOBAL RESET
+   GLOBAL RESET AND APPLICATION LAYOUT
    ============================================================= */
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 html, body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #006648;
-  background-size: cover;
-  font-family: "Segoe UI", Arial, sans-serif;
-  color: #ffffff;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #006648;
+    background-size: cover;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #ffffff;
 }
 
-/* Main app wrapper: stacks clock / slideshow / buttons vertically */
 .app {
-  /* Deep ivy -> woodland -> banks of the wabash */
-/* Ivy green with a cooler contrast (grey) */
-/* Bright green glow look */
-    background: linear-gradient(180deg, #41AD49 0%, #006648 100%);
     display: flex;
     flex-direction: column;
     width: 100vw;
     height: 100vh;
     position: relative;
-  
+
+    background: linear-gradient(
+        180deg,
+        #8DC63F 0%,
+        #41AD49 45%,
+        #006648 100%
+    );
 }
 
-
 /* =============================================================
-   TOP: CLOCK
+   CLOCK AND DATE DISPLAY
    ============================================================= */
+
 #clock-container {
-  flex: 0 0 0 auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 3vw;
-  padding-top: 20px; 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px 3vw 0;
+
+    background: linear-gradient(
+        180deg,
+        #8DC63F 0%,
+        #41AD49 45%,
+        #006648 100%
+    );
 }
 
 #date {
@@ -61,66 +69,61 @@ html, body {
   letter-spacing: 2px;
   order: 2;
 }
-
-
 /* =============================================================
-   CENTER: SLIDESHOW
+   SLIDESHOW DISPLAY
    ============================================================= */
+
 #slideshow-container {
-  flex: 1 1 65%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  background-color: rgb(22, 110, 86);
-  padding: 2vh 2vw 0;
+    flex: 1 1 65%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 2vh 2vw 0;
+
+    background: linear-gradient(
+        180deg,
+        #006648 0%,
+        #41AD49 55%,
+        #8DC63F 100%
+    );
 }
 
 #slideshow {
-  width: 100%;
-  height: 100%;
-  position: relative;
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 
-#slideshow img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-  pointer-events: none;
-}
-
-#slideshow video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* fit fully within frame at natural aspect ratio, no cropping/stretching */
-  object-position: center;
-  background: transparent; /* lets the slideshow's gradient show through the letterboxed space */
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-  display: block;
-  pointer-events: none; /* Prevents hover triggering modals */
-}
-
+/* Shared image and video styling */
 #slideshow img,
 #slideshow video {
-    object-position: center center; /* ensures the media is centered in the slideshow frame */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+    object-position: center;
+
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none;
 }
 
-/* Currently-visible slide (image or video) fades in */
+/* Video-specific styling */
+#slideshow video {
+    background: transparent;
+    display: block;
+}
+
+/* Currently displayed slide */
 #slideshow img.active,
 #slideshow video.active {
-  opacity: 1;
+    opacity: 1;
 }
-
 
 /* =============================================================
    SLIDESHOW CONTROLS (prev / play-pause / next)
@@ -247,27 +250,11 @@ html, body {
     transition: 0.2s ease;
     -webkit-tap-highlight-color: transparent;
 }
-
-.action-btn:active {
-    transform: translateY(5px);
-
-    box-shadow:
-        0 3px 0 #004B35,
-        0 5px 10px rgba(0, 0, 0, 0.25);
-
-    filter: brightness(1.1);
-}
 /* Touchscreen press feedback */
 .action-btn:active {
     transform: scale(0.96);
     filter: brightness(1.15);
-
-    box-shadow:
-        0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-.action-btn:active {
-  transform: scale(0.96);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* =============================================================
@@ -287,10 +274,6 @@ html, body {
   transition: opacity 0.25s ease;
 }
 
-#modal-overlay.hidden {
-  display: none;
-}
-
 #modal-box {
   background: #1a1d26;
   border: 2px solid #3a4157;
@@ -301,11 +284,6 @@ html, body {
   text-align: center;
 }
 
-/* Wider modal used specifically for the map view */
-#modal-box.map-mode {
-  width: 90vw;
-  max-width: 1400px;
-}
 
 #modal-title {
   font-size: 3vw;
@@ -341,20 +319,17 @@ html, body {
   margin-bottom: 12px;
 }
 
-#modal-image.hidden {
-  display: none;
-}
 
 #resource-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
     max-width: 100%;
     max-height: 60vh;
-    border-radius: 8px;
-    margin-bottom: 12px;
-}
 
-#resource-image.hidden,
-#resource-video.hidden {
-    display: none;
+    object-fit: cover;
+    object-position: center;
+
+    border-radius: 8px;
 }
 
 /* =============================================================
@@ -417,11 +392,6 @@ html, body {
 .idle-countdown {
   font-size: 0.75em;
   opacity: 0.8;
-}
-
-#map-controls.hidden,
-#resource-controls.hidden {
-  display: none;
 }
 
 /* Shared circular arrow button style, used by both control rows */
@@ -581,77 +551,63 @@ html, body {
   border-color: #fa5903;
   font-weight: 700;
 }
-
-#resource-qr {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 100px;
-  height: 100px;
-  background: white;
-  padding: 6px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-  z-index: 5;
-}
-
-#resource-qr.hidden {
-  display: none;
-}
-
+/* Shared QR code styling */
+#resource-qr,
 #program-qr {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 100px;
-  height: 100px;
-  background: white;
-  padding: 6px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-  z-index: 5;
-}
-
-#program-qr.hidden {
-  display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 100px;
+    height: 100px;
+    background: white;
+    padding: 6px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    z-index: 5;
 }
 
 #resource-video::-webkit-media-controls-fullscreen-button {
   display: none !important;
 }
 
-
-#slideshow-container {
-  background: linear-gradient(180deg, #006648 0%, #41AD49 55%, #8DC63F 100%);
-}
-
-/* Top (clock bar): light at top, darker as it goes down */
-#clock-container {
-  background: linear-gradient(180deg, #8DC63F 0%, #41AD49 45%, #006648 100%);
-}
-
-/* App base (so the “bleed” between sections matches):
-   light near the top, dark near the bottom */
-.app {
-  background: linear-gradient(180deg, #8DC63F 0%, #41AD49 45%, #006648 100%);
-}
-
-
+/* =============================================================
+   IDLE BUTTON BOUNCE ANIMATION
+   ============================================================= */
+   
 @keyframes buttonJump {
-  0%, 100% { transform: translateY(0); }
-  40%      { transform: translateY(-10px); }
-  60%      { transform: translateY(-6px); }
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-20px);
+    }
+
+    60% {
+        transform: translateY(-10px);
+    }
 }
 
 .action-btn.idle-nudge {
-  animation: buttonJump 1.3s ease-in-out 1; /* ← plays exactly twice, then stops */
+    animation: buttonJump 1s ease-in-out 2;
 }
 
-.action-btn.idle-nudge:nth-child(1) { animation-delay: 0s; }
-.action-btn.idle-nudge:nth-child(2) { animation-delay: 0.15s; }
-.action-btn.idle-nudge:nth-child(3) { animation-delay: 0.30s; }
-.action-btn.idle-nudge:nth-child(4) { animation-delay: 0.45s; }
+/* Staggered animation */
+.action-btn.idle-nudge:nth-child(1) {
+    animation-delay: 0s;
+}
 
+.action-btn.idle-nudge:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.action-btn.idle-nudge:nth-child(3) {
+    animation-delay: 0.30s;
+}
+
+.action-btn.idle-nudge:nth-child(4) {
+    animation-delay: 0.45s;
+}
 
 img[src*="assets/campusResource_ITProf.png"] { 
   width: 600px; 
@@ -723,4 +679,213 @@ img[src*="assets/campusResource_ITProf.png"] {
         opacity: 0;
         transform: translateY(15px);
     }
+}
+
+
+/* =============================================================
+   PROGRAMS - SCHOOL SELECTION GRID
+   ============================================================= */
+
+#program-jump-links.school-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    margin-top: 2vh;
+}
+
+/* School buttons */
+#program-jump-links.school-grid > button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 9vh;
+    padding: 15px 10px;
+    gap: 8px;
+
+    background: linear-gradient(180deg, #19765D, #105440);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+
+    color: #ffffff;
+    font-family: "Montserrat", sans-serif;
+    font-size: 2.2vw;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Restrict SVG icon dimensions */
+#program-jump-links.school-grid svg.school-icon {
+    width: 5vw !important;
+    height: 5vw !important;
+    max-width: 64px;
+    max-height: 64px;
+    flex-shrink: 0;
+    color: #A8DC76;
+}
+
+/* Touch feedback */
+#program-jump-links.school-grid button:active {
+    transform: scale(0.96);
+    filter: brightness(1.15);
+}
+
+/* Final school spans both columns */
+#program-jump-links.school-grid button:last-child {
+    grid-column: 1 / -1;
+}
+
+/* Heading */
+.programs-heading {
+    font-family: "Montserrat", sans-serif;
+    font-size: 4vw;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.programs-subheading {
+    display: block;
+    margin-top: 1vh;
+    font-size: 2.5vw;
+    font-weight: 600;
+    color: #8DC63F;
+}
+
+/* =============================================================
+   PROGRAM IMAGE STANDARDIZATION
+   ============================================================= */
+
+#program-image {
+    width: 100%;
+    height: 35vh;
+    max-width: 100%;
+
+    object-fit: contain;
+    object-position: center;
+
+    border-radius: 8px;
+}
+
+#program-video {
+    width: 100%;
+    height: 35vh;
+
+    object-fit: contain;
+    object-position: center;
+
+    border-radius: 8px;
+}
+
+#program-video-wrap {
+    width: 100%;
+    min-height: 35vh;
+}
+
+#program-video-wrap.empty {
+    min-height: 0;
+}
+
+/* =============================================================
+   CONSISTENT PROGRAM POPUP DIMENSIONS
+   ============================================================= */
+
+#modal-box.program-mode {
+    width: 90vw;
+    height: 80vh;
+    max-width: 1400px;
+
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+#modal-box.program-mode #modal-title {
+    min-height: 6vh;
+}
+
+#modal-box.program-mode #modal-content {
+    min-height: 5vh;
+}
+
+/* =============================================================
+   STUDENT SERVICES - FIXED POPUP LAYOUT
+   ============================================================= */
+
+#modal-box.resource-mode {
+    width: 90vw;
+    height: 85vh;
+    min-height: 85vh;
+    max-height: 85vh;
+    max-width: 1400px;
+
+    padding: 2.5vh 3vw;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    overflow-y: auto;
+}
+
+/* Title */
+#modal-box.resource-mode #modal-title {
+    flex-shrink: 0;
+    font-size: 3.2vw;
+    margin-bottom: 1.5vh;
+}
+
+/* Allow the entire description to display */
+#modal-box.resource-mode #modal-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    font-size: 2.2vw;
+    line-height: 1.4;
+    margin-bottom: 2vh;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+/* Keep navigation toward the bottom */
+#modal-box.resource-mode #resource-controls {
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+/* Image and video dimensions */
+#modal-box.resource-mode #resource-video-wrap {
+    width: 100%;
+    min-height: 0;
+}
+
+#modal-box.resource-mode #resource-image,
+#modal-box.resource-mode #resource-video {
+    display: block;
+    width: 100%;
+    height: 26vh;
+    max-height: 26vh;
+
+    object-fit: cover;
+    object-position: center;
+
+    border-radius: 12px;
+}
+
+/* Navigation spacing */
+#modal-box.resource-mode .resource-jump-links {
+    margin-top: 1vh;
+    gap: 8px;
+}
+
+#modal-box.resource-mode .resource-arrow-row {
+    margin-top: 1.5vh;
 }

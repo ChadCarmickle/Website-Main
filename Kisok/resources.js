@@ -50,7 +50,9 @@ const Announcements = [
       label: "Library Hours", 
       title: "Extended Library Hours",
       content: "Attention students: Starting today, the library is open until 9 PM on weekdays.",
-      image: "assets/ProgramResources/Healthcare/HealthInformationTechnology.jpg",
+      image: "assets/CampusResources/IvyTechLib.jpg",
+
+      
       video: null,
       qr: null,
     },
@@ -105,7 +107,7 @@ const CampusResources = [
     label: "IvyCares", 
     title: "IvyCares",
     content: "Everyone needs a little help sometimes, and IvyCares is here to provide additional support to you throught your academic journey. <br><br><strong> Ivy Cares can help with: </strong> <br>• Student Emergency Aid Fund <br>• Food Access <br>• Loaner Laptops & Hotspots <br>• Transportation Resources <br>• Mental Health <br>• Childcare Vouchers  <br>• IvyAssist (Community Resources) <br><br> <strong> Hours of Operation </strong><br> Monday, Wednesday, Thursday: 8 am to 5 pm <br> Tuesday: 8 am to 6 pm <br>Friday: 9 am - 12 pm <br> <br> <strong> Contact Us</strong>  <br> Email: sellersburg-ivycares@ivytech.edu <br> Phone: (812) 955-5892 <br> Location: Pfau Hall - B18",
-    image: "assets/CampusResources/IvyCares.png",
+    image: "assets/CampusResources/IvyCares.jpg",
     video: null,
     qr: "assets/QR-Codes/CampusResources/QR_DisabilitySupport.png",
   },
@@ -133,18 +135,229 @@ const CampusResources = [
     video: null,
     qr: "assets/QR-Codes/CampusResources/QR_CareerLink.png",
   },  
-  {
-    label: "More Resources", 
-    title: "More Resources | Video Example ",
+{
+    label: "More Resources",
+    title: "More Resources",
+    submenu: true,
+    content: "",
     image: null,
-    video: "videos/video_1.mp4",
+    video: null,
     qr: null,
-    
-  },
+},
   
 ];
 
+/* =========================================================
+   ADDITIONAL STUDENT SERVICES
+   ========================================================= */
 
+/* =========================================================
+   ADDITIONAL STUDENT SERVICES
+   ========================================================= */
+
+const MoreResources = [
+    {
+        label: "Student Life",
+        title: "Get Involved with Student Life",
+        content: `
+            Make the most of your college experience! Student Life 
+            provides opportunities to build friendships, develop 
+            leadership skills, and become more involved at Ivy Tech.
+            <br><br>
+
+            <strong>Explore Opportunities:</strong><br>
+            • Student clubs and organizations<br>
+            • Campus events and activities<br>
+            • Leadership development<br>
+            • Community service and volunteering<br>
+            • Networking and student engagement<br><br>
+
+            <strong style="color: #8DC63F;">
+                Get involved and make your college experience memorable!
+            </strong><br><br>
+
+            <strong>Contact Us</strong><br>
+            sellersburg-studentlife@ivytech.edu<br><br>
+
+            <i>Pictured below: Ivy Tech students participating in 
+            the IT Challenge on November 20, 2026.</i>
+        `,
+        image: "assets/CampusResources/StudentLife.jpg",
+        video: null,
+        qr: null,
+    },
+    {
+        label: "Testing Services",
+        title: "Testing Services",
+        content: `
+            Ivy Tech Testing Services provides a professional 
+            testing environment for students, prospective students, 
+            and members of the community.
+            <br><br>
+
+            <strong>Available Testing Services:</strong><br>
+            • Academic and course examinations<br>
+            • Placement assessments<br>
+            • Certification and professional examinations<br>
+            • Proctored examinations<br>
+            • Community testing services<br><br>
+
+            <strong>Preparing for Your Exam</strong><br>
+            Confirm your appointment, bring the required 
+            identification, and review your examination requirements 
+            before arriving.<br><br>
+
+            <strong>Contact Us</strong><br>
+            sellersburg-testingservices@ivytech.edu
+        `,
+        image: "assets/CampusResources/TestingServices.jpg",
+        video: null,
+        qr: null,
+    },
+    {
+        label: "Tech Support",
+        title: "Information Technology Support",
+        content: `
+            Experiencing technical difficulties? Ivy Tech's IT 
+            Help Desk is available to assist you with college 
+            technology and online learning resources.
+            <br><br>
+
+            <strong>How We Can Help:</strong><br>
+            • MyIvy account assistance<br>
+            • Password resets and login issues<br>
+            • IvyLearn technical assistance<br>
+            • Student email access<br>
+            • Technology-related questions and troubleshooting<br><br>
+
+            <strong>Need Technical Assistance?</strong><br>
+            Contact the Ivy Tech IT Help Desk.<br><br>
+
+            <strong style="color: #8DC63F; font-size: 1.4em;">
+                1-833-OIT-LINE
+            </strong><br>
+            1-833-648-5463 (Toll-Free)<br><br>
+
+            IT support requests can also be submitted through MyIvy.
+        `,
+        image: "assets/CampusResources/TechSupport.jpg",
+        video: null,
+        qr: null,
+    },
+    {
+        label: "Veteran Affairs",
+        title: "Veteran and Military Services",
+        content: `
+            Your service matters. Ivy Tech is committed to 
+            supporting veterans, active-duty military members, 
+            and eligible military family members throughout 
+            their educational journey.
+            <br><br>
+
+            <strong>Available Support:</strong><br>
+            • VA education benefits assistance<br>
+            • Military education resources<br>
+            • Transitioning from military service to college<br>
+            • Educational benefit eligibility guidance<br>
+            • Connections to additional student resources<br><br>
+
+            <strong style="color: #8DC63F;">
+                Take the next step toward your educational 
+                and career goals.
+            </strong><br><br>
+
+            <strong>Contact Us</strong><br>
+            Sellersburg-VeteransAffairs@ivytech.edu
+        `,
+        image: "assets/CampusResources/VeteranAffairs.png",
+        video: null,
+        qr: null,
+    },
+    {
+        label: "Alumni",
+        title: "Ivy Tech Alumni Community",
+        content: `
+            Your connection to Ivy Tech does not end at graduation.
+            Become part of a lifelong community of graduates, 
+            professionals, and supporters across Indiana.
+            <br><br>
+
+            <strong>Stay Connected:</strong><br>
+            • Build professional connections<br>
+            • Reconnect with former classmates<br>
+            • Share your career achievements<br>
+            • Stay informed about Ivy Tech<br>
+            • Explore alumni programs and resources<br><br>
+
+            Celebrate your accomplishments and inspire the next 
+            generation of Ivy Tech students.<br><br>
+
+            <strong style="color: #8DC63F; font-size: 1.3em;">
+                Your Ivy Tech journey continues after graduation!
+            </strong>
+        `,
+        image: "assets/CampusResources/Alumni.png",
+        video: null,
+        qr: null,
+    },
+    {
+        label: "Safety and Alerts",
+        title: "Campus Safety and Emergency Preparedness",
+        content: `
+            Ivy Tech is committed to maintaining a safe, secure, 
+            and welcoming environment for everyone on campus.
+            Campus safety is a shared responsibility.
+            <br><br>
+
+            <strong>Stay Safe and Prepared:</strong><br>
+            • Remain aware of your surroundings<br>
+            • Familiarize yourself with emergency exits<br>
+            • Report suspicious activity or safety concerns<br>
+            • Follow campus emergency instructions<br>
+            • Stay informed about severe weather and closures<br><br>
+
+            Report non-emergency safety concerns to campus 
+            personnel or Public Safety.<br><br>
+
+            <strong style="color: #ff6666; font-size: 1.5em;">
+                In case of an emergency, call 911.
+            </strong>
+        `,
+        image: "assets/CampusResources/Safety.png",
+        video: null,
+        qr: null,
+    },
+    {
+        label: "IvyAlert",
+        title: "IvyAlert Emergency Notifications",
+        content: `
+            Stay connected. Stay informed. Stay safe.<br><br>
+
+            IvyAlert is Ivy Tech's emergency notification system 
+            designed to keep students, faculty, and staff informed 
+            about important campus developments.
+            <br><br>
+
+            <strong>Receive Important Notifications About:</strong><br>
+            • Campus emergencies<br>
+            • Severe weather conditions<br>
+            • Campus closures and delays<br>
+            • Changes to instructional delivery<br>
+            • Important campus safety updates<br><br>
+
+            <strong>Keep Your Information Updated</strong><br>
+            Review your IvyAlert notification preferences and 
+            ensure your contact information is current.<br><br>
+
+            <strong style="color: #8DC63F; font-size: 1.3em;">
+                Learn more at IvyTech.edu/alert
+            </strong>
+        `,
+        image: "assets/CampusResources/AlertIvyn.png",
+        video: null,
+        qr: null,
+    },
+];
 /* =========================================================
    4. PROGRAMS
    ========================================================= */
@@ -173,7 +386,7 @@ const ProgramFields = [
         label: "Design Technology",
         title: "Design Technology",
         content: "From EVs to self-driving cars, few industries are moving as fast as automotive. Be ready with training in today's high-tech vehicles. <br><br> Associate Degrees (3): 5 semesters <br> Certificates (8): 2-3 semesters <br><br>",
-        image: "assets/ProgramResources/Advanced_Manufacturing/DesignTechnology.jpg",
+        image: "assets/ProgramResources/Advanced_Manufacturing/DesignTechnology.png",
         video: null,
         qr: null,
       },
@@ -398,6 +611,14 @@ const ProgramFields = [
   {
     label: "School of Infomation Technology",
     programs: [
+
+      {
+        label: "Meet your Professors!", 
+        title: "IT Professors",
+        image: "assets/campusResource_ITProf.png",
+        video: null,
+        qr: null,
+      },
       {
         label: "Applied Artificial Intelligence",
         title: "Applied Artificial Intelligence",
@@ -477,14 +698,6 @@ const ProgramFields = [
         image: "assets/ProgramResources/IT/SoftwareDev.jpg",
         video: null,
         qr: "assets/QR-Codes/Programs/IT/QR_SoftwareDevelopment.png",
-      },
-
-      {
-        label: "Meet your Professors!", 
-        title: "IT Professors",
-        image: "assets/campusResource_ITProf.png",
-        video: null,
-        qr: null,
       },
       
     ]

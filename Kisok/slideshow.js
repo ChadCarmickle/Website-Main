@@ -44,7 +44,9 @@ const eventImages = [
   "events/event_1.png",
   "events/event_2.png",
   "events/event_3.png",
-  "events/event_4.png"
+  "events/event_4.png",
+  "events/event_5.png",
+  "events/event_6.png"
 ]
 
 const departmentVideos = [

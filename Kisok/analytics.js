@@ -9,14 +9,10 @@ let sessionStart = new Date().toISOString();
 
 // Load previous logs from localStorage
 function loadLogs() {
-  const saved = localStorage.getItem("smartboard_analytics");
-  if (saved) {
-    try {
-      eventLog = JSON.parse(saved);
-    } catch (e) {
-      eventLog = [];
-    }
-  }
+    eventLog = [];
+    localStorage.removeItem("smartboard_analytics");
+
+    console.log("[Analytics] New session started. Previous logs cleared.");
 }
 
 // Save logs to localStorage
@@ -166,6 +162,3 @@ function clearAnalyticsData() {
   localStorage.removeItem("smartboard_analytics");
   // or: localStorage.setItem("smartboard_analytics", "[]");
 }
-
-window.addEventListener("beforeunload", clearAnalyticsData);
-window.addEventListener("unload", clearAnalyticsData);
