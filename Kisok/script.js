@@ -66,7 +66,9 @@ let currentModalMode = null;  // 'announcements', 'resources', 'map', etc.
 let currentResourcePage = 1;
 
 // Main navigation button handlers
-document.querySelectorAll(".action-btn").forEach(btn => {
+const actionButtons = document.querySelectorAll(".action-btn");
+
+actionButtons.forEach(btn => {
     btn.addEventListener("click", () => {
         const btnType = btn.textContent.trim()
             || btn.dataset.title
@@ -213,6 +215,17 @@ function buildJumpLinks(container, items, onSelect) {
         container.appendChild(btn);
     });
 }
+
+// Highlight the selected navigation button
+function highlightActiveButton(container, activeIndex) {
+    container.querySelectorAll("button").forEach(btn => {
+        btn.classList.toggle(
+            "active-resource",
+            Number(btn.dataset.index) === activeIndex
+        );
+    });
+}
+
 /* =========================================================
    3. ANNOUNCEMENTS
    ========================================================= */
@@ -227,12 +240,7 @@ function showAnnouncement() {
 
     renderMedia(ann, "resource");
 
-    resourceJumpLinks.querySelectorAll("button").forEach(btn => {
-        btn.classList.toggle(
-            "active-resource",
-            Number(btn.dataset.index) === currentAnnouncement
-        );
-    });
+    highlightActiveButton(resourceJumpLinks, currentAnnouncement);
 
     window.analytics.logEvent("announcement_view", {
         index: currentAnnouncement,
@@ -253,7 +261,7 @@ function buildAnnouncementJumpLinks() {
 }
 
 /* =========================================================
-   3. CAMPUS RESOURCES
+   4. CAMPUS RESOURCES
    ========================================================= */
 
 // Get the currently selected resource page
@@ -299,7 +307,7 @@ function buildResourceJumpLinks() {
 }
 
 /* =========================================================
-   4. PROGRAMS (field -> program drill-down)
+   5. PROGRAMS (School Fields + Program Details)
    ========================================================= */
 
 // null = showing the field grid. A number = index into ProgramFields.
@@ -443,9 +451,7 @@ function renderProgramDetail() {
 
   renderMedia(program, "program");
 
-  programJumpLinks.querySelectorAll("button").forEach(btn => {
-    btn.classList.toggle("active-resource", Number(btn.dataset.index) === currentProgram);
-  });
+  highlightActiveButton(programJumpLinks, currentProgram);
 
   window.analytics.logEvent("program_view", {
     field: fieldLabel,
@@ -462,26 +468,8 @@ programBack.addEventListener("click", () => {
   renderFieldGrid();
 });
 
-// Button listener for the next > button. 
-nextProgram.addEventListener("click", () => {
-  resetModalTimer();
-  const programs = getCurrentPrograms();
-  if (programs.length === 0) return;
-  currentProgram = (currentProgram + 1) % programs.length;
-  renderProgramDetail();
-});
-
-// button listener for the preview < button. 
-prevProgram.addEventListener("click", () => {
-  resetModalTimer();
-  const programs = getCurrentPrograms();
-  if (programs.length === 0) return;
-  currentProgram = (currentProgram - 1 + programs.length) % programs.length;
-  renderProgramDetail();
-});
-
 /* =========================================================
-   5. MAPS
+   6. MAPS
    ========================================================= */
 const maps = [
   { image: "assets/map_1.png", title: "Pfau Hall" },
@@ -490,7 +478,7 @@ const maps = [
 
 
 /* =========================================================
-   6. IDLE TIMER + DISPLAY FUNCTIONS
+   7. IDLE TIMER + DISPLAY FUNCTIONS
    ========================================================= */
 const MODAL_IDLE_TIME = 120;
 const COUNTDOWN_WARNING = 30;
@@ -558,7 +546,7 @@ function startNudgeTimer() {
         // Only bounce when no popup is open
         if (modalOverlay.classList.contains("hidden")) {
 
-            document.querySelectorAll(".action-btn").forEach(btn => {
+            actionButtons.forEach(btn => {
 
                 // Reset the animation
                 btn.classList.remove("idle-nudge");
@@ -580,7 +568,7 @@ function startNudgeTimer() {
 }
 
 function resetNudge() {
-    document.querySelectorAll(".action-btn").forEach(btn => {
+    actionButtons.forEach(btn => {
         btn.classList.remove("idle-nudge");
     });
 
@@ -596,7 +584,7 @@ function resetNudge() {
 startNudgeTimer();
 
 /* =========================================================
-   6. MODAL DISPLAY FUNCTIONS
+   8. MODAL DISPLAY FUNCTIONS
    ========================================================= */
 function closeModal(reason = "manual") {
     // Prevent duplicate closure events
@@ -658,8 +646,12 @@ function showResource() {
 
     if (!resource) return;
 
-    // Open the second Student Services page
+       // Open the second Student Services page
     if (resource.submenu) {
+        window.analytics.logEvent("resource_view", {
+            index: currentResource,
+            label: resource.label || "More Resources"
+        });
 
         currentResourcePage = 2;
         currentResource = 0;
@@ -674,10 +666,7 @@ function showResource() {
     modalContent.innerHTML = resource.content || "";
 
   renderMedia(resource, "resource");
-
-  resourceJumpLinks.querySelectorAll("button").forEach(btn => {
-    btn.classList.toggle("active-resource", Number(btn.dataset.index) === currentResource);
-  });
+  highlightActiveButton(resourceJumpLinks, currentResource);
 
   window.analytics.logEvent("resource_view", {
     index: currentResource,
@@ -695,62 +684,84 @@ function showMap() {
     title: maps[currentMap].title
   });
 }
+/* =========================================================
+   9. NAVIGATION CONTROLS
+   ========================================================= */
 
-// Navigation listeners
-nextResource.addEventListener("click", () => {
+// Calculate the next index with wraparound
+function wrapIndex(index, direction, length) {
+    return (index + direction + length) % length;
+}
+
+// Navigate Announcements or Student Services
+function navigateResource(direction) {
     resetModalTimer();
 
-    if (currentModalMode === 'announcements') {
+    if (currentModalMode === "announcements") {
+        if (!Announcements.length) return;
 
-        currentAnnouncement =
-            (currentAnnouncement + 1) % Announcements.length;
+        currentAnnouncement = wrapIndex(
+            currentAnnouncement,
+            direction,
+            Announcements.length
+        );
 
         showAnnouncement();
 
-    } else {
-
+    } else if (currentModalMode === "resources") {
         const resources = getActiveResources();
 
-        currentResource =
-            (currentResource + 1) % resources.length;
+        if (!resources.length) return;
+
+        currentResource = wrapIndex(
+            currentResource,
+            direction,
+            resources.length
+        );
 
         showResource();
     }
-});
+}
 
-prevResource.addEventListener("click", () => {
+// Navigate programs within a school
+function navigateProgram(direction) {
     resetModalTimer();
 
-    if (currentModalMode === 'announcements') {
+    const programs = getCurrentPrograms();
 
-        currentAnnouncement =
-            (currentAnnouncement - 1 + Announcements.length)
-            % Announcements.length;
+    if (!programs.length) return;
 
-        showAnnouncement();
+    currentProgram = wrapIndex(
+        currentProgram,
+        direction,
+        programs.length
+    );
 
-    } else {
+    renderProgramDetail();
+}
 
-        const resources = getActiveResources();
+// Navigate campus maps
+function navigateMap(direction) {
+    resetModalTimer();
 
-        currentResource =
-            (currentResource - 1 + resources.length)
-            % resources.length;
+    if (!maps.length) return;
 
-        showResource();
-    }
-});
+    currentMap = wrapIndex(
+        currentMap,
+        direction,
+        maps.length
+    );
 
-nextMap.addEventListener("click", () => {
-  resetModalTimer();
-  currentMap = (currentMap + 1) % maps.length;
-  showMap();
-});
+    showMap();
+}
 
-prevMap.addEventListener("click", () => {
-  resetModalTimer();
-  currentMap = (currentMap - 1 + maps.length) % maps.length;
-  showMap();
-});
+// Register navigation button handlers
+nextResource.addEventListener("click", () => navigateResource(1));
+prevResource.addEventListener("click", () => navigateResource(-1));
 
+nextProgram.addEventListener("click", () => navigateProgram(1));
+prevProgram.addEventListener("click", () => navigateProgram(-1));
+
+nextMap.addEventListener("click", () => navigateMap(1));
+prevMap.addEventListener("click", () => navigateMap(-1));
 
